@@ -17,5 +17,5 @@ web-build/
 .metro-health-check*
 
 package-lock.json
-yarn-lock.json
+yarn.lock
 pnpm-lock.yaml
