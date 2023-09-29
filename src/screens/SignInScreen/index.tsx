@@ -58,6 +58,7 @@ const SignInScreen = () => {
               placeholder="Digite sua senha"
               value={password}
               onChangeText={handlePasswordChange}
+              onSubmitEditing={handleSignIn}
               height={60}
               width={"100%"}
               style="primary"
