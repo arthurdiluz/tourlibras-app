@@ -1,20 +1,30 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useState } from "react";
+import { ActivityIndicator } from "react-native";
+import UnauthenticatedStack from "./src/stacks/UnauthenticatedStack";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+const App = () => {
+  const Stack = createStackNavigator();
+  const [isLoading, setIsLoading] = useState(true);
+
+  setTimeout(() => {
+    setIsLoading(false);
+  }, 5000);
+
+  return isLoading ? (
+    <ActivityIndicator size="large" />
+  ) : (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="UnauthenticatedStack"
+          component={UnauthenticatedStack}
+          options={{ headerShown: false }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+export default App;
