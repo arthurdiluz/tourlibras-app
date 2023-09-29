@@ -1,20 +1,37 @@
-import React, { useState } from "react";
-import { ActivityIndicator } from "react-native";
+import React, { useEffect } from "react";
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
 import UnauthenticatedStack from "./src/stacks/UnauthenticatedStack";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
+SplashScreen.preventAutoHideAsync();
+
 const App = () => {
   const Stack = createStackNavigator();
-  const [isLoading, setIsLoading] = useState(true);
+  const [fontsLoaded] = useFonts({
+    Roboto: require("./assets/fonts/Roboto/Roboto-Regular.ttf"),
+  });
 
-  setTimeout(() => {
-    setIsLoading(false);
-  }, 5000);
+  useEffect(() => {
+    async function loadResourcesAndDataAsync() {
+      try {
+        await SplashScreen.preventAutoHideAsync();
 
-  return isLoading ? (
-    <ActivityIndicator size="large" />
-  ) : (
+        if (fontsLoaded) {
+          await SplashScreen.hideAsync();
+        }
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+
+    loadResourcesAndDataAsync();
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) return null;
+
+  return (
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
