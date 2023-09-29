@@ -11,6 +11,7 @@ const App = () => {
   const Stack = createStackNavigator();
   const [fontsLoaded] = useFonts({
     Roboto: require("./assets/fonts/Roboto/Roboto-Regular.ttf"),
+    "Roboto Bold": require("./assets/fonts/Roboto/Roboto-Bold.ttf"),
   });
 
   useEffect(() => {

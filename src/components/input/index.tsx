@@ -1,5 +1,4 @@
 import React from "react";
-import { StyleSheet, ViewStyle } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { DimensionValue, KeyboardTypeOptions } from "react-native/types";
 import styles from "./styles";
@@ -36,7 +35,7 @@ const TextInputComponent: React.FC<Props> = ({
       onChangeText={onChangeText}
       keyboardType={keyboardType}
       secureTextEntry={secureTextEntry}
-      style={{ height, width, ...styles[style], ...customStyle }}
+      style={{ ...styles[style], ...customStyle, height, width }}
       placeholderTextColor={style === "primary" ? "#FFF" : "#A0A0A0"}
     />
   );
