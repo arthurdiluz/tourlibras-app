@@ -1,7 +1,7 @@
 import React from "react";
 import Svg, { SvgProps, G, Path } from "react-native-svg";
 
-const UserCircleSvg = (props: SvgProps) => (
+const UserCircleIcon = (props: SvgProps) => (
   <Svg {...props}>
     <G
       stroke="#fff"
@@ -15,4 +15,4 @@ const UserCircleSvg = (props: SvgProps) => (
     </G>
   </Svg>
 );
-export default UserCircleSvg;
+export default UserCircleIcon;
