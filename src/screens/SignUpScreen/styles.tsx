@@ -10,9 +10,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#1B9CFC",
   },
 
+  scrollStyle: {
+    width: "100%",
+  },
+
   ArrowLeft: {
     position: "absolute",
-    top: "10%",
+    top: "1%",
     left: 20,
   },
 
@@ -39,10 +43,9 @@ const styles = StyleSheet.create({
 
   inputFields: {
     width: "100%",
-    height: 130,
     display: "flex",
     flexDirection: "column",
-    justifyContent: "space-between",
+    gap: 5,
   },
 
   passwordInputContainer: {
@@ -101,7 +104,7 @@ const styles = StyleSheet.create({
 
   professorOptionSectionSelect: {
     padding: 25,
-    height: 60,
+    height: 30,
     width: "100%",
     borderRadius: 50,
     backgroundColor: "#FFF",
@@ -111,7 +114,7 @@ const styles = StyleSheet.create({
 
   buttonSection: {
     width: "100%",
-    marginVertical: 35,
+    marginVertical: 20,
   },
 });
 
