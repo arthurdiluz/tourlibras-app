@@ -6,14 +6,17 @@ import UserCircleIcon from "../../components/Icons/UserCircleIcon";
 import styles from "./styles";
 import IonIcons from "react-native-vector-icons/Ionicons";
 import ButtonComponent from "../../components/Button";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { UnauthenticatedStackParamList } from "../../types/unauthenticatedStack.types";
 
-const SignInScreen = () => {
+type Props = NativeStackScreenProps<UnauthenticatedStackParamList>;
+
+const SignInScreen = ({ navigation }: Props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordHidden, setPasswordHidden] = useState(true);
 
   const handleEmailChange = (text: string) => setEmail(text);
-
   const handlePasswordChange = (text: string) => setPassword(text);
 
   const handeTogglePasswordVisibility = () => {
@@ -31,10 +34,7 @@ const SignInScreen = () => {
     return Alert.alert("Auth", "You will sign in");
   };
 
-  const handleSignUp = () => {
-    // TODO: navigate to ForgotPasswordScreen; send the email
-    return Alert.alert("Auth", "You will sign up");
-  };
+  const handleSignUp = () => navigation.navigate("SignUp");
 
   return (
     <SafeAreaView style={styles.container}>
@@ -62,7 +62,7 @@ const SignInScreen = () => {
               height={60}
               width={"100%"}
               style="primary"
-              customStyle={{ paddingRight: "20%" }}
+              customStyle={{ paddingRight: "15%" }}
               secureTextEntry={isPasswordHidden}
             />
             <TouchableOpacity

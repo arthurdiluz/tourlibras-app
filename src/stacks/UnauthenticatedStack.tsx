@@ -2,10 +2,11 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import SignInScreen from "../screens/SignInScreen";
 import SignUpScreen from "../screens/SignUpScreen";
+import { UnauthenticatedStackParamList } from "../types/unauthenticatedStack.types";
 
-const UnauthenticatedStack = () => {
-  const Stack = createStackNavigator();
+const Stack = createStackNavigator<UnauthenticatedStackParamList>();
 
+const UnauthenticatedStack: React.FC = () => {
   return (
     <Stack.Navigator initialRouteName="SignIn">
       <Stack.Screen
@@ -18,7 +19,11 @@ const UnauthenticatedStack = () => {
         component={SignUpScreen}
         options={{ headerShown: false }}
       />
-      {/* TODO: add PasswordRecoverScreen */}
+      {/* <Stack.Screen
+        name="PasswordRecover"
+        component={PasswordRecoverScreen}
+        options={{ headerShown: false }}
+      /> */}
     </Stack.Navigator>
   );
 };
