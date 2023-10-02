@@ -10,6 +10,7 @@ interface Props {
   height?: DimensionValue;
   width?: DimensionValue;
   customStyle?: any;
+  disabled?: boolean;
   style?: StyleOptions;
 }
 
@@ -19,11 +20,13 @@ const ButtonComponent: React.FC<Props> = ({
   height,
   width,
   customStyle,
+  disabled,
   style = "primary",
 }: Props) => {
   return (
     <TouchableOpacity
       onPress={onPress}
+      disabled={disabled}
       style={{ ...styles[style], ...customStyle, height, width }}
     >
       <Text style={styles[`${style}Text`]}>{title}</Text>
