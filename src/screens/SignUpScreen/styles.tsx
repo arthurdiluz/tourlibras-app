@@ -110,6 +110,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
+  iosSelect: {
+    height: 50,
+    justifyContent: "center",
+  },
+
+  iosSelectText: {
+    paddingLeft: "5%",
+  },
+  
   buttonSection: {
     width: "100%",
     marginVertical: 20,

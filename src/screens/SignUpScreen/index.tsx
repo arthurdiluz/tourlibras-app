@@ -19,6 +19,7 @@ import { Picker } from "@react-native-picker/picker";
 type Props = NativeStackScreenProps<UnauthenticatedStackParamList>;
 
 const SignUpScreen = ({ navigation }: Props) => {
+  const platform = Platform.OS;
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -38,6 +39,7 @@ const SignUpScreen = ({ navigation }: Props) => {
   const handleFullName = (text: string) => setFullName(text);
   const handleEmailChange = (text: string) => setEmail(text);
   const handlePasswordChange = (text: string) => setPassword(text);
+  const [isPickerVisible, setPickerVisible] = useState(platform === "android");
 
   const handleTogglePasswordVisibility = () => {
     setPasswordHidden(!isPasswordHidden);
@@ -52,9 +54,12 @@ const SignUpScreen = ({ navigation }: Props) => {
     setSelectedGrammar(value);
   };
 
+  const handleTogglePicker = () => {
+    setPickerVisible(!isPickerVisible);
+  };
+
   const handleSignUp = () => {
     // TODO: create user
-    // TODO: navigate to the User/Professor stack homepage
 
     return isProfessor
       ? {
@@ -70,6 +75,8 @@ const SignUpScreen = ({ navigation }: Props) => {
           password,
           profilePhoto: null,
         };
+
+    // TODO: navigate to the Student/Professor stack homepage
   };
 
   return (
@@ -147,20 +154,34 @@ const SignUpScreen = ({ navigation }: Props) => {
                 {"Informe a gramática utilizada em suas aulas"}
               </Text>
               <View style={styles.professorOptionSectionSelect}>
-                <Picker
-                  placeholder="test"
-                  selectedValue={selectedGrammar}
-                  onValueChange={(grammar) => setSelectedGrammar(grammar)}
-                >
-                  {grammarList.map((grammar, index) => (
-                    <Picker.Item
-                      enabled={isProfessor}
-                      key={`grammar-${index}`}
-                      label={grammar.value}
-                      value={isProfessor ? grammar.value : null}
-                    />
-                  ))}
-                </Picker>
+                {platform === "ios" && (
+                  <TouchableOpacity
+                    onPress={handleTogglePicker}
+                    style={styles.iosSelect}
+                  >
+                    <Text style={styles.iosSelectText}>
+                      {selectedGrammar === "" ? "Selecione:" : selectedGrammar}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+                {isPickerVisible && (
+                  <Picker
+                    selectedValue={selectedGrammar}
+                    onValueChange={(grammar) => {
+                      setSelectedGrammar(grammar);
+                      platform === "ios" && handleTogglePicker();
+                    }}
+                  >
+                    {grammarList.map((grammar, index) => (
+                      <Picker.Item
+                        enabled={isProfessor}
+                        key={`grammar-${index}`}
+                        label={grammar.value}
+                        value={isProfessor ? grammar.value : null}
+                      />
+                    ))}
+                  </Picker>
+                )}
               </View>
             </View>
           )}
