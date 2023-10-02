@@ -1,8 +1,8 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
+import { UnauthenticatedStackParamList } from "../types/unauthenticatedStack.types";
 import SignInScreen from "../screens/SignInScreen";
 import SignUpScreen from "../screens/SignUpScreen";
-import { UnauthenticatedStackParamList } from "../types/unauthenticatedStack.types";
 
 const Stack = createStackNavigator<UnauthenticatedStackParamList>();
 
