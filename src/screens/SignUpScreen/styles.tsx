@@ -103,10 +103,8 @@ const styles = StyleSheet.create({
   },
 
   professorOptionSectionSelect: {
-    padding: 25,
-    height: 30,
     width: "100%",
-    borderRadius: 50,
+    borderRadius: 10,
     backgroundColor: "#FFF",
     marginTop: 35,
     justifyContent: "center",
