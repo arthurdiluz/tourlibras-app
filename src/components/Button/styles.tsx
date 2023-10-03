@@ -9,6 +9,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowOffset: { height: 5, width: 0 },
     shadowRadius: 5,
+    padding: 18,
   },
 
   primaryText: {
@@ -26,6 +27,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowOffset: { height: 0, width: 0 },
     shadowRadius: 5,
+    padding: 18,
   },
 
   secondaryText: {

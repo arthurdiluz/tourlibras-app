@@ -24,8 +24,7 @@ const SignInScreen = ({ navigation }: Props) => {
   };
 
   const handleForgetPassword = () => {
-    // TODO: navigate to ForgotPasswordScreen; send the email
-    return Alert.alert("You forgot your password", "Try to remember it");
+    return navigation.navigate("PasswordRecover", { email });
   };
 
   const handleSignIn = () => {

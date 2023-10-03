@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
   iosSelectText: {
     paddingLeft: "5%",
   },
-  
+
   buttonSection: {
     width: "100%",
     marginVertical: 20,
