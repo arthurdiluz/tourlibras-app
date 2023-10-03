@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { Alert, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import TextInputComponent from "../../components/input";
-import UserCircleIcon from "../../components/Icons/UserCircleIcon";
+import TextInputComponent from "../../../components/input";
+import UserCircleIcon from "../../../components/Icons/UserCircleIcon";
 import styles from "./styles";
 import IonIcons from "react-native-vector-icons/Ionicons";
-import ButtonComponent from "../../components/Button";
+import ButtonComponent from "../../../components/Button";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { UnauthenticatedStackParamList } from "../../types/unauthenticatedStack.types";
+import { UnauthenticatedStackParamList } from "../../../types/unauthenticatedStack.types";
 
 type Props = NativeStackScreenProps<UnauthenticatedStackParamList>;
 

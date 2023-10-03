@@ -3,11 +3,11 @@ import { useState } from "react";
 import { Alert, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
-import ButtonComponent from "../../components/Button";
-import ArrowLeftIcon from "../../components/Icons/ArrowLeftIcon";
-import KeyIcon from "../../components/Icons/KeyIcon";
-import TextInputComponent from "../../components/input";
-import { UnauthenticatedStackParamList } from "../../types/unauthenticatedStack.types";
+import ButtonComponent from "../../../components/Button";
+import ArrowLeftIcon from "../../../components/Icons/ArrowLeftIcon";
+import KeyIcon from "../../../components/Icons/KeyIcon";
+import TextInputComponent from "../../../components/input";
+import { UnauthenticatedStackParamList } from "../../../types/unauthenticatedStack.types";
 import styles from "./styles";
 
 type Props = NativeStackScreenProps<UnauthenticatedStackParamList>;

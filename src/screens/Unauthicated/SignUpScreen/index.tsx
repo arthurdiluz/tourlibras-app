@@ -6,13 +6,13 @@ import {
   TouchableOpacity,
 } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
-import UserCircleIcon from "../../components/Icons/UserCircleIcon";
-import TextInputComponent from "../../components/input";
-import { UnauthenticatedStackParamList } from "../../types/unauthenticatedStack.types";
+import UserCircleIcon from "../../../components/Icons/UserCircleIcon";
+import TextInputComponent from "../../../components/input";
+import { UnauthenticatedStackParamList } from "../../../types/unauthenticatedStack.types";
 import styles from "./styles";
 import IonIcons from "react-native-vector-icons/Ionicons";
-import ButtonComponent from "../../components/Button";
-import ArrowLeftIcon from "../../components/Icons/ArrowLeftIcon";
+import ButtonComponent from "../../../components/Button";
+import ArrowLeftIcon from "../../../components/Icons/ArrowLeftIcon";
 import { useState } from "react";
 import { Picker } from "@react-native-picker/picker";
 
