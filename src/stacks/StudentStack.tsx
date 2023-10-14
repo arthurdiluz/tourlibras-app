@@ -6,7 +6,7 @@ const Stack = createStackNavigator<any>();
 
 const StudentStack: React.FC = () => {
   return (
-    <Stack.Navigator initialRouteName="StudentHomepage">
+    <Stack.Navigator id="StudentStack" initialRouteName="StudentHomepage">
       <Stack.Screen
         name="StudentHomepage"
         component={StudentHomepageScreen}

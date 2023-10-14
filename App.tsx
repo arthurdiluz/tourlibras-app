@@ -2,18 +2,12 @@ import React, { useEffect } from "react";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import UnauthenticatedStack from "./src/stacks/UnauthenticatedStack";
-import ProfessorStack from "./src/stacks/ProfessorStack";
-import StudentStack from "./src/stacks/StudentStack";
-import { AuthProvider, useAuth } from "./src/contexts/AuthContext";
-import { ROLE } from "./src/constants/constants";
+import { AuthProvider } from "./src/contexts/AuthContext";
+import AppStack from "./src/stacks/AppStack";
 
 SplashScreen.preventAutoHideAsync();
 
-const App = () => {
-  const { user } = useAuth();
-  const Stack = createStackNavigator();
+const AppRoot = () => {
   const [fontsLoaded] = useFonts({
     Roboto: require("./assets/fonts/Roboto/Roboto-Regular.ttf"),
     "Roboto Bold": require("./assets/fonts/Roboto/Roboto-Bold.ttf"),
@@ -39,41 +33,17 @@ const App = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName={
-          user
-            ? user.role === ROLE.PROFESSOR
-              ? "StudentStack"
-              : "ProfessorStack"
-            : "UnauthenticatedStack"
-        }
-      >
-        <Stack.Screen
-          name="ProfessorStack"
-          component={ProfessorStack}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="StudentStack"
-          component={StudentStack}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="UnauthenticatedStack"
-          component={UnauthenticatedStack}
-          options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
+      <AppStack />
     </NavigationContainer>
   );
 };
 
-const AppWithAuthProvider = () => {
+const App = () => {
   return (
     <AuthProvider>
-      <App />
+      <AppRoot />
     </AuthProvider>
   );
 };
 
-export default AppWithAuthProvider;
+export default App;

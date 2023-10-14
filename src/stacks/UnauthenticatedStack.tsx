@@ -8,7 +8,7 @@ const Stack = createStackNavigator<any>();
 
 const UnauthenticatedStack: React.FC = () => {
   return (
-    <Stack.Navigator initialRouteName="SignIn">
+    <Stack.Navigator id="UnauthenticatedStack" initialRouteName="SignIn">
       <Stack.Screen
         name="SignIn"
         component={SignInScreen}

@@ -1,74 +1,88 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import jwtDecode from "jwt-decode";
-import { IJwtPayload } from "../interfaces";
+import AuthContextType, { IJwtPayload } from "../interfaces";
+import api from "../utils/api";
 
-interface AuthContextType {
-  user: IJwtPayload | null;
-  token: string | null;
-  signIn: (jwtToken: string) => void;
-  signOut: () => void;
-}
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }: {
   children: React.ReactNode;
 }) => {
-  const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<IJwtPayload | null>(null);
-
-  const signIn = async (jwtToken: string) => {
-    const decodedUser: IJwtPayload = jwtDecode(jwtToken);
-
-    try {
-      await AsyncStorage.setItem("jwtToken", jwtToken);
-      await AsyncStorage.setItem("userData", JSON.stringify(decodedUser));
-    } catch (error) {
-      console.error(error);
-    }
-
-    setToken(jwtToken);
-    setUser(decodedUser);
-  };
-
-  const signOut = async () => {
-    try {
-      await AsyncStorage.removeItem("jwtToken");
-      await AsyncStorage.removeItem("userData");
-    } catch (error) {
-      console.error(error);
-    }
-
-    setToken(null);
-    setUser(null);
-  };
+  const [token, setToken] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const loadUser = async () => {
-      const userDataJSON = await AsyncStorage.getItem("userData");
+    try {
+      const loadUser = async (): Promise<void> => {
+        const userDataJSON = await AsyncStorage.getItem("userData");
 
-      if (userDataJSON) {
-        const userData: IJwtPayload = JSON.parse(userDataJSON);
-        setUser(userData);
-      }
-    };
+        if (userDataJSON) {
+          const userData: IJwtPayload = JSON.parse(userDataJSON);
+          setUser(userData);
+        }
+      };
 
-    const loadToken = async () => {
-      const storageToken = await AsyncStorage.getItem("jwtToken");
-      setToken(storageToken);
-    };
+      const loadToken = async (): Promise<void> => {
+        const storageToken = await AsyncStorage.getItem("jwtToken");
+        setToken(storageToken);
+      };
 
-    // signOut();
+      loadUser();
+      loadToken();
+      checkTokenExpiration(token);
 
-    loadUser();
-    loadToken();
+      api.defaults.headers["Authorization"] = `Bearer ${token}`;
+    } catch (error) {
+      return console.error(error);
+    } finally {
+      return setLoading(false);
+    }
   }, []);
 
+  const signIn = async (jwtToken: string): Promise<void> => {
+    try {
+      const decodedUser: IJwtPayload = jwtDecode(jwtToken);
+
+      await Promise.all([
+        AsyncStorage.setItem("jwtToken", jwtToken),
+        AsyncStorage.setItem("userData", JSON.stringify(decodedUser)),
+      ]);
+
+      setToken(jwtToken);
+      setUser(decodedUser);
+
+      api.defaults.headers["Authorization"] = `Bearer ${token}`;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const signOut = async (): Promise<void> => {
+    try {
+      await Promise.all([
+        AsyncStorage.removeItem("jwtToken").then(() => setToken(null)),
+        AsyncStorage.removeItem("userData").then(() => setUser(null)),
+      ]);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const checkTokenExpiration = (token?: string | null) => {
+    if (!token) return;
+
+    const decodedToken: IJwtPayload = jwtDecode(token);
+    const expirationTime = decodedToken.exp * 1000;
+
+    if (expirationTime < Date.now()) return signOut();
+  };
+
   return (
-    <AuthContext.Provider value={{ user, token, signIn, signOut }}>
+    <AuthContext.Provider value={{ user, token, signIn, signOut, loading }}>
       {children}
     </AuthContext.Provider>
   );
@@ -76,8 +90,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
+
   if (!context) {
     throw new Error("useAuth must be used within an AuthProvider");
   }
+
   return context;
 };
