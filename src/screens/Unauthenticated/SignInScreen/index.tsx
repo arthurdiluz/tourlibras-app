@@ -7,10 +7,14 @@ import TextInputComponent from "../../../components/input";
 import UserCircleIcon from "../../../components/Icons/UserCircleIcon";
 import IonIcons from "react-native-vector-icons/Ionicons";
 import ButtonComponent from "../../../components/Button";
+import { useAuth } from "../../../contexts/AuthContext";
+import api from "../../../utils/api";
 
 type Props = NativeStackScreenProps<any>;
 
 const SignInScreen = ({ navigation }: Props) => {
+  const { signIn } = useAuth();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordHidden, setPasswordHidden] = useState(true);
@@ -26,10 +30,20 @@ const SignInScreen = ({ navigation }: Props) => {
     return navigation.navigate("PasswordRecover", { email });
   };
 
-  const handleSignIn = () => {
-    // TODO: validate credentials
-    // TODO: navigate to Student/Professor stack
-    return Alert.alert("Auth", "You will sign in");
+  const handleSignIn = async () => {
+    try {
+      // TODO: validate credentials
+      const { data } = await api.post("auth/local/signin", {
+        email,
+        password,
+      });
+
+      const accessToken = data?.accessToken as string;
+
+      return signIn(accessToken);
+    } catch (error: any) {
+      Alert.alert("Error", error?.message);
+    }
   };
 
   const handleSignUp = () => navigation.navigate("SignUp");
