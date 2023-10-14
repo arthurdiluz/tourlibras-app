@@ -1,15 +1,14 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import { UnauthenticatedStackParamList } from "../types/unauthenticatedStack.types";
-import SignInScreen from "../screens/SignInScreen";
-import SignUpScreen from "../screens/SignUpScreen";
-import PasswordRecoverScreen from "../screens/PasswordRecoverScreen";
+import SignInScreen from "../screens/Unauthenticated/SignInScreen";
+import SignUpScreen from "../screens/Unauthenticated/SignUpScreen";
+import PasswordRecoverScreen from "../screens/Unauthenticated/PasswordRecoverScreen";
 
-const Stack = createStackNavigator<UnauthenticatedStackParamList>();
+const Stack = createStackNavigator<any>();
 
 const UnauthenticatedStack: React.FC = () => {
   return (
-    <Stack.Navigator initialRouteName="SignIn">
+    <Stack.Navigator id="UnauthenticatedStack" initialRouteName="SignIn">
       <Stack.Screen
         name="SignIn"
         component={SignInScreen}

@@ -1,31 +1,35 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Platform, Text, View } from "react-native";
+import React, { useState } from "react";
+import { Alert, Platform, Text, View } from "react-native";
 import {
   ScrollView,
   Switch,
   TouchableOpacity,
 } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
-import UserCircleIcon from "../../components/Icons/UserCircleIcon";
-import TextInputComponent from "../../components/input";
-import { UnauthenticatedStackParamList } from "../../types/unauthenticatedStack.types";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import styles from "./styles";
+import UserCircleIcon from "../../../components/Icons/UserCircleIcon";
+import TextInputComponent from "../../../components/input";
 import IonIcons from "react-native-vector-icons/Ionicons";
-import ButtonComponent from "../../components/Button";
-import ArrowLeftIcon from "../../components/Icons/ArrowLeftIcon";
-import { useState } from "react";
+import ButtonComponent from "../../../components/Button";
+import ArrowLeftIcon from "../../../components/Icons/ArrowLeftIcon";
 import { Picker } from "@react-native-picker/picker";
+import { useAuth } from "../../../contexts/AuthContext";
+import api from "../../../utils/api";
 
-type Props = NativeStackScreenProps<UnauthenticatedStackParamList>;
+type Props = NativeStackScreenProps<any>;
 
 const SignUpScreen = ({ navigation }: Props) => {
   const platform = Platform.OS;
+  const { signIn } = useAuth();
+
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordHidden, setPasswordHidden] = useState(true);
   const [isProfessor, setIsProfessor] = useState(false);
   const [selectedGrammar, setSelectedGrammar] = useState("");
+
   const grammarList = [
     { value: "SVO", label: "SVO" },
     { value: "SOV", label: "SOV" },
@@ -58,25 +62,56 @@ const SignUpScreen = ({ navigation }: Props) => {
     setPickerVisible(!isPickerVisible);
   };
 
+  const handleProfessorSignUp = async () => {
+    try {
+      await api.post("/user/professor", {
+        fullName,
+        email,
+        password,
+        grammar: selectedGrammar,
+        profilePhoto: null,
+      });
+
+      const { data } = await api.post("auth/local/signin", {
+        email,
+        password,
+      });
+
+      const accessToken = data?.accessToken as string;
+
+      return signIn(accessToken);
+    } catch (error: any) {
+      console.error(error);
+      return Alert.alert("Não foi possível criar usuário", error?.message);
+    }
+  };
+
+  const handleStudentSignUp = async () => {
+    try {
+      await api.post("/user/student", {
+        fullName,
+        email,
+        password,
+        profilePhoto: undefined,
+      });
+
+      const { data } = await api.post("auth/local/signin", {
+        email,
+        password,
+      });
+
+      const accessToken = data?.accessToken as string;
+
+      return signIn(accessToken);
+    } catch (error: any) {
+      console.error(error);
+      return Alert.alert("Não foi possível criar usuário", error?.message);
+    }
+  };
+
   const handleSignUp = () => {
-    // TODO: create user
-
-    return isProfessor
-      ? {
-          fullName,
-          email,
-          password,
-          grammar: selectedGrammar,
-          profilePhoto: null,
-        }
-      : {
-          fullName,
-          email,
-          password,
-          profilePhoto: null,
-        };
-
-    // TODO: navigate to the Student/Professor stack homepage
+    // TODO: validate inputs
+    return isProfessor ? handleProfessorSignUp() : handleStudentSignUp();
   };
 
   return (
@@ -120,7 +155,6 @@ const SignUpScreen = ({ navigation }: Props) => {
                 placeholder="Digite sua senha"
                 value={password}
                 onChangeText={handlePasswordChange}
-                onSubmitEditing={handleSignUp}
                 height={60}
                 width={"100%"}
                 style="primary"

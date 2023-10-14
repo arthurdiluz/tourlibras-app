@@ -1,14 +1,13 @@
 import React, { useEffect } from "react";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import UnauthenticatedStack from "./src/stacks/UnauthenticatedStack";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import { AuthProvider } from "./src/contexts/AuthContext";
+import AppStack from "./src/stacks/AppStack";
 
 SplashScreen.preventAutoHideAsync();
 
-const App = () => {
-  const Stack = createStackNavigator();
+const AppRoot = () => {
   const [fontsLoaded] = useFonts({
     Roboto: require("./assets/fonts/Roboto/Roboto-Regular.ttf"),
     "Roboto Bold": require("./assets/fonts/Roboto/Roboto-Bold.ttf"),
@@ -34,14 +33,16 @@ const App = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="UnauthenticatedStack"
-          component={UnauthenticatedStack}
-          options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
+      <AppStack />
     </NavigationContainer>
+  );
+};
+
+const App = () => {
+  return (
+    <AuthProvider>
+      <AppRoot />
+    </AuthProvider>
   );
 };
 
