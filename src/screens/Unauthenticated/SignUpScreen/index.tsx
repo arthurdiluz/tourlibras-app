@@ -20,14 +20,16 @@ import api from "../../../utils/api";
 type Props = NativeStackScreenProps<any>;
 
 const SignUpScreen = ({ navigation }: Props) => {
-  const { signIn } = useAuth();
   const platform = Platform.OS;
+  const { signIn } = useAuth();
+
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordHidden, setPasswordHidden] = useState(true);
   const [isProfessor, setIsProfessor] = useState(false);
   const [selectedGrammar, setSelectedGrammar] = useState("");
+
   const grammarList = [
     { value: "SVO", label: "SVO" },
     { value: "SOV", label: "SOV" },
@@ -62,7 +64,7 @@ const SignUpScreen = ({ navigation }: Props) => {
 
   const handleProfessorSignUp = async () => {
     try {
-      const { data: professorData } = await api.post("/user/professor", {
+      await api.post("/user/professor", {
         fullName,
         email,
         password,
@@ -70,47 +72,45 @@ const SignUpScreen = ({ navigation }: Props) => {
         profilePhoto: null,
       });
 
-      if (!professorData) {
-        throw new Error("Não foi possível criar usuário professor");
-      }
-
-      const professorId = professorData.Professor.id as number;
-      const { data: authData } = await api.post("auth/local/signin", {
+      const { data } = await api.post("auth/local/signin", {
         email,
         password,
       });
-      const accessToken = authData.accessToken as string;
 
-      signIn(accessToken);
+      const accessToken = data?.accessToken as string;
 
-      return navigation.navigate("ProfessorStack", {
-        screen: "ProfessorHomepage",
-        params: { professorId },
-      });
-    } catch (error) {
+      return signIn(accessToken);
+    } catch (error: any) {
       console.error(error);
-      return Alert.alert("Erro", "Não foi possível criar usuário");
+      return Alert.alert("Não foi possível criar usuário", error?.message);
     }
   };
 
   const handleStudentSignUp = async () => {
-    return api
-      .post("/user/student", {
+    try {
+      await api.post("/user/student", {
         fullName,
         email,
         password,
         profilePhoto: undefined,
-      })
-      .then(({ data }) => {
-        // TODO: implement user stack
-        // return navigation.navigate('')
-      })
-      .catch((error) => {
-        return Alert.alert("Could not create account", error);
       });
+
+      const { data } = await api.post("auth/local/signin", {
+        email,
+        password,
+      });
+
+      const accessToken = data?.accessToken as string;
+
+      return signIn(accessToken);
+    } catch (error: any) {
+      console.error(error);
+      return Alert.alert("Não foi possível criar usuário", error?.message);
+    }
   };
 
   const handleSignUp = () => {
+    // TODO: validate inputs
     return isProfessor ? handleProfessorSignUp() : handleStudentSignUp();
   };
 
