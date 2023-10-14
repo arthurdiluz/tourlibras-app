@@ -1,19 +1,17 @@
 import axios from "axios";
-import {
-  contentType,
-  applicationJson,
-  accept,
-  baseURL,
-  timeout,
-} from "../constants";
+import { baseURL, timeout } from "../constants";
 
 const api = axios.create({
-  baseURL: baseURL,
-  headers: {
-    [contentType]: applicationJson,
-    [accept]: applicationJson,
-  },
-  timeout: timeout,
+  baseURL,
+  timeout,
 });
 
 export default api;
+
+export function createAxiosAuthInterceptor(token: string) {
+  api.interceptors.request.clear();
+  api.interceptors.request.use(function (config) {
+    config.headers.Authorization = token ? `Bearer ${token}` : "";
+    return config;
+  });
+}

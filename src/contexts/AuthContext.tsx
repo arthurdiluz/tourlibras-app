@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import jwtDecode from "jwt-decode";
 import AuthContextType, { IJwtPayload } from "../interfaces";
-import api from "../utils/api";
+import api, { createAxiosAuthInterceptor } from "../utils/api";
 
 export const AuthContext = createContext<AuthContextType | null>(null);
 
@@ -20,28 +20,34 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       const loadUser = async (): Promise<void> => {
         const userDataJSON = await AsyncStorage.getItem("userData");
 
-        if (userDataJSON) {
-          const userData: IJwtPayload = JSON.parse(userDataJSON);
-          setUser(userData);
-        }
+        if (!userDataJSON) return;
+
+        setUser(JSON.parse(userDataJSON));
       };
 
       const loadToken = async (): Promise<void> => {
         const storageToken = await AsyncStorage.getItem("jwtToken");
-        setToken(storageToken);
+
+        if (!storageToken) return;
+
+        handleSetToken(storageToken);
       };
 
       loadUser();
       loadToken();
-      checkTokenExpiration(token);
 
-      api.defaults.headers["Authorization"] = `Bearer ${token}`;
+      checkTokenExpiration(token);
     } catch (error) {
       return console.error(error);
     } finally {
       return setLoading(false);
     }
   }, []);
+
+  const handleSetToken = (tk: string | null) => {
+    if (tk) createAxiosAuthInterceptor(tk);
+    setToken(tk);
+  };
 
   const signIn = async (jwtToken: string): Promise<void> => {
     try {
@@ -52,7 +58,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         AsyncStorage.setItem("userData", JSON.stringify(decodedUser)),
       ]);
 
-      setToken(jwtToken);
+      handleSetToken(jwtToken);
       setUser(decodedUser);
 
       api.defaults.headers["Authorization"] = `Bearer ${token}`;
@@ -64,7 +70,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const signOut = async (): Promise<void> => {
     try {
       await Promise.all([
-        AsyncStorage.removeItem("jwtToken").then(() => setToken(null)),
+        AsyncStorage.removeItem("jwtToken").then(() => handleSetToken(null)),
         AsyncStorage.removeItem("userData").then(() => setUser(null)),
       ]);
     } catch (error) {
@@ -73,12 +79,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const checkTokenExpiration = (token?: string | null) => {
-    if (!token) return;
+    if (!token) return signOut();
 
     const decodedToken: IJwtPayload = jwtDecode(token);
     const expirationTime = decodedToken.exp * 1000;
 
-    if (expirationTime < Date.now()) return signOut();
+    if (expirationTime <= Date.now()) return signOut();
   };
 
   return (
