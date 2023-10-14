@@ -1,4 +1,4 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import React, { useState } from "react";
 import { Alert, Platform, Text, View } from "react-native";
 import {
   ScrollView,
@@ -6,16 +6,16 @@ import {
   TouchableOpacity,
 } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import styles from "./styles";
 import UserCircleIcon from "../../../components/Icons/UserCircleIcon";
 import TextInputComponent from "../../../components/input";
-import styles from "./styles";
 import IonIcons from "react-native-vector-icons/Ionicons";
 import ButtonComponent from "../../../components/Button";
 import ArrowLeftIcon from "../../../components/Icons/ArrowLeftIcon";
-import { useState } from "react";
 import { Picker } from "@react-native-picker/picker";
-import api from "../../../utils/api";
 import { useAuth } from "../../../contexts/AuthContext";
+import api from "../../../utils/api";
 
 type Props = NativeStackScreenProps<any>;
 

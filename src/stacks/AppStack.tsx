@@ -1,13 +1,10 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import SignInScreen from "../screens/Unauthenticated/SignInScreen";
-import SignUpScreen from "../screens/Unauthenticated/SignUpScreen";
-import PasswordRecoverScreen from "../screens/Unauthenticated/PasswordRecoverScreen";
-import { useAuth } from "../contexts/AuthContext";
-import { ROLE } from "../enums";
+import UnauthenticatedStack from "./UnauthenticatedStack";
 import ProfessorStack from "./ProfessorStack";
 import StudentStack from "./StudentStack";
-import UnauthenticatedStack from "./UnauthenticatedStack";
+import { useAuth } from "../contexts/AuthContext";
+import { ROLE } from "../enums";
 
 const Stack = createStackNavigator<any>();
 
