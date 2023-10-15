@@ -2,7 +2,7 @@ import React from "react";
 import { TouchableOpacity, Text, DimensionValue } from "react-native";
 import styles from "./styles";
 
-type StyleOptions = "primary" | "secondary";
+type StyleOptions = "primary" | "secondary" | "tertiary" | "warning";
 
 interface Props {
   title: string;
@@ -27,9 +27,22 @@ const ButtonComponent: React.FC<Props> = ({
     <TouchableOpacity
       onPress={onPress}
       disabled={disabled}
-      style={{ ...styles[style], ...customStyle, height, width }}
+      style={{
+        ...styles.default,
+        ...styles[style],
+        ...customStyle,
+        height,
+        width,
+      }}
     >
-      <Text style={styles[`${style}Text`]}>{title}</Text>
+      <Text
+        style={{
+          ...styles.defaultText,
+          ...styles[`${style}Text`],
+        }}
+      >
+        {title}
+      </Text>
     </TouchableOpacity>
   );
 };
