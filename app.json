@@ -2,9 +2,14 @@
   "expo": {
     "name": "TourLibras",
     "slug": "tourlibras",
-    "platforms": [
-      "ios",
-      "android"
+    "platforms": ["ios", "android"],
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "O app acessa suas imagens para você poder escolher sua imagem"
+        }
+      ]
     ],
     "version": "1.0.0",
     "orientation": "portrait",
@@ -15,9 +20,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
