@@ -158,13 +158,17 @@ const ProfessorHomepageScreen = ({ navigation }: Props) => {
     }
   };
 
-  const handleViewProfile = () => {};
+  const handleViewProfile = () => {
+    // TODO: implement handler
+  };
 
   const handleManageLessons = () => {
     return navigation.navigate("ProfessorManageLessons");
   };
 
-  const handleManageMedals = () => {};
+  const handleManageMedals = () => {
+    return navigation.navigate("ProfessorManageMedals");
+  };
 
   const handleSignOut = () => {
     return signOut();

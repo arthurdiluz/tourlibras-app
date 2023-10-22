@@ -12,7 +12,7 @@ import { getImageUrlFromS3Key } from "../../../utils/file";
 
 type Props = NativeStackScreenProps<any>;
 
-const ProfessorManageLessons = ({ navigation }: Props) => {
+const ProfessorManageMedals = ({ navigation }: Props) => {
   const { user } = useAuth();
   const [profilePicture, setProfilePicture] = useState<string | null>(null);
 
@@ -55,9 +55,9 @@ const ProfessorManageLessons = ({ navigation }: Props) => {
         />
       </View>
       <View style={styles.menuButtons}>
-        <ButtonComponent title="criar aula" onPress={handleCreateLesson} />
+        <ButtonComponent title="criar medalha" onPress={handleCreateLesson} />
         <ButtonComponent
-          title="editar/remover aula"
+          title="editar/remover medalha"
           onPress={handleManageLesson}
         />
       </View>
@@ -72,4 +72,4 @@ const ProfessorManageLessons = ({ navigation }: Props) => {
   );
 };
 
-export default ProfessorManageLessons;
+export default ProfessorManageMedals;
