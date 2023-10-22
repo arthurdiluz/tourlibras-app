@@ -5,7 +5,7 @@ import { Alert, Text, View } from "react-native";
 import styles from "./styles";
 import api from "../../../utils/api";
 import { useAuth } from "../../../contexts/AuthContext";
-import { Professor } from "../../../interfaces";
+import { IProfessor } from "../../../interfaces";
 import UserImageComponent from "../../../components/UserImage";
 import ButtonComponent from "../../../components/Button";
 import * as ImagePicker from "expo-image-picker";
@@ -16,7 +16,7 @@ type Props = NativeStackScreenProps<any>;
 
 const ProfessorHomepageScreen = ({ navigation }: Props) => {
   const { user, token, signOut } = useAuth();
-  const [professor, setProfessor] = useState<Professor | null>(null);
+  const [professor, setProfessor] = useState<IProfessor | null>(null);
 
   useEffect(() => {
     async function getProfessorData() {
@@ -26,7 +26,7 @@ const ProfessorHomepageScreen = ({ navigation }: Props) => {
         const { Professor } = (await api.get(`/user/${user?.sub}`))?.data;
         const { data } = await api.get(`/professor/${Professor?.id}`);
 
-        setProfessor(data as Professor);
+        setProfessor(data as IProfessor);
       } catch (error: any) {
         console.error(error);
         return Alert.alert("Could not load professor data", error?.message);
@@ -84,7 +84,7 @@ const ProfessorHomepageScreen = ({ navigation }: Props) => {
                           ...prevProfessor?.User,
                           profilePhoto: key,
                         },
-                      } as Professor;
+                      } as IProfessor;
                     });
                   })
                   .catch((error: any) => {
@@ -133,7 +133,7 @@ const ProfessorHomepageScreen = ({ navigation }: Props) => {
                           ...prevProfessor?.User,
                           profilePhoto: key,
                         },
-                      } as Professor;
+                      } as IProfessor;
                     });
                   })
                   .catch((error: any) => {
@@ -159,7 +159,7 @@ const ProfessorHomepageScreen = ({ navigation }: Props) => {
   };
 
   const handleViewProfile = () => {
-    // TODO: implement handler
+    return navigation.navigate("ProfessorProfile");
   };
 
   const handleManageLessons = () => {

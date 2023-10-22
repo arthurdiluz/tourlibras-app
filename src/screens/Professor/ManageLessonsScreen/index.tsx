@@ -5,7 +5,7 @@ import { Alert, Text, View } from "react-native";
 import styles from "./styles";
 import api from "../../../utils/api";
 import { useAuth } from "../../../contexts/AuthContext";
-import { User } from "../../../interfaces";
+import { IUser } from "../../../interfaces";
 import UserImageComponent from "../../../components/UserImage";
 import ButtonComponent from "../../../components/Button";
 import { getImageUrlFromS3Key } from "../../../utils/file";
@@ -22,7 +22,7 @@ const ProfessorManageLessonsScreen = ({ navigation }: Props) => {
 
       try {
         const { data } = await api.get(`/user/${user?.sub}`);
-        const { profilePhoto } = data as User;
+        const { profilePhoto } = data as IUser;
 
         setProfilePicture(profilePhoto);
       } catch (error: any) {

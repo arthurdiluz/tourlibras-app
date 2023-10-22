@@ -1,10 +1,10 @@
 import * as React from "react";
 import Svg, { SvgProps, G, Path } from "react-native-svg";
 
-const ArrowLeftIcon = (props: SvgProps) => (
+const ArrowLeftIcon = ({ stroke, ...props }: SvgProps) => (
   <Svg {...props}>
     <G
-      stroke="#fff"
+      stroke={stroke ? stroke : "#FFF"}
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={4}

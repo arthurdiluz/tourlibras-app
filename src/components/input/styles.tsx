@@ -4,20 +4,23 @@ const styles = StyleSheet.create({
   default: {
     paddingVertical: 18,
     paddingHorizontal: 22,
-  },
-
-  primary: {
     borderRadius: 30,
-    borderWidth: 4,
-    borderColor: "#FFF",
-    paddingHorizontal: 22,
     fontFamily: "Roboto",
     fontSize: 20,
     fontWeight: "400",
-    color: "#FFF",
   },
 
-  secondary: {},
+  primary: {
+    color: "#FFF",
+    borderWidth: 4,
+    borderColor: "#FFF",
+  },
+
+  secondary: {
+    // color: "#A0A0A0",
+    borderWidth: 2,
+    borderColor: "#D9D9D9",
+  },
 });
 
 export default styles;
