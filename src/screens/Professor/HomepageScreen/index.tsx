@@ -160,7 +160,9 @@ const ProfessorHomepageScreen = ({ navigation }: Props) => {
 
   const handleViewProfile = () => {};
 
-  const handleManageClasses = () => {};
+  const handleManageLessons = () => {
+    return navigation.navigate("ProfessorManageLessons");
+  };
 
   const handleManageMedals = () => {};
 
@@ -185,7 +187,7 @@ const ProfessorHomepageScreen = ({ navigation }: Props) => {
         <ButtonComponent title="meu perfil" onPress={handleViewProfile} />
         <ButtonComponent
           title="gerenciar aulas"
-          onPress={handleManageClasses}
+          onPress={handleManageLessons}
         />
         <ButtonComponent
           title="gerenciar medalhas"
