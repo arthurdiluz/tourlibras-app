@@ -12,7 +12,7 @@ import { getImageUrlFromS3Key } from "../../../utils/file";
 
 type Props = NativeStackScreenProps<any>;
 
-const ProfessorManageMedals = ({ navigation }: Props) => {
+const ProfessorManageMedalsScreen = ({ navigation }: Props) => {
   const { user } = useAuth();
   const [profilePicture, setProfilePicture] = useState<string | null>(null);
 
@@ -72,4 +72,4 @@ const ProfessorManageMedals = ({ navigation }: Props) => {
   );
 };
 
-export default ProfessorManageMedals;
+export default ProfessorManageMedalsScreen;

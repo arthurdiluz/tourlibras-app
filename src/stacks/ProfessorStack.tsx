@@ -1,8 +1,8 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import ProfessorHomepageScreen from "../screens/Professor/HomepageScreen";
-import ProfessorManageLessons from "../screens/Professor/ManageLessons";
-import ProfessorManageMedals from "../screens/Professor/ManageMedals";
+import ProfessorManageLessonsScreen from "../screens/Professor/ManageLessonsScreen";
+import ProfessorManageMedalsScreen from "../screens/Professor/ManageMedalsScreen";
 
 const Stack = createStackNavigator<any>();
 
@@ -16,12 +16,12 @@ const ProfessorStack: React.FC = () => {
       />
       <Stack.Screen
         name="ProfessorManageLessons"
-        component={ProfessorManageLessons}
+        component={ProfessorManageLessonsScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
         name="ProfessorManageMedals"
-        component={ProfessorManageMedals}
+        component={ProfessorManageMedalsScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
