@@ -221,7 +221,7 @@ const SignUpScreen = ({ navigation }: Props) => {
           )}
           <View style={styles.buttonSection}>
             <ButtonComponent
-              title="Cadastrar-se"
+              title="cadastrar-se"
               style="primary"
               height={60}
               width={"100%"}
