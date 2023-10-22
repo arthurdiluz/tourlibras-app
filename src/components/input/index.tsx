@@ -45,6 +45,8 @@ const TextInputComponent: React.FC<Props> = ({
       onSubmitEditing={onSubmitEditing}
       keyboardType={keyboardType}
       secureTextEntry={secureTextEntry}
+      autoCapitalize={"none"}
+      placeholderTextColor={style === "primary" ? "#FFF" : "#A0A0A0"}
       style={{
         ...styles[style],
         ...styles["default"],
@@ -52,7 +54,6 @@ const TextInputComponent: React.FC<Props> = ({
         height,
         width,
       }}
-      placeholderTextColor={style === "primary" ? "#FFF" : "#A0A0A0"}
     />
   );
 };

@@ -9,18 +9,14 @@ import { Professor } from "../../../interfaces";
 import UserImageComponent from "../../../components/UserImage";
 import ButtonComponent from "../../../components/Button";
 import * as ImagePicker from "expo-image-picker";
-import {
-  CameraType,
-  MediaTypeOptions,
-  UIImagePickerPreferredAssetRepresentationMode,
-} from "expo-image-picker";
+import { CameraType, MediaTypeOptions } from "expo-image-picker";
+import { getImageUrlFromS3Key, uploadImage } from "../../../utils/file";
 
 type Props = NativeStackScreenProps<any>;
 
 const ProfessorHomepageScreen = ({ navigation }: Props) => {
-  const { user, signOut } = useAuth();
+  const { user, token, signOut } = useAuth();
   const [professor, setProfessor] = useState<Professor | null>(null);
-  const [image, setImage] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     async function getProfessorData() {
@@ -45,10 +41,10 @@ const ProfessorHomepageScreen = ({ navigation }: Props) => {
       const imageOptions: ImagePicker.ImagePickerOptions = {
         allowsEditing: true,
         allowsMultipleSelection: false,
-        aspect: [4, 3],
+        aspect: [1, 1],
         cameraType: CameraType.front,
         mediaTypes: MediaTypeOptions.Images,
-        quality: 0,
+        quality: 1,
       };
 
       Alert.alert(
@@ -60,7 +56,6 @@ const ProfessorHomepageScreen = ({ navigation }: Props) => {
             onPress: async () => {
               const cameraPermission =
                 await ImagePicker.requestCameraPermissionsAsync();
-
               if (
                 cameraPermission.status !== ImagePicker.PermissionStatus.GRANTED
               ) {
@@ -69,12 +64,37 @@ const ProfessorHomepageScreen = ({ navigation }: Props) => {
                   "Por favor, permita o app acessar sua câmera."
                 );
               }
-
               const selectedImage = await ImagePicker.launchCameraAsync(
                 imageOptions
               );
 
-              selectedImage.assets && setImage(selectedImage.assets[0].uri);
+              if (selectedImage.assets) {
+                const { uri } = selectedImage.assets[0];
+
+                await uploadImage({
+                  endpoint: `/user/${user?.sub}/profile-picture`,
+                  uri,
+                  token,
+                })
+                  .then((key) => {
+                    setProfessor((prevProfessor) => {
+                      return {
+                        ...prevProfessor,
+                        User: {
+                          ...prevProfessor?.User,
+                          profilePhoto: key,
+                        },
+                      } as Professor;
+                    });
+                  })
+                  .catch((error: any) => {
+                    console.error(error);
+                    return Alert.alert(
+                      "Não foi possível enviar a imagem",
+                      error?.message
+                    );
+                  });
+              }
             },
           },
           {
@@ -97,7 +117,33 @@ const ProfessorHomepageScreen = ({ navigation }: Props) => {
                 imageOptions
               );
 
-              selectedImage.assets && setImage(selectedImage.assets[0].uri);
+              if (selectedImage.assets) {
+                const { uri } = selectedImage.assets[0];
+
+                await uploadImage({
+                  endpoint: `/user/${user?.sub}/profile-picture`,
+                  uri,
+                  token,
+                })
+                  .then((key) => {
+                    setProfessor((prevProfessor) => {
+                      return {
+                        ...prevProfessor,
+                        User: {
+                          ...prevProfessor?.User,
+                          profilePhoto: key,
+                        },
+                      } as Professor;
+                    });
+                  })
+                  .catch((error: any) => {
+                    console.error(error);
+                    return Alert.alert(
+                      "Não foi possível enviar a imagem",
+                      error?.message
+                    );
+                  });
+              }
             },
           },
           {
@@ -127,7 +173,11 @@ const ProfessorHomepageScreen = ({ navigation }: Props) => {
       <Text style={styles.panelNameText}>{"Painel do Professor"}</Text>
       <View style={styles.imageSection}>
         <UserImageComponent
-          source={image ? { uri: image } : undefined}
+          source={
+            professor?.User.profilePhoto
+              ? { uri: getImageUrlFromS3Key(professor?.User.profilePhoto) }
+              : undefined
+          }
           onPress={handleUpdateImage}
         />
       </View>
