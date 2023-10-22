@@ -1,6 +1,6 @@
 import { ROLE } from "../enums";
 
-export interface User {
+export interface IUser {
   email: string;
   fullName: string;
   id: number;
@@ -9,11 +9,11 @@ export interface User {
   role: string;
 }
 
-export interface Professor {
+export interface IProfessor {
   Items: any[];
   Medals: any[];
   Students: any[];
-  User: User;
+  User: IUser;
   createdAt: string;
   grammar: string;
   id: number;
