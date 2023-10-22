@@ -7,7 +7,8 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "O app acessa suas imagens para você poder escolher sua imagem"
+          "photosPermission": "Permita $(PRODUCT_NAME) acessar sua galeria",
+          "cameraPermission": "Permita $(PRODUCT_NAME) acessar sua câmera"
         }
       ]
     ],
@@ -22,7 +23,8 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.arthurdiluz.tourlibras"
     },
     "android": {
       "adaptiveIcon": {
