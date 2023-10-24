@@ -228,6 +228,7 @@ const UserProfileScreen = ({ navigation }: Props) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.topMenu}>
+        {/* TODO: fix "go back" button */}
         <View style={styles.ArrowLeft}>
           <TouchableOpacity onPress={handleGoBack}>
             <ArrowLeftIcon
