@@ -6,7 +6,7 @@ import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "../../contexts/AuthContext";
-import { IUser } from "../../interfaces";
+import { IProfessor, IUser } from "../../interfaces";
 import {
   ImagePickerOptions,
   requestCameraPermissionsAsync,
@@ -40,26 +40,43 @@ const UserProfileScreen = ({ navigation }: Props) => {
 
   const [user, setUser] = useState<IUser | null>(null);
   const [isPickerVisible, setPickerVisible] = useState(platform === "android");
+  const [name, setName] = useState("");
   const [selectedGrammar, setSelectedGrammar] = useState("");
 
   useEffect(() => {
     async function getUserData() {
-      if (!user) return;
+      if (!userContext) return navigation.navigate("UnauthenticatedStack");
 
       try {
-        const { data } = await api.get(`/user/${userContext?.sub}`);
+        const data: IUser = (await api.get(`/user/${userContext?.sub}`)).data;
 
-        console.log({ data });
-
-        setUser(data as IUser);
+        setName(data.fullName);
+        setUser(data);
       } catch (error: any) {
         console.error(error);
         return Alert.alert("Could not load user data", error?.message);
       }
     }
 
+    async function getProfessorData() {
+      if (!userContext) return;
+
+      try {
+        const { Professor } = (await api.get(`/user/${userContext.sub}`))?.data;
+        const data: IProfessor = await (
+          await api.get(`/professor/${Professor?.id}`)
+        ).data;
+
+        setSelectedGrammar(data.grammar);
+      } catch (error: any) {
+        console.error(error);
+        return Alert.alert("Could not load professor data", error?.message);
+      }
+    }
+
     getUserData();
-  }, [user]);
+    userContext?.role === ROLE.PROFESSOR && getProfessorData();
+  }, [userContext]);
 
   const handleUpdateImage = async () => {
     try {
@@ -171,7 +188,9 @@ const UserProfileScreen = ({ navigation }: Props) => {
     setPickerVisible(!isPickerVisible);
   };
 
-  const handleGoBack = () => navigation.pop();
+  const handleGoBack = () => navigation.goBack();
+
+  const handleName = (_name: string) => setName(_name);
 
   const handleCredentials = () => {};
 
@@ -211,10 +230,12 @@ const UserProfileScreen = ({ navigation }: Props) => {
           <View style={styles.inputField}>
             <Text style={styles.inputLabel}>{"Nome"}</Text>
             <TextInputComponent
+              value={name}
+              onChangeText={handleName}
+              style={"secondary"}
+              keyboardType={"default"}
               height={55}
               width={"100%"}
-              keyboardType={"default"}
-              style={"secondary"}
             />
           </View>
           {/* TODO: create component for grammar picker */}
