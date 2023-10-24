@@ -36,6 +36,7 @@ const ProfessorHomepageScreen = ({ navigation }: Props) => {
     getProfessorData();
   }, [user]);
 
+  // TODO: remove image handler
   const handleUpdateImage = async () => {
     try {
       const imageOptions: ImagePicker.ImagePickerOptions = {

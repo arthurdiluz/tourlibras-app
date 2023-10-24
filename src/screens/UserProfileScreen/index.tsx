@@ -198,23 +198,23 @@ const UserProfileScreen = ({ navigation }: Props) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={styles.topMenu}>
+        <View style={styles.ArrowLeft}>
+          <TouchableOpacity onPress={handleGoBack}>
+            <ArrowLeftIcon
+              height={40}
+              width={40}
+              fillOpacity={0}
+              stroke={"#1B9CFC"}
+            />
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.panelText}>{"Meu perfil"}</Text>
+      </View>
       <ScrollView
         style={styles.scrollContainer}
         contentContainerStyle={{ alignItems: "center" }}
       >
-        <View style={styles.topMenu}>
-          <View style={styles.ArrowLeft}>
-            <TouchableOpacity onPress={handleGoBack}>
-              <ArrowLeftIcon
-                height={40}
-                width={40}
-                fillOpacity={0}
-                stroke={"#1B9CFC"}
-              />
-            </TouchableOpacity>
-          </View>
-          <Text style={styles.panelText}>{"Meu perfil"}</Text>
-        </View>
         <View style={styles.imageSection}>
           <UserImageComponent
             style="secundary"
@@ -281,19 +281,19 @@ const UserProfileScreen = ({ navigation }: Props) => {
             </View>
           )}
         </View>
-        <View style={styles.actionButtons}>
-          <ButtonComponent
-            title="editar credenciais"
-            style="primary"
-            onPress={handleCredentials}
-          />
-          <ButtonComponent
-            title="salvar"
-            style="secondary"
-            onPress={handleSave}
-          />
-        </View>
       </ScrollView>
+      <View style={styles.actionButtons}>
+        <ButtonComponent
+          title="editar credenciais"
+          style="primary"
+          onPress={handleCredentials}
+        />
+        <ButtonComponent
+          title="salvar"
+          style="secondary"
+          onPress={handleSave}
+        />
+      </View>
     </SafeAreaView>
   );
 };

@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
 
   topMenu: {
     height: "10%",
-    width: "100%",
+    width: "90%",
     alignContent: "center",
     justifyContent: "center",
   },
@@ -76,9 +76,10 @@ const styles = StyleSheet.create({
   },
 
   actionButtons: {
-    width: "100%",
+    width: "90%",
     marginVertical: 10,
     gap: 10,
+    paddingHorizontal: 1,
   },
 });
 
