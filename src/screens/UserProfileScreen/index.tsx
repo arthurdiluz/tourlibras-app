@@ -39,9 +39,12 @@ const UserProfileScreen = ({ navigation }: Props) => {
   ];
 
   const [user, setUser] = useState<IUser | null>(null);
-  const [isPickerVisible, setPickerVisible] = useState(platform === "android");
-  const [name, setName] = useState("");
+  const [fullName, setFullname] = useState("");
+  const [professor, setProfessor] = useState<IProfessor | null>(null);
   const [selectedGrammar, setSelectedGrammar] = useState("");
+  const [isPickerVisible, setPickerVisible] = useState<boolean>(
+    platform === "android"
+  );
 
   useEffect(() => {
     async function getUserData() {
@@ -50,32 +53,43 @@ const UserProfileScreen = ({ navigation }: Props) => {
       try {
         const data: IUser = (await api.get(`/user/${userContext?.sub}`)).data;
 
-        setName(data.fullName);
+        setFullname(data.fullName);
         setUser(data);
+
+        switch (userContext.role) {
+          case "PROFESSOR":
+            try {
+              const { Professor } = (await api.get(`/user/${userContext.sub}`))
+                ?.data;
+              const professorData: IProfessor = await (
+                await api.get(`/professor/${Professor?.id}`)
+              ).data;
+
+              setProfessor(professorData);
+              setSelectedGrammar(professorData.grammar);
+            } catch (error: any) {
+              console.error(error);
+              return Alert.alert(
+                "Could not load professor data",
+                error?.message
+              );
+            }
+            break;
+
+          case "STUDENT":
+            // TODO: implement user case
+            break;
+
+          default:
+            break;
+        }
       } catch (error: any) {
         console.error(error);
         return Alert.alert("Could not load user data", error?.message);
       }
     }
 
-    async function getProfessorData() {
-      if (!userContext) return;
-
-      try {
-        const { Professor } = (await api.get(`/user/${userContext.sub}`))?.data;
-        const data: IProfessor = await (
-          await api.get(`/professor/${Professor?.id}`)
-        ).data;
-
-        setSelectedGrammar(data.grammar);
-      } catch (error: any) {
-        console.error(error);
-        return Alert.alert("Could not load professor data", error?.message);
-      }
-    }
-
     getUserData();
-    userContext?.role === ROLE.PROFESSOR && getProfessorData();
   }, [userContext]);
 
   const handleUpdateImage = async () => {
@@ -184,17 +198,32 @@ const UserProfileScreen = ({ navigation }: Props) => {
     }
   };
 
-  const handleTogglePicker = () => {
-    setPickerVisible(!isPickerVisible);
-  };
-
   const handleGoBack = () => navigation.goBack();
 
-  const handleName = (_name: string) => setName(_name);
+  const handleTogglePicker = () => setPickerVisible(!isPickerVisible);
+
+  const handleFullname = (name: string) => setFullname(name);
 
   const handleCredentials = () => {};
 
-  const handleSave = () => {};
+  const handleSave = async () => {
+    // TODO: add fields validation
+
+    try {
+      if (user?.role === ROLE.PROFESSOR) {
+        await api.patch(`/professor/${professor?.id}`, {
+          grammar: selectedGrammar,
+        });
+      }
+
+      await api.patch(`/user/${userContext?.sub}`, { fullName });
+
+      return handleGoBack();
+    } catch (error: any) {
+      console.error(error);
+      return Alert.alert("Could not update data", error?.message);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -230,8 +259,8 @@ const UserProfileScreen = ({ navigation }: Props) => {
           <View style={styles.inputField}>
             <Text style={styles.inputLabel}>{"Nome"}</Text>
             <TextInputComponent
-              value={name}
-              onChangeText={handleName}
+              value={fullName}
+              onChangeText={handleFullname}
               style={"secondary"}
               keyboardType={"default"}
               height={55}
