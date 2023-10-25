@@ -4,7 +4,7 @@ import ProfessorHomepageScreen from "../screens/Professor/HomepageScreen";
 import ProfessorManageLessonsScreen from "../screens/Professor/ManageLessonsScreen";
 import ProfessorManageMedalsScreen from "../screens/Professor/ManageMedalsScreen";
 import UserProfileScreen from "../screens/User/UserProfileScreen";
-import UpdateUserProfileScreen from "../screens/UpdateUserProfileScreen";
+import UpdateUserProfileScreen from "../screens/User/UpdateUserProfileScreen";
 
 const Stack = createStackNavigator<any>();
 

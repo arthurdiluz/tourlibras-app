@@ -4,12 +4,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Alert, Text, View } from "react-native";
 import styles from "./styles";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import ArrowLeftIcon from "../../components/Icons/ArrowLeftIcon";
-import TextInputComponent from "../../components/input";
-import ButtonComponent from "../../components/Button";
-import { useAuth } from "../../contexts/AuthContext";
-import api from "../../utils/api";
-import { IUser } from "../../interfaces";
+import ArrowLeftIcon from "../../../components/Icons/ArrowLeftIcon";
+import TextInputComponent from "../../../components/input";
+import ButtonComponent from "../../../components/Button";
+import { useAuth } from "../../../contexts/AuthContext";
+import api from "../../../utils/api";
+import { IUser } from "../../../interfaces";
 
 type Props = NativeStackScreenProps<any>;
 
