@@ -4,6 +4,7 @@ import ProfessorHomepageScreen from "../screens/Professor/HomepageScreen";
 import ProfessorManageLessonsScreen from "../screens/Professor/ManageLessonsScreen";
 import ProfessorManageMedalsScreen from "../screens/Professor/ManageMedalsScreen";
 import UserProfileScreen from "../screens/UserProfileScreen";
+import UpdateUserProfileScreen from "../screens/UpdateUserProfileScreen";
 
 const Stack = createStackNavigator<any>();
 
@@ -18,6 +19,11 @@ const ProfessorStack: React.FC = () => {
       <Stack.Screen
         name="ProfessorProfile"
         component={UserProfileScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="UpdateProfessorProfile"
+        component={UpdateUserProfileScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen

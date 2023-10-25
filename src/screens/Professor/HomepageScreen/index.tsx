@@ -189,13 +189,19 @@ const ProfessorHomepageScreen = ({ navigation }: Props) => {
         />
       </View>
       <View style={styles.menuButtons}>
-        <ButtonComponent title="meu perfil" onPress={handleViewProfile} />
+        <ButtonComponent
+          title="meu perfil"
+          height={60}
+          onPress={handleViewProfile}
+        />
         <ButtonComponent
           title="gerenciar aulas"
+          height={60}
           onPress={handleManageLessons}
         />
         <ButtonComponent
           title="gerenciar medalhas"
+          height={60}
           onPress={handleManageMedals}
         />
       </View>

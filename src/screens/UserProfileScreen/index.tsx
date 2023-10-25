@@ -204,7 +204,9 @@ const UserProfileScreen = ({ navigation }: Props) => {
 
   const handleFullname = (name: string) => setFullname(name);
 
-  const handleCredentials = () => {};
+  const handleCredentials = () => {
+    return navigation.navigate("UpdateProfessorProfile");
+  };
 
   const handleSave = async () => {
     // TODO: add fields validation
@@ -316,11 +318,13 @@ const UserProfileScreen = ({ navigation }: Props) => {
         <ButtonComponent
           title="editar credenciais"
           style="primary"
+          height={60}
           onPress={handleCredentials}
         />
         <ButtonComponent
           title="salvar"
           style="secondary"
+          height={60}
           onPress={handleSave}
         />
       </View>
