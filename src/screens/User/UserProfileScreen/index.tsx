@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Alert, Platform, Text, View } from "react-native";
 import styles from "./styles";
-import api from "../../utils/api";
+import api from "../../../utils/api";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useAuth } from "../../contexts/AuthContext";
-import { IProfessor, IUser } from "../../interfaces";
+import { useAuth } from "../../../contexts/AuthContext";
+import { IProfessor, IUser } from "../../../interfaces";
 import {
   ImagePickerOptions,
   requestCameraPermissionsAsync,
@@ -16,13 +16,13 @@ import {
   launchImageLibraryAsync,
 } from "expo-image-picker";
 import { CameraType, MediaTypeOptions } from "expo-image-picker";
-import { getImageUrlFromS3Key, uploadImage } from "../../utils/file";
-import UserImageComponent from "../../components/UserImage";
-import ArrowLeftIcon from "../../components/Icons/ArrowLeftIcon";
-import TextInputComponent from "../../components/input";
-import { ROLE } from "../../enums";
+import { getImageUrlFromS3Key, uploadImage } from "../../../utils/file";
+import UserImageComponent from "../../../components/UserImage";
+import ArrowLeftIcon from "../../../components/Icons/ArrowLeftIcon";
+import TextInputComponent from "../../../components/input";
+import { ROLE } from "../../../enums";
 import { Picker } from "@react-native-picker/picker";
-import ButtonComponent from "../../components/Button";
+import ButtonComponent from "../../../components/Button";
 
 type Props = NativeStackScreenProps<any>;
 
