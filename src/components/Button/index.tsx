@@ -17,8 +17,8 @@ interface Props {
 const ButtonComponent: React.FC<Props> = ({
   title,
   onPress,
-  height,
-  width,
+  height = 60,
+  width = "100%",
   customStyle,
   disabled,
   style = "primary",

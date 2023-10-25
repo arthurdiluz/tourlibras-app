@@ -2,8 +2,8 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   default: {
-    paddingVertical: 18,
-    paddingHorizontal: 22,
+    // paddingVertical: 18,
+    paddingHorizontal: "5%",
     borderRadius: 30,
     fontFamily: "Roboto",
     fontSize: 20,
