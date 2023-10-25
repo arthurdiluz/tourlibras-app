@@ -5,10 +5,11 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     justifyContent: "center",
     shadowColor: "#000",
-    shadowOpacity: 0.25,
+    shadowOpacity: 0.1,
     shadowOffset: { height: 5, width: 0 },
     shadowRadius: 5,
-    padding: 18,
+    paddingVertical: "2%",
+    paddingHorizontal: 2,
   },
 
   defaultText: {
@@ -21,6 +22,10 @@ const styles = StyleSheet.create({
 
   primary: {
     backgroundColor: "#FFF",
+    borderWidth: 1,
+    borderColor: "#D9D9D9",
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
   },
 
   primaryText: {

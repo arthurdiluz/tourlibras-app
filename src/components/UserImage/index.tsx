@@ -6,9 +6,10 @@ import styles from "./styles";
 type Props = {
   source?: ImageSourcePropType | null;
   onPress?: () => void;
+  style?: "primary" | "secundary";
 };
 
-const UserImageComponent = ({ source, onPress }: Props) => {
+const UserImageComponent = ({ source, onPress, style = "primary" }: Props) => {
   return (
     <TouchableOpacity style={styles.touchable} onPress={onPress}>
       {source ? (
@@ -18,7 +19,7 @@ const UserImageComponent = ({ source, onPress }: Props) => {
           style={styles.image}
           height={"100%"}
           width={"100%"}
-          fill={"#fff"}
+          fill={style === "primary" ? "#fff" : "#1B9CFC"}
         />
       )}
     </TouchableOpacity>

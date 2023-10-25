@@ -5,7 +5,7 @@ import { Alert, Text, View } from "react-native";
 import styles from "./styles";
 import api from "../../../utils/api";
 import { useAuth } from "../../../contexts/AuthContext";
-import { Professor } from "../../../interfaces";
+import { IProfessor } from "../../../interfaces";
 import UserImageComponent from "../../../components/UserImage";
 import ButtonComponent from "../../../components/Button";
 import * as ImagePicker from "expo-image-picker";
@@ -16,7 +16,7 @@ type Props = NativeStackScreenProps<any>;
 
 const ProfessorHomepageScreen = ({ navigation }: Props) => {
   const { user, token, signOut } = useAuth();
-  const [professor, setProfessor] = useState<Professor | null>(null);
+  const [professor, setProfessor] = useState<IProfessor | null>(null);
 
   useEffect(() => {
     async function getProfessorData() {
@@ -26,7 +26,7 @@ const ProfessorHomepageScreen = ({ navigation }: Props) => {
         const { Professor } = (await api.get(`/user/${user?.sub}`))?.data;
         const { data } = await api.get(`/professor/${Professor?.id}`);
 
-        setProfessor(data as Professor);
+        setProfessor(data as IProfessor);
       } catch (error: any) {
         console.error(error);
         return Alert.alert("Could not load professor data", error?.message);
@@ -36,6 +36,7 @@ const ProfessorHomepageScreen = ({ navigation }: Props) => {
     getProfessorData();
   }, [user]);
 
+  // TODO: remove image handler
   const handleUpdateImage = async () => {
     try {
       const imageOptions: ImagePicker.ImagePickerOptions = {
@@ -84,7 +85,7 @@ const ProfessorHomepageScreen = ({ navigation }: Props) => {
                           ...prevProfessor?.User,
                           profilePhoto: key,
                         },
-                      } as Professor;
+                      } as IProfessor;
                     });
                   })
                   .catch((error: any) => {
@@ -133,7 +134,7 @@ const ProfessorHomepageScreen = ({ navigation }: Props) => {
                           ...prevProfessor?.User,
                           profilePhoto: key,
                         },
-                      } as Professor;
+                      } as IProfessor;
                     });
                   })
                   .catch((error: any) => {
@@ -158,11 +159,17 @@ const ProfessorHomepageScreen = ({ navigation }: Props) => {
     }
   };
 
-  const handleViewProfile = () => {};
+  const handleViewProfile = () => {
+    return navigation.navigate("ProfessorProfile");
+  };
 
-  const handleManageClasses = () => {};
+  const handleManageLessons = () => {
+    return navigation.navigate("ProfessorManageLessons");
+  };
 
-  const handleManageMedals = () => {};
+  const handleManageMedals = () => {
+    return navigation.navigate("ProfessorManageMedals");
+  };
 
   const handleSignOut = () => {
     return signOut();
@@ -182,13 +189,19 @@ const ProfessorHomepageScreen = ({ navigation }: Props) => {
         />
       </View>
       <View style={styles.menuButtons}>
-        <ButtonComponent title="meu perfil" onPress={handleViewProfile} />
+        <ButtonComponent
+          title="meu perfil"
+          height={60}
+          onPress={handleViewProfile}
+        />
         <ButtonComponent
           title="gerenciar aulas"
-          onPress={handleManageClasses}
+          height={60}
+          onPress={handleManageLessons}
         />
         <ButtonComponent
           title="gerenciar medalhas"
+          height={60}
           onPress={handleManageMedals}
         />
       </View>

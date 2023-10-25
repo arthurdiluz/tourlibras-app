@@ -29,7 +29,6 @@ const SignUpScreen = ({ navigation }: Props) => {
   const [isPasswordHidden, setPasswordHidden] = useState(true);
   const [isProfessor, setIsProfessor] = useState(false);
   const [selectedGrammar, setSelectedGrammar] = useState("");
-
   const grammarList = [
     { value: "SVO", label: "SVO" },
     { value: "SOV", label: "SOV" },
@@ -187,6 +186,7 @@ const SignUpScreen = ({ navigation }: Props) => {
               <Text style={styles.professorOptionSectionText}>
                 {"Informe a gramática utilizada em suas aulas"}
               </Text>
+              {/* TODO: create component for grammar picker */}
               <View style={styles.professorOptionSectionSelect}>
                 {platform === "ios" && (
                   <TouchableOpacity
@@ -221,7 +221,7 @@ const SignUpScreen = ({ navigation }: Props) => {
           )}
           <View style={styles.buttonSection}>
             <ButtonComponent
-              title="Cadastrar-se"
+              title="cadastrar-se"
               style="primary"
               height={60}
               width={"100%"}

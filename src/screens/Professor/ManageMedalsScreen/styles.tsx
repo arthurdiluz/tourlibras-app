@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
 
-  signOutButton: {
+  goBackButton: {
     flex: 1,
     width: "80%",
     justifyContent: "flex-end",
