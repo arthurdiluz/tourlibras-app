@@ -11,6 +11,8 @@ const AppRoot = () => {
   const [fontsLoaded] = useFonts({
     Roboto: require("./assets/fonts/Roboto/Roboto-Regular.ttf"),
     "Roboto Bold": require("./assets/fonts/Roboto/Roboto-Bold.ttf"),
+    Nunito: require("./assets/fonts/Nunito/static/Nunito-Regular.ttf"),
+    "Nunito Bold": require("./assets/fonts/Nunito/static/Nunito-Bold.ttf"),
   });
 
   useEffect(() => {
