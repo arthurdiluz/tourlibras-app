@@ -8,14 +8,12 @@ import { useAuth } from "../../../contexts/AuthContext";
 import { IProfessor } from "../../../interfaces";
 import UserImageComponent from "../../../components/UserImage";
 import ButtonComponent from "../../../components/Button";
-import * as ImagePicker from "expo-image-picker";
-import { CameraType, MediaTypeOptions } from "expo-image-picker";
 import { getImageUrlFromS3Key, uploadImage } from "../../../utils/file";
 
 type Props = NativeStackScreenProps<any>;
 
 const ProfessorHomepageScreen = ({ navigation }: Props) => {
-  const { user, token, signOut } = useAuth();
+  const { user, signOut } = useAuth();
   const [professor, setProfessor] = useState<IProfessor | null>(null);
 
   useEffect(() => {
@@ -35,129 +33,6 @@ const ProfessorHomepageScreen = ({ navigation }: Props) => {
 
     getProfessorData();
   }, [user]);
-
-  // TODO: remove image handler
-  const handleUpdateImage = async () => {
-    try {
-      const imageOptions: ImagePicker.ImagePickerOptions = {
-        allowsEditing: true,
-        allowsMultipleSelection: false,
-        aspect: [1, 1],
-        cameraType: CameraType.front,
-        mediaTypes: MediaTypeOptions.Images,
-        quality: 1,
-      };
-
-      Alert.alert(
-        "Selecionar imagem",
-        "Escolha como deseja selecionar a imagem:",
-        [
-          {
-            text: "Câmera",
-            onPress: async () => {
-              const cameraPermission =
-                await ImagePicker.requestCameraPermissionsAsync();
-              if (
-                cameraPermission.status !== ImagePicker.PermissionStatus.GRANTED
-              ) {
-                return Alert.alert(
-                  "Permissão necessária",
-                  "Por favor, permita o app acessar sua câmera."
-                );
-              }
-              const selectedImage = await ImagePicker.launchCameraAsync(
-                imageOptions
-              );
-
-              if (selectedImage.assets) {
-                const { uri } = selectedImage.assets[0];
-
-                await uploadImage({
-                  endpoint: `/user/${user?.sub}/profile-picture`,
-                  uri,
-                  token,
-                })
-                  .then((key) => {
-                    setProfessor((prevProfessor) => {
-                      return {
-                        ...prevProfessor,
-                        User: {
-                          ...prevProfessor?.User,
-                          profilePhoto: key,
-                        },
-                      } as IProfessor;
-                    });
-                  })
-                  .catch((error: any) => {
-                    console.error(error);
-                    return Alert.alert(
-                      "Não foi possível enviar a imagem",
-                      error?.message
-                    );
-                  });
-              }
-            },
-          },
-          {
-            text: "Galeria",
-            onPress: async () => {
-              const galleryPermission =
-                await ImagePicker.requestMediaLibraryPermissionsAsync();
-
-              if (
-                galleryPermission.status !==
-                ImagePicker.PermissionStatus.GRANTED
-              ) {
-                return Alert.alert(
-                  "Permissão necessária",
-                  "Por favor, permita o app acessar sua galeria."
-                );
-              }
-
-              const selectedImage = await ImagePicker.launchImageLibraryAsync(
-                imageOptions
-              );
-
-              if (selectedImage.assets) {
-                const { uri } = selectedImage.assets[0];
-
-                await uploadImage({
-                  endpoint: `/user/${user?.sub}/profile-picture`,
-                  uri,
-                  token,
-                })
-                  .then((key) => {
-                    setProfessor((prevProfessor) => {
-                      return {
-                        ...prevProfessor,
-                        User: {
-                          ...prevProfessor?.User,
-                          profilePhoto: key,
-                        },
-                      } as IProfessor;
-                    });
-                  })
-                  .catch((error: any) => {
-                    console.error(error);
-                    return Alert.alert(
-                      "Não foi possível enviar a imagem",
-                      error?.message
-                    );
-                  });
-              }
-            },
-          },
-          {
-            text: "Cancelar",
-            style: "cancel",
-          },
-        ]
-      );
-    } catch (error: any) {
-      console.error(error);
-      Alert.alert("Could not upload image", error?.message);
-    }
-  };
 
   const handleViewProfile = () => {
     return navigation.navigate("ProfessorProfile");
@@ -185,7 +60,6 @@ const ProfessorHomepageScreen = ({ navigation }: Props) => {
               ? { uri: getImageUrlFromS3Key(professor?.User.profilePhoto) }
               : undefined
           }
-          onPress={handleUpdateImage}
         />
       </View>
       <View style={styles.menuButtons}>
