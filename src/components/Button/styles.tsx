@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: "Roboto Bold",
     fontSize: 20,
-    textTransform: "capitalize",
+    textTransform: "uppercase",
   },
 
   primary: {

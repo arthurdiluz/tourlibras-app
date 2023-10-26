@@ -23,6 +23,10 @@ import TextInputComponent from "../../../components/input";
 import { ROLE } from "../../../enums";
 import { Picker } from "@react-native-picker/picker";
 import ButtonComponent from "../../../components/Button";
+import {
+  uploadImageFromCamera,
+  uploadImageFromGallery,
+} from "../../../services/mediaUpload";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -109,82 +113,51 @@ const UserProfileScreen = ({ navigation }: Props) => {
         [
           {
             text: "Câmera",
-            onPress: async () => {
-              const cameraPermission = await requestCameraPermissionsAsync();
-              if (cameraPermission.status !== PermissionStatus.GRANTED) {
-                return Alert.alert(
-                  "Permissão necessária",
-                  "Por favor, permita o app acessar sua câmera."
-                );
-              }
-              const selectedImage = await launchCameraAsync(imageOptions);
-
-              if (selectedImage.assets) {
-                const { uri } = selectedImage.assets[0];
-
-                await uploadImage({
-                  endpoint: `/user/${userContext?.sub}/profile-picture`,
-                  uri,
-                  token,
-                })
-                  .then((key) => {
-                    setUser((prevUser) => {
-                      return {
-                        ...prevUser,
-                        profilePhoto: key,
-                      } as IUser;
-                    });
-                  })
-                  .catch((error: any) => {
-                    console.error(error);
-                    return Alert.alert(
-                      "Não foi possível enviar a imagem",
-                      error?.message
-                    );
+            onPress: async () =>
+              uploadImageFromCamera({
+                endpoint: `/user/${userContext?.sub}/profile-picture`,
+                token,
+              })
+                .then((key) => {
+                  if (!key) throw new Error("Erro ao enviar imagem");
+                  setUser((prevUser) => {
+                    return {
+                      ...prevUser,
+                      profilePhoto: key,
+                    } as IUser;
                   });
-              }
-            },
+                })
+                .catch((error: any) => {
+                  console.error(error);
+                  return Alert.alert(
+                    "Não foi possível enviar a imagem",
+                    error?.message
+                  );
+                }),
           },
           {
             text: "Galeria",
-            onPress: async () => {
-              const galleryPermission =
-                await requestMediaLibraryPermissionsAsync();
-
-              if (galleryPermission.status !== PermissionStatus.GRANTED) {
-                return Alert.alert(
-                  "Permissão necessária",
-                  "Por favor, permita o app acessar sua galeria."
-                );
-              }
-
-              const selectedImage = await launchImageLibraryAsync(imageOptions);
-
-              if (selectedImage.assets) {
-                const { uri } = selectedImage.assets[0];
-
-                await uploadImage({
-                  endpoint: `/user/${userContext?.sub}/profile-picture`,
-                  uri,
-                  token,
-                })
-                  .then((key) => {
-                    setUser((prevUser) => {
-                      return {
-                        ...prevUser,
-                        profilePhoto: key,
-                      } as IUser;
-                    });
-                  })
-                  .catch((error: any) => {
-                    console.error(error);
-                    return Alert.alert(
-                      "Não foi possível enviar a imagem",
-                      error?.message
-                    );
+            onPress: async () =>
+              uploadImageFromGallery({
+                endpoint: `/user/${userContext?.sub}/profile-picture`,
+                token,
+              })
+                .then((key) => {
+                  if (!key) throw new Error("Erro ao enviar imagem");
+                  setUser((prevUser) => {
+                    return {
+                      ...prevUser,
+                      profilePhoto: key,
+                    } as IUser;
                   });
-              }
-            },
+                })
+                .catch((error: any) => {
+                  console.error(error);
+                  return Alert.alert(
+                    "Não foi possível enviar a imagem",
+                    error?.message
+                  );
+                }),
           },
           {
             text: "Cancelar",
