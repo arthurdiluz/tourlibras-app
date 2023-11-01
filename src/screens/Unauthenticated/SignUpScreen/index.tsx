@@ -16,6 +16,7 @@ import ArrowLeftIcon from "../../../components/Icons/ArrowLeftIcon";
 import { Picker } from "@react-native-picker/picker";
 import { useAuth } from "../../../contexts/AuthContext";
 import api from "../../../utils/api";
+import PickerComponent from "../../../components/PickerComponent";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -59,6 +60,11 @@ const SignUpScreen = ({ navigation }: Props) => {
 
   const handleTogglePicker = () => {
     setPickerVisible(!isPickerVisible);
+  };
+
+  const handleGrammarValueChange = (grammar: string) => {
+    setSelectedGrammar(grammar);
+    platform === "ios" && handleTogglePicker();
   };
 
   const handleProfessorSignUp = async () => {
@@ -186,37 +192,14 @@ const SignUpScreen = ({ navigation }: Props) => {
               <Text style={styles.professorOptionSectionText}>
                 {"Informe a gramática utilizada em suas aulas"}
               </Text>
-              {/* TODO: create component for grammar picker */}
-              <View style={styles.professorOptionSectionSelect}>
-                {platform === "ios" && (
-                  <TouchableOpacity
-                    onPress={handleTogglePicker}
-                    style={styles.iosSelect}
-                  >
-                    <Text style={styles.iosSelectText}>
-                      {selectedGrammar === "" ? "Selecione:" : selectedGrammar}
-                    </Text>
-                  </TouchableOpacity>
-                )}
-                {isPickerVisible && (
-                  <Picker
-                    selectedValue={selectedGrammar}
-                    onValueChange={(grammar) => {
-                      setSelectedGrammar(grammar);
-                      platform === "ios" && handleTogglePicker();
-                    }}
-                  >
-                    {grammarList.map((grammar, index) => (
-                      <Picker.Item
-                        enabled={isProfessor}
-                        key={`grammar-${index}`}
-                        label={grammar.value}
-                        value={isProfessor ? grammar.value : null}
-                      />
-                    ))}
-                  </Picker>
-                )}
-              </View>
+              <PickerComponent
+                optionsList={grammarList}
+                onPickerPress={handleTogglePicker}
+                selectedOption={selectedGrammar}
+                isPickerVisible={isPickerVisible}
+                onValueChange={handleGrammarValueChange}
+                isItemEnabled={isProfessor}
+              />
             </View>
           )}
           <View style={styles.buttonSection}>
