@@ -7,16 +7,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "../../../contexts/AuthContext";
 import { IProfessor, IUser } from "../../../interfaces";
-import {
-  ImagePickerOptions,
-  requestCameraPermissionsAsync,
-  PermissionStatus,
-  launchCameraAsync,
-  requestMediaLibraryPermissionsAsync,
-  launchImageLibraryAsync,
-} from "expo-image-picker";
-import { CameraType, MediaTypeOptions } from "expo-image-picker";
-import { getImageUrlFromS3Key, uploadImage } from "../../../utils/file";
+import { getImageUrlFromS3Key } from "../../../utils/file";
 import UserImageComponent from "../../../components/UserImage";
 import ArrowLeftIcon from "../../../components/Icons/ArrowLeftIcon";
 import TextInputComponent from "../../../components/input";
@@ -98,15 +89,6 @@ const UserProfileScreen = ({ navigation }: Props) => {
 
   const handleUpdateImage = async () => {
     try {
-      const imageOptions: ImagePickerOptions = {
-        allowsEditing: true,
-        allowsMultipleSelection: false,
-        aspect: [1, 1],
-        cameraType: CameraType.front,
-        mediaTypes: MediaTypeOptions.Images,
-        quality: 1,
-      };
-
       Alert.alert(
         "Selecionar imagem",
         "Escolha como deseja selecionar a imagem:",
@@ -167,7 +149,7 @@ const UserProfileScreen = ({ navigation }: Props) => {
       );
     } catch (error: any) {
       console.error(error);
-      Alert.alert("Could not upload image", error?.message);
+      Alert.alert("Não foi possível enviar imagem", error?.message);
     }
   };
 

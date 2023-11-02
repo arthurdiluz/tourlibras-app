@@ -1,5 +1,6 @@
 import { Image, ImageSourcePropType } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { NumberProp } from "react-native-svg";
 import UserIcon from "../Icons/UserIcon";
 import styles from "./styles";
 
@@ -7,9 +8,17 @@ type Props = {
   source?: ImageSourcePropType | null;
   onPress?: () => void;
   style?: "primary" | "secundary";
+  height?: NumberProp;
+  width?: NumberProp;
 };
 
-const UserImageComponent = ({ source, onPress, style = "primary" }: Props) => {
+const UserImageComponent = ({
+  source,
+  onPress,
+  height = "100%",
+  width = "100%",
+  style = "primary",
+}: Props) => {
   return (
     <TouchableOpacity style={styles.touchable} onPress={onPress}>
       {source ? (
@@ -17,8 +26,8 @@ const UserImageComponent = ({ source, onPress, style = "primary" }: Props) => {
       ) : (
         <UserIcon
           style={styles.image}
-          height={"100%"}
-          width={"100%"}
+          height={height}
+          width={width}
           fill={style === "primary" ? "#fff" : "#1B9CFC"}
         />
       )}
