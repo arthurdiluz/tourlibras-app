@@ -18,7 +18,7 @@ const ProfessorHomepageScreen = ({ navigation }: Props) => {
 
   useEffect(() => {
     async function getProfessorData() {
-      if (!user) return;
+      if (!user) throw new Error("Usuário não encontrado");
 
       try {
         const { Professor } = (await api.get(`/user/${user?.sub}`))?.data;
@@ -27,7 +27,10 @@ const ProfessorHomepageScreen = ({ navigation }: Props) => {
         setProfessor(data as IProfessor);
       } catch (error: any) {
         console.error(error);
-        return Alert.alert("Could not load professor data", error?.message);
+        return Alert.alert(
+          "Não foi possível obter dados do professor",
+          error?.message
+        );
       }
     }
 
