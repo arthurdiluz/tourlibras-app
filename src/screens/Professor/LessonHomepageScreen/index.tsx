@@ -34,7 +34,9 @@ const ProfessorLessonHomepageScreen = ({ navigation }: Props) => {
     getUserData();
   }, [user]);
 
-  const handleCreateLesson = () => {};
+  const handleCreateLesson = () => {
+    return navigation.navigate("ProfessorCreateLessonScreen");
+  };
 
   const handleManageLesson = () => {};
 
