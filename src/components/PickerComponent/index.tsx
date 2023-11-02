@@ -4,10 +4,8 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { Picker } from "@react-native-picker/picker";
 import styles from "./styles";
 
-type OptionListValue = { value: string; label: string };
-
 type Props = {
-  optionsList: Array<OptionListValue>;
+  optionsList: Array<any>;
   selectedOption: string;
   isPickerVisible: boolean;
   isItemEnabled: boolean;
@@ -40,8 +38,8 @@ const PickerComponent = ({
             <Picker.Item
               enabled={isItemEnabled}
               key={`option-${index}`}
-              label={option.label}
-              value={option.value}
+              label={`${index}-${option?.name}`}
+              value={option?.name}
             />
           ))}
         </Picker>

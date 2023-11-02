@@ -7,15 +7,14 @@ import {
 } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { useAuth } from "../../../contexts/AuthContext";
 import styles from "./styles";
+import api from "../../../utils/api";
 import UserCircleIcon from "../../../components/Icons/UserCircleIcon";
 import TextInputComponent from "../../../components/input";
 import IonIcons from "react-native-vector-icons/Ionicons";
 import ButtonComponent from "../../../components/Button";
 import ArrowLeftIcon from "../../../components/Icons/ArrowLeftIcon";
-import { Picker } from "@react-native-picker/picker";
-import { useAuth } from "../../../contexts/AuthContext";
-import api from "../../../utils/api";
 import PickerComponent from "../../../components/PickerComponent";
 
 type Props = NativeStackScreenProps<any>;
@@ -31,12 +30,12 @@ const SignUpScreen = ({ navigation }: Props) => {
   const [isProfessor, setIsProfessor] = useState(false);
   const [selectedGrammar, setSelectedGrammar] = useState("");
   const grammarList = [
-    { value: "SVO", label: "SVO" },
-    { value: "SOV", label: "SOV" },
-    { value: "VSO", label: "VSO" },
-    { value: "VOS", label: "VOS" },
-    { value: "OSV", label: "OSV" },
-    { value: "OSV", label: "OSV" },
+    { name: "SVO" },
+    { name: "SOV" },
+    { name: "VSO" },
+    { name: "VOS" },
+    { name: "OSV" },
+    { name: "OSV" },
   ];
 
   const handleGoBack = () => navigation.goBack();
