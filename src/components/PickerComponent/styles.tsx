@@ -1,21 +1,27 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
-  optionSectionSelect: {
-    width: "100%",
-    borderRadius: 10,
+  DefaultOptionSectionSelect: {
+    borderRadius: 50,
     backgroundColor: "#FFF",
-    marginTop: 35,
     justifyContent: "center",
+    width: "100%",
+  },
+
+  primaryOptionSectionSelect: {},
+
+  secundaryOptionSectionSelect: {
+    borderColor: "#D9D9D9",
+    borderWidth: 1,
   },
 
   iosSelect: {
-    height: 50,
     justifyContent: "center",
   },
 
   iosSelectText: {
-    paddingLeft: "5%",
+    textAlign: "center",
+    fontSize: 20,
   },
 
   buttonSection: {

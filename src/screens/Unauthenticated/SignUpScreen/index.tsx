@@ -192,12 +192,14 @@ const SignUpScreen = ({ navigation }: Props) => {
                 {"Informe a gramática utilizada em suas aulas"}
               </Text>
               <PickerComponent
+                height={60}
                 optionsList={grammarList}
                 onPickerPress={handleTogglePicker}
                 selectedOption={selectedGrammar}
                 isPickerVisible={isPickerVisible}
                 onValueChange={handleGrammarValueChange}
                 isItemEnabled={isProfessor}
+                style={"primary"}
               />
             </View>
           )}

@@ -1,30 +1,45 @@
 import React from "react";
-import { Platform, Text, View } from "react-native";
+import { DimensionValue, Platform, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Picker } from "@react-native-picker/picker";
 import styles from "./styles";
 
 type Props = {
+  height?: DimensionValue;
+  width?: DimensionValue;
   optionsList: Array<any>;
   selectedOption: string;
   isPickerVisible: boolean;
-  isItemEnabled: boolean;
-  onValueChange: (value: string) => void;
+  isItemEnabled?: boolean | undefined;
+  onValueChange: (value: any) => void;
   onPickerPress: () => void;
+  key?: string | undefined;
+  style?: "primary" | "secundary";
 };
 
 const PickerComponent = ({
   optionsList,
   selectedOption,
   isPickerVisible,
-  isItemEnabled,
   onPickerPress,
   onValueChange,
+  isItemEnabled = true,
+  height = "100%",
+  width = "100%",
+  key = "name",
+  style = "primary",
 }: Props) => {
   const os = Platform.OS;
 
   return (
-    <View style={styles.optionSectionSelect}>
+    <View
+      style={[
+        { width },
+        isPickerVisible ? { height: "75%" } : { height },
+        styles[`${style}OptionSectionSelect`],
+        styles.DefaultOptionSectionSelect,
+      ]}
+    >
       {os === "ios" && (
         <TouchableOpacity onPress={onPickerPress} style={styles.iosSelect}>
           <Text style={styles.iosSelectText}>
@@ -37,9 +52,9 @@ const PickerComponent = ({
           {optionsList.map((option, index) => (
             <Picker.Item
               enabled={isItemEnabled}
-              key={`option-${index}`}
-              label={`${index}-${option?.name}`}
-              value={option?.name}
+              key={`${index}-${option[key]}`}
+              label={option[key]}
+              value={option[key]}
             />
           ))}
         </Picker>
