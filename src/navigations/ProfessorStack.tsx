@@ -1,10 +1,10 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import ProfessorHomepageScreen from "../screens/Professor/HomepageScreen";
-import ProfessorManageLessonsScreen from "../screens/Professor/ManageLessonsScreen";
 import ProfessorManageMedalsScreen from "../screens/Professor/ManageMedalsScreen";
-import UserProfileScreen from "../screens/UserProfileScreen";
-import UpdateUserProfileScreen from "../screens/UpdateUserProfileScreen";
+import UserProfileScreen from "../screens/User/UserProfileScreen";
+import UpdateUserProfileScreen from "../screens/User/UpdateUserProfileScreen";
+import ProfessorLessonStack from "./ProfessorLessonStack";
 
 const Stack = createStackNavigator<any>();
 
@@ -28,9 +28,10 @@ const ProfessorStack: React.FC = () => {
       />
       <Stack.Screen
         name="ProfessorManageLessons"
-        component={ProfessorManageLessonsScreen}
+        component={ProfessorLessonStack}
         options={{ headerShown: false }}
       />
+      {/* TODO: refactor */}
       <Stack.Screen
         name="ProfessorManageMedals"
         component={ProfessorManageMedalsScreen}

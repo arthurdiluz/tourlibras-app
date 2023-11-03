@@ -1,26 +1,5 @@
 import { ROLE } from "../enums";
 
-export interface IUser {
-  email: string;
-  fullName: string;
-  id: number;
-  isActive: boolean;
-  profilePhoto: string;
-  role: string;
-}
-
-export interface IProfessor {
-  Items: any[];
-  Medals: any[];
-  Students: any[];
-  User: IUser;
-  createdAt: string;
-  grammar: string;
-  id: number;
-  updatedAt: string;
-  userId: number;
-}
-
 export interface IJwtPayload {
   sub: number; // userID
   email: string;
@@ -35,4 +14,59 @@ export default interface AuthContextType {
   signIn: (jwtToken: string) => void;
   signOut: () => void;
   loading: boolean;
+}
+
+export interface IUser {
+  id: number;
+  createdAt: Date | string;
+  updatedAt: Date | string;
+  isActive: boolean;
+  email: string;
+  fullName: string;
+  profilePhoto: string;
+  role: string;
+  Professor: any;
+  Student: any;
+}
+
+export interface IProfessor {
+  id: number;
+  createdAt: Date | string;
+  updatedAt: Date | string;
+  grammar: string;
+  userId: number;
+  User: IUser;
+  Medals: IMedal[];
+  Items: any[];
+  Students: any[];
+}
+
+export interface IMedal {
+  id: number;
+  createdAt: Date | string;
+  updatedAt: Date | string;
+  name: string;
+  description: string;
+  media: string;
+  professorId: number;
+}
+
+export interface ILevel {
+  id: number;
+  createdAt: Date | string;
+  updatedAt: Date | string;
+  level: number;
+  earnedXp: number;
+  earnedMoney: number;
+  lessonId: number;
+  medalId: number;
+}
+
+export interface ILesson {
+  id: number;
+  createdAt: Date | string;
+  updatedAt: Date | string;
+  icon: string;
+  title: string;
+  professorId: number;
 }

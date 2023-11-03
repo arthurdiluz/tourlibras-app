@@ -56,25 +56,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
 
-  optionSectionSelect: {
-    width: "100%",
-    borderRadius: 10,
-    fontFamily: "Roboto",
-    fontSize: 20,
-    fontWeight: "400",
-    borderWidth: 2,
-    borderColor: "#D9D9D9",
-  },
-
-  iosSelect: {
-    height: 50,
-    justifyContent: "center",
-  },
-
-  iosSelectText: {
-    paddingLeft: "5%",
-  },
-
   actionButtons: {
     width: "90%",
     marginVertical: 10,

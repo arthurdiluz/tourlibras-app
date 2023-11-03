@@ -94,29 +94,13 @@ const styles = StyleSheet.create({
   },
 
   professorOptionSectionText: {
+    marginBottom: 10,
     width: "75%",
     color: "#FFF",
     fontFamily: "Roboto",
     fontSize: 22,
     fontWeight: "400",
     textAlign: "center",
-  },
-
-  professorOptionSectionSelect: {
-    width: "100%",
-    borderRadius: 10,
-    backgroundColor: "#FFF",
-    marginTop: 35,
-    justifyContent: "center",
-  },
-
-  iosSelect: {
-    height: 50,
-    justifyContent: "center",
-  },
-
-  iosSelectText: {
-    paddingLeft: "5%",
   },
 
   buttonSection: {

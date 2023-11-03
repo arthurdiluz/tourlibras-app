@@ -1,18 +1,18 @@
 import { Image, ImageSourcePropType } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { NumberProp } from "react-native-svg";
-import UserIcon from "../Icons/UserIcon";
+import LessonIcon from "../Icons/ClassIcon";
 import styles from "./styles";
 
 type Props = {
-  source?: ImageSourcePropType | null;
-  onPress?: () => void;
-  style?: "primary" | "secundary";
   height?: NumberProp;
   width?: NumberProp;
+  style?: "primary" | "secundary";
+  source?: ImageSourcePropType | null;
+  onPress?: () => void;
 };
 
-const UserImageComponent = ({
+const LessonImageComponent = ({
   source,
   onPress,
   height = "100%",
@@ -24,7 +24,7 @@ const UserImageComponent = ({
       {source ? (
         <Image source={source} style={styles.image} resizeMode="cover" />
       ) : (
-        <UserIcon
+        <LessonIcon
           style={styles.image}
           height={height}
           width={width}
@@ -35,4 +35,4 @@ const UserImageComponent = ({
   );
 };
 
-export default UserImageComponent;
+export default LessonImageComponent;

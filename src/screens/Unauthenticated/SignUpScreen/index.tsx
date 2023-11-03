@@ -7,15 +7,15 @@ import {
 } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { useAuth } from "../../../contexts/AuthContext";
 import styles from "./styles";
+import api from "../../../utils/api";
 import UserCircleIcon from "../../../components/Icons/UserCircleIcon";
 import TextInputComponent from "../../../components/input";
 import IonIcons from "react-native-vector-icons/Ionicons";
 import ButtonComponent from "../../../components/Button";
 import ArrowLeftIcon from "../../../components/Icons/ArrowLeftIcon";
-import { Picker } from "@react-native-picker/picker";
-import { useAuth } from "../../../contexts/AuthContext";
-import api from "../../../utils/api";
+import PickerComponent from "../../../components/PickerComponent";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -30,12 +30,12 @@ const SignUpScreen = ({ navigation }: Props) => {
   const [isProfessor, setIsProfessor] = useState(false);
   const [selectedGrammar, setSelectedGrammar] = useState("");
   const grammarList = [
-    { value: "SVO", label: "SVO" },
-    { value: "SOV", label: "SOV" },
-    { value: "VSO", label: "VSO" },
-    { value: "VOS", label: "VOS" },
-    { value: "OSV", label: "OSV" },
-    { value: "OSV", label: "OSV" },
+    { name: "SVO" },
+    { name: "SOV" },
+    { name: "VSO" },
+    { name: "VOS" },
+    { name: "OSV" },
+    { name: "OSV" },
   ];
 
   const handleGoBack = () => navigation.goBack();
@@ -59,6 +59,11 @@ const SignUpScreen = ({ navigation }: Props) => {
 
   const handleTogglePicker = () => {
     setPickerVisible(!isPickerVisible);
+  };
+
+  const handleGrammarValueChange = (grammar: string) => {
+    setSelectedGrammar(grammar);
+    platform === "ios" && handleTogglePicker();
   };
 
   const handleProfessorSignUp = async () => {
@@ -186,37 +191,16 @@ const SignUpScreen = ({ navigation }: Props) => {
               <Text style={styles.professorOptionSectionText}>
                 {"Informe a gramática utilizada em suas aulas"}
               </Text>
-              {/* TODO: create component for grammar picker */}
-              <View style={styles.professorOptionSectionSelect}>
-                {platform === "ios" && (
-                  <TouchableOpacity
-                    onPress={handleTogglePicker}
-                    style={styles.iosSelect}
-                  >
-                    <Text style={styles.iosSelectText}>
-                      {selectedGrammar === "" ? "Selecione:" : selectedGrammar}
-                    </Text>
-                  </TouchableOpacity>
-                )}
-                {isPickerVisible && (
-                  <Picker
-                    selectedValue={selectedGrammar}
-                    onValueChange={(grammar) => {
-                      setSelectedGrammar(grammar);
-                      platform === "ios" && handleTogglePicker();
-                    }}
-                  >
-                    {grammarList.map((grammar, index) => (
-                      <Picker.Item
-                        enabled={isProfessor}
-                        key={`grammar-${index}`}
-                        label={grammar.value}
-                        value={isProfessor ? grammar.value : null}
-                      />
-                    ))}
-                  </Picker>
-                )}
-              </View>
+              <PickerComponent
+                height={60}
+                optionsList={grammarList}
+                onPickerPress={handleTogglePicker}
+                selectedOption={selectedGrammar}
+                isPickerVisible={isPickerVisible}
+                onValueChange={handleGrammarValueChange}
+                isItemEnabled={isProfessor}
+                style={"primary"}
+              />
             </View>
           )}
           <View style={styles.buttonSection}>
