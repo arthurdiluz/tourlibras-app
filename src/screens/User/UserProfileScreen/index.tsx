@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Alert, Platform, Text, View } from "react-native";
 import styles from "./styles";
 import api from "../../../utils/api";
@@ -23,6 +23,8 @@ type Props = NativeStackScreenProps<any>;
 
 const UserProfileScreen = ({ navigation }: Props) => {
   const platform = Platform.OS;
+  const scrollViewRef = useRef<any>(null);
+
   const { user: userContext, token } = useAuth();
   const grammarList = [
     { name: "SVO" },
@@ -155,7 +157,11 @@ const UserProfileScreen = ({ navigation }: Props) => {
 
   const handleGoBack = () => navigation.goBack();
 
-  const handleTogglePicker = () => setPickerVisible(!isPickerVisible);
+  const handleTogglePicker = () => {
+    // TODO: fox scroll to end
+    scrollViewRef?.current?.scrollToEnd({ animated: true });
+    setPickerVisible(!isPickerVisible);
+  };
 
   const handleFullname = (name: string) => setFullname(name);
 
@@ -204,6 +210,7 @@ const UserProfileScreen = ({ navigation }: Props) => {
         <Text style={styles.panelText}>{"Meu perfil"}</Text>
       </View>
       <ScrollView
+        ref={scrollViewRef}
         style={styles.scrollContainer}
         contentContainerStyle={{ alignItems: "center" }}
       >
