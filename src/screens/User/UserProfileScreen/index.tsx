@@ -12,12 +12,12 @@ import UserImageComponent from "../../../components/UserImage";
 import ArrowLeftIcon from "../../../components/Icons/ArrowLeftIcon";
 import TextInputComponent from "../../../components/input";
 import { ROLE } from "../../../enums";
-import { Picker } from "@react-native-picker/picker";
 import ButtonComponent from "../../../components/Button";
 import {
   uploadImageFromCamera,
   uploadImageFromGallery,
 } from "../../../services/mediaUpload";
+import PickerComponent from "../../../components/PickerComponent";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -25,12 +25,12 @@ const UserProfileScreen = ({ navigation }: Props) => {
   const platform = Platform.OS;
   const { user: userContext, token } = useAuth();
   const grammarList = [
-    { value: "SVO", label: "SVO" },
-    { value: "SOV", label: "SOV" },
-    { value: "VSO", label: "VSO" },
-    { value: "VOS", label: "VOS" },
-    { value: "OSV", label: "OSV" },
-    { value: "OSV", label: "OSV" },
+    { name: "SVO" },
+    { name: "SOV" },
+    { name: "VSO" },
+    { name: "VOS" },
+    { name: "OSV" },
+    { name: "OSV" },
   ];
 
   const [user, setUser] = useState<IUser | null>(null);
@@ -159,6 +159,11 @@ const UserProfileScreen = ({ navigation }: Props) => {
 
   const handleFullname = (name: string) => setFullname(name);
 
+  const handleGrammarValueChange = (grammar: string) => {
+    setSelectedGrammar(grammar);
+    platform === "ios" && handleTogglePicker();
+  };
+
   const handleCredentials = () => {
     return navigation.navigate("UpdateProfessorProfile");
   };
@@ -225,48 +230,19 @@ const UserProfileScreen = ({ navigation }: Props) => {
               width={"100%"}
             />
           </View>
-          {/* TODO: create component for grammar picker */}
-          {userContext?.role === ROLE.PROFESSOR && (
-            <View style={styles.inputField}>
-              <Text style={styles.inputLabel}>
-                {"Escolha a gramática de suas aulas"}
-              </Text>
-              <View style={styles.optionSectionSelect}>
-                {platform === "ios" && (
-                  <TouchableOpacity
-                    onPress={handleTogglePicker}
-                    style={styles.iosSelect}
-                  >
-                    <Text style={styles.iosSelectText}>
-                      {selectedGrammar === "" ? "Selecione:" : selectedGrammar}
-                    </Text>
-                  </TouchableOpacity>
-                )}
-                {isPickerVisible && (
-                  <Picker
-                    selectedValue={selectedGrammar}
-                    onValueChange={(grammar) => {
-                      setSelectedGrammar(grammar);
-                      platform === "ios" && handleTogglePicker();
-                    }}
-                  >
-                    {grammarList.map((grammar, index) => (
-                      <Picker.Item
-                        enabled={userContext?.role === ROLE.PROFESSOR}
-                        key={`grammar-${index}`}
-                        label={grammar.value}
-                        value={
-                          userContext?.role === ROLE.PROFESSOR
-                            ? grammar.value
-                            : null
-                        }
-                      />
-                    ))}
-                  </Picker>
-                )}
-              </View>
-            </View>
-          )}
+          <Text style={styles.inputLabel}>
+            {"Escolha a gramática de suas aulas"}
+          </Text>
+          <PickerComponent
+            height={60}
+            width={"100%"}
+            style={"secundary"}
+            optionsList={grammarList}
+            onPickerPress={handleTogglePicker}
+            selectedOption={selectedGrammar}
+            isPickerVisible={isPickerVisible}
+            onValueChange={handleGrammarValueChange}
+          />
         </View>
       </ScrollView>
       <View style={styles.actionButtons}>

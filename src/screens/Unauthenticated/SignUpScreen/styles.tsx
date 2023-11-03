@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
   },
 
   professorOptionSectionText: {
+    marginBottom: 10,
     width: "75%",
     color: "#FFF",
     fontFamily: "Roboto",

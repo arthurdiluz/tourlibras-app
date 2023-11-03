@@ -35,7 +35,7 @@ const PickerComponent = ({
     <View
       style={[
         { width },
-        isPickerVisible ? { height: "75%" } : { height },
+        isPickerVisible ? { height: 300 } : { height },
         styles[`${style}OptionSectionSelect`],
         styles.DefaultOptionSectionSelect,
       ]}
