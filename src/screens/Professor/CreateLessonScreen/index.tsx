@@ -16,9 +16,11 @@ import CardComponent from "../../../components/CardComponent";
 
 type Props = NativeStackScreenProps<any>;
 
-const ProfessorCreateLessonScreen = ({ navigation }: Props) => {
+const ProfessorCreateLessonScreen = ({ navigation, route }: Props) => {
   const os = Platform.OS;
   const { user } = useAuth();
+  const lessonId: number | undefined = route.params?.lessonId;
+  console.log({ lessonId });
 
   const [professor, setProfessor] = useState<IProfessor | null>(null);
   const [medals, setMedals] = useState<Array<IMedal> | null>(null);
@@ -89,6 +91,10 @@ const ProfessorCreateLessonScreen = ({ navigation }: Props) => {
   const handleUpdateLevel = () => {};
 
   const handleDeleteLevel = () => {};
+
+  const handleCreateLevel = () => {
+    return navigation.navigate("ProfessorCreateLevelScreen");
+  };
 
   const renderItem = ({ item, index }: ListRenderItemInfo<ILevel>) => {
     return (
@@ -177,27 +183,31 @@ const ProfessorCreateLessonScreen = ({ navigation }: Props) => {
             style={"secundary"}
           />
         </View>
-        <View style={[styles.inputSection, styles.levelsCard]}>
-          <Text style={styles.inputSectionText}>{"Níveis da aula"}</Text>
-          {levels.length ? (
-            <FlatList data={levels} renderItem={renderItem} />
-          ) : (
-            <View style={styles.emptyLevelMessage}>
-              <Text style={styles.emptyLevelMessageText}>
-                {"Nenhum nívei criado :("}
-              </Text>
-            </View>
-          )}
-        </View>
+        {lessonId && (
+          <View style={[styles.inputSection, styles.levelsCard]}>
+            <Text style={styles.inputSectionText}>{"Níveis da aula"}</Text>
+            {levels.length ? (
+              <FlatList data={levels} renderItem={renderItem} />
+            ) : (
+              <View style={styles.emptyLevelMessage}>
+                <Text style={styles.emptyLevelMessageText}>
+                  {"Nenhum nível criado :("}
+                </Text>
+              </View>
+            )}
+          </View>
+        )}
       </View>
-      <ButtonComponent
-        title="criar novo nível"
-        style="secondary"
-        height={55}
-        width={"90%"}
-        onPress={() => {}}
-        customStyle={{ marginTop: 15 }}
-      />
+      {lessonId && (
+        <ButtonComponent
+          title="criar novo nível"
+          style="secondary"
+          height={55}
+          width={"90%"}
+          onPress={handleCreateLevel}
+          customStyle={{ marginTop: 15 }}
+        />
+      )}
     </SafeAreaView>
   );
 };

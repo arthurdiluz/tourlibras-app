@@ -3,7 +3,7 @@ import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { NavigationContainer } from "@react-navigation/native";
 import { AuthProvider } from "./src/contexts/AuthContext";
-import AppStack from "./src/stacks/AppStack";
+import AppStack from "./src/navigations/AppStack";
 
 SplashScreen.preventAutoHideAsync();
 

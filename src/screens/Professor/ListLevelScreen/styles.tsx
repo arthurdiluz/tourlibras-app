@@ -34,38 +34,6 @@ const styles = StyleSheet.create({
     right: 0,
   },
 
-  saveTextButton: {
-    color: "#1B9CFC",
-    fontFamily: "Roboto",
-    fontSize: 18,
-    fontWeight: "600",
-  },
-
-  inputSections: {
-    flex: 1,
-    width: "90%",
-    gap: 25,
-  },
-
-  illustrativeImageSection: {
-    width: "100%",
-    alignItems: "center",
-    gap: 25,
-    marginBottom: 30,
-  },
-
-  inputSection: {
-    width: "100%",
-    gap: 10,
-  },
-
-  inputSectionText: {
-    color: "#000",
-    fontFamily: "Roboto",
-    fontSize: 20,
-    fontWeight: "600",
-  },
-
   emptyLevelMessage: {
     flex: 1,
     alignItems: "center",
@@ -79,34 +47,27 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
   },
 
-  levelsCard: {
-    flex: 1,
+  flatListContentContainerStyle: {
+    alignItems: "center",
   },
 
-  cardTitle: {
-    marginVertical: 15,
-    marginHorizontal: 20,
+  renderItemLessonSection: {
+    marginHorizontal: 50,
+    marginVertical: 25,
+    gap: 10,
+  },
+
+  renderItemLessonImage: {
+    height: 100,
+    width: 100,
+  },
+
+  renderItemLessonText: {
     color: "#000",
+    textAlign: "center",
     fontFamily: "Roboto",
     fontSize: 20,
     fontWeight: "600",
-  },
-
-  cardButtons: {
-    flex: 1,
-    display: "flex",
-    flexDirection: "row",
-    columnGap: 32,
-    alignItems: "flex-end",
-    marginVertical: 15,
-    marginHorizontal: 20,
-  },
-
-  cardButtonText: {
-    fontFamily: "Roboto Bold",
-    fontSize: 18,
-    fontWeight: "600",
-    textTransform: "uppercase",
   },
 });
 

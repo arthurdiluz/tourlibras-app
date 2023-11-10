@@ -38,7 +38,9 @@ const ProfessorLessonHomepageScreen = ({ navigation }: Props) => {
     return navigation.navigate("ProfessorCreateLessonScreen");
   };
 
-  const handleManageLesson = () => {};
+  const handleManageLesson = () => {
+    return navigation.navigate("ProfessorListLevelScreen");
+  };
 
   const handleGoBack = () => {
     return navigation.pop();
