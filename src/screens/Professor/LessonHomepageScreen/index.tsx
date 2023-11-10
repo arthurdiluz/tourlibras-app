@@ -61,7 +61,7 @@ const ProfessorLessonHomepageScreen = ({ navigation }: Props) => {
       <View style={styles.menuButtons}>
         <ButtonComponent title="criar aula" onPress={handleCreateLesson} />
         <ButtonComponent
-          title="editar/remover aula"
+          title="visualizar/gerenciar aulas"
           onPress={handleManageLesson}
         />
       </View>
