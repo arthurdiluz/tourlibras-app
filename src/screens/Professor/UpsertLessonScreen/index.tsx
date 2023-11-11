@@ -16,7 +16,7 @@ import CardComponent from "../../../components/CardComponent";
 
 type Props = NativeStackScreenProps<any>;
 
-const ProfessorCreateLessonScreen = ({ navigation, route }: Props) => {
+const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
   const os = Platform.OS;
   const { user } = useAuth();
   const lessonId: number | undefined = route.params?.lessonId;
@@ -64,8 +64,7 @@ const ProfessorCreateLessonScreen = ({ navigation, route }: Props) => {
       }
     }
 
-    fetchProfessorData();
-    fetchMedalData();
+    fetchProfessorData().then(() => fetchMedalData());
   }, [user]);
 
   const handleGoBack = () => navigation.goBack();
@@ -212,4 +211,4 @@ const ProfessorCreateLessonScreen = ({ navigation, route }: Props) => {
   );
 };
 
-export default ProfessorCreateLessonScreen;
+export default ProfessorUpsertLessonScreen;
