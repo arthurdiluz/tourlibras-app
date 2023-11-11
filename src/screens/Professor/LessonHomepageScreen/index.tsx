@@ -35,10 +35,12 @@ const ProfessorLessonHomepageScreen = ({ navigation }: Props) => {
   }, [user]);
 
   const handleCreateLesson = () => {
-    return navigation.navigate("ProfessorCreateLessonScreen");
+    return navigation.navigate("ProfessorUpsertLessonScreen");
   };
 
-  const handleManageLesson = () => {};
+  const handleManageLesson = () => {
+    return navigation.navigate("ProfessorListLevelScreen");
+  };
 
   const handleGoBack = () => {
     return navigation.pop();
@@ -59,7 +61,7 @@ const ProfessorLessonHomepageScreen = ({ navigation }: Props) => {
       <View style={styles.menuButtons}>
         <ButtonComponent title="criar aula" onPress={handleCreateLesson} />
         <ButtonComponent
-          title="editar/remover aula"
+          title="visualizar/gerenciar aulas"
           onPress={handleManageLesson}
         />
       </View>
