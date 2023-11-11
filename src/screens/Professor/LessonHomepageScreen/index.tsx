@@ -35,7 +35,7 @@ const ProfessorLessonHomepageScreen = ({ navigation }: Props) => {
   }, [user]);
 
   const handleCreateLesson = () => {
-    return navigation.navigate("ProfessorCreateLessonScreen");
+    return navigation.navigate("ProfessorUpsertLessonScreen");
   };
 
   const handleManageLesson = () => {
