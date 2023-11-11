@@ -15,7 +15,7 @@ type Props = NativeStackScreenProps<any>;
 
 const ProfessorListLevelScreen = ({ navigation }: Props) => {
   const { user } = useAuth();
-  const [lessons, setLessons] = useState<Array<ILesson> | null>(null);
+  const [lessons, setLessons] = useState<Array<ILesson>>([]);
 
   useEffect(() => {
     async function fetchLesson() {
@@ -64,8 +64,19 @@ const ProfessorListLevelScreen = ({ navigation }: Props) => {
                 {
                   text: "Apagar aula",
                   style: "destructive",
-                  onPress: () => {
-                    // TODO: handle delete lesson
+                  onPress: async () => {
+                    try {
+                      await api.delete(
+                        `/professor/${user?.sub}/lesson/${lesson.id}`
+                      );
+                      // Remove the deleted lesson from the state
+                      setLessons((prevLessons) =>
+                        prevLessons.filter((l) => l.id !== lesson.id)
+                      );
+                    } catch (error: any) {
+                      console.error(error);
+                      Alert.alert("Erro ao apagar aula", error?.message);
+                    }
                   },
                 },
               ]
@@ -75,7 +86,9 @@ const ProfessorListLevelScreen = ({ navigation }: Props) => {
           text: "Editar",
           style: "default",
           onPress: () => {
-            // TODO: handle edit lesson
+            return navigation.navigate("ProfessorUpsertLessonScreen", {
+              lessonId: lesson.id,
+            });
           },
         },
         {
@@ -126,6 +139,7 @@ const ProfessorListLevelScreen = ({ navigation }: Props) => {
           renderItem={renderItem}
           numColumns={2}
           contentContainerStyle={styles.flatListContentContainerStyle}
+          extraData={lessons}
         />
       ) : (
         <View style={styles.emptyLevelMessage}>
