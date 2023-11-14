@@ -66,7 +66,12 @@ export interface ILesson {
   id: number;
   createdAt: Date | string;
   updatedAt: Date | string;
-  icon: string;
   title: string;
+  icon: string;
   professorId: number;
+  medalId: any;
+  Professor: IProfessor;
+  Students: any[];
+  Levels: any[];
+  Medal: any;
 }

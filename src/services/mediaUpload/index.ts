@@ -20,13 +20,15 @@ const imageOptions: ImagePickerOptions = {
 };
 
 type uploadImageType = {
-  endpoint: string;
   token?: string | null;
+  endpoint?: string | null;
+  uploadToAws?: boolean;
 };
 
 export const uploadImageFromCamera = async ({
-  endpoint,
   token,
+  endpoint,
+  uploadToAws = true,
 }: uploadImageType) => {
   const cameraPermission = await requestCameraPermissionsAsync();
 
@@ -42,22 +44,26 @@ export const uploadImageFromCamera = async ({
   if (selectedImage.assets) {
     const { uri } = selectedImage.assets[0];
 
-    return uploadImage({
-      endpoint,
-      uri,
-      token,
-    })
-      .then((key) => key)
-      .catch((error: any) => {
-        console.error(error);
-        throw new Error(error);
-      });
+    return uploadToAws
+      ? endpoint &&
+          uploadImage({
+            endpoint,
+            uri,
+            token,
+          })
+            .then((key) => key)
+            .catch((error: any) => {
+              console.error(error);
+              throw new Error(error);
+            })
+      : uri;
   }
 };
 
 export const uploadImageFromGallery = async ({
-  endpoint,
   token,
+  endpoint,
+  uploadToAws = true,
 }: uploadImageType) => {
   const galleryPermission = await requestMediaLibraryPermissionsAsync();
 
@@ -73,15 +79,23 @@ export const uploadImageFromGallery = async ({
   if (selectedImage.assets) {
     const { uri } = selectedImage.assets[0];
 
-    return uploadImage({
-      endpoint,
-      uri,
-      token,
-    })
-      .then((key) => key)
-      .catch((error: any) => {
-        console.error(error);
-        throw new Error(error);
-      });
+    console.log("uri:", uri);
+
+    return uploadToAws
+      ? endpoint &&
+          (await uploadImage({
+            endpoint,
+            uri,
+            token,
+          })
+            .then((key) => {
+              console.log({ key });
+              return key;
+            })
+            .catch((error: any) => {
+              console.error(error);
+              throw new Error(error);
+            }))
+      : uri;
   }
 };
