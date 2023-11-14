@@ -67,7 +67,7 @@ const ProfessorListLevelScreen = ({ navigation }: Props) => {
                   onPress: async () => {
                     try {
                       await api.delete(
-                        `/professor/${user?.sub}/lesson/${lesson.id}`
+                        `/professor/${lesson.professorId}/lesson/${lesson.id}`
                       );
                       // Remove the deleted lesson from the state
                       setLessons((prevLessons) =>
