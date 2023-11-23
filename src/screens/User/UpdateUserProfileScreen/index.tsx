@@ -31,7 +31,6 @@ const UpdateUserProfileScreen = ({ navigation }: Props) => {
         setNewEmail(data.email);
         setUser(data);
       } catch (error: any) {
-        console.error(error);
         return Alert.alert("Could not load user data", error?.message);
       }
     }
@@ -74,7 +73,6 @@ const UpdateUserProfileScreen = ({ navigation }: Props) => {
                   try {
                     return await api.delete(`/user/${user?.id}`);
                   } catch (error: any) {
-                    console.error(error);
                     return Alert.alert(
                       "Could not delete your account",
                       error?.message
@@ -87,7 +85,6 @@ const UpdateUserProfileScreen = ({ navigation }: Props) => {
         ]
       );
     } catch (error: any) {
-      console.error(error);
       return Alert.alert("Could not delete your account", error?.message);
     }
   };
@@ -110,7 +107,6 @@ const UpdateUserProfileScreen = ({ navigation }: Props) => {
 
       return handleGoBack();
     } catch (error: any) {
-      console.error(error);
       return Alert.alert("Could not update data", error?.message);
     }
   };

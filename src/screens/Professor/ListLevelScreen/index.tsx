@@ -32,7 +32,6 @@ const ProfessorListLevelScreen = ({ navigation }: Props) => {
 
         setLessons(lessonsData);
       } catch (error: any) {
-        console.error(error);
         return Alert.alert("Não foi possível obter as aulas", error?.message);
       }
     }
@@ -74,7 +73,6 @@ const ProfessorListLevelScreen = ({ navigation }: Props) => {
                         prevLessons.filter((l) => l.id !== lesson.id)
                       );
                     } catch (error: any) {
-                      console.error(error);
                       Alert.alert("Erro ao apagar aula", error?.message);
                     }
                   },

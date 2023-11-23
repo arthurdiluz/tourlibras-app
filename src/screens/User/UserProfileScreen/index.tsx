@@ -65,7 +65,6 @@ const UserProfileScreen = ({ navigation }: Props) => {
               setProfessor(professorData);
               setSelectedGrammar(professorData.grammar);
             } catch (error: any) {
-              console.error(error);
               return Alert.alert(
                 "Could not load professor data",
                 error?.message
@@ -81,7 +80,6 @@ const UserProfileScreen = ({ navigation }: Props) => {
             break;
         }
       } catch (error: any) {
-        console.error(error);
         return Alert.alert("Could not load user data", error?.message);
       }
     }
@@ -112,7 +110,6 @@ const UserProfileScreen = ({ navigation }: Props) => {
                   });
                 })
                 .catch((error: any) => {
-                  console.error(error);
                   return Alert.alert(
                     "Não foi possível enviar a imagem",
                     error?.message
@@ -136,7 +133,6 @@ const UserProfileScreen = ({ navigation }: Props) => {
                   });
                 })
                 .catch((error: any) => {
-                  console.error(error);
                   return Alert.alert(
                     "Não foi possível enviar a imagem",
                     error?.message
@@ -150,7 +146,6 @@ const UserProfileScreen = ({ navigation }: Props) => {
         ]
       );
     } catch (error: any) {
-      console.error(error);
       Alert.alert("Não foi possível enviar imagem", error?.message);
     }
   };
@@ -188,7 +183,6 @@ const UserProfileScreen = ({ navigation }: Props) => {
 
       return handleGoBack();
     } catch (error: any) {
-      console.error(error);
       return Alert.alert("Could not update data", error?.message);
     }
   };

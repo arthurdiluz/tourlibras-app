@@ -50,7 +50,6 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
         setProfessor(professorData);
         setMedals(professorData.Medals);
       } catch (error: any) {
-        console.error(error);
         return Alert.alert(
           "Não foi possível obter dados do professor",
           error?.message
@@ -72,7 +71,6 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
 
         setMedals(_medals);
       } catch (error: any) {
-        console.error(error);
         return Alert.alert("Não foi possível obter medalhas", error?.message);
       }
     }
@@ -92,7 +90,6 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
         setSelectedMedal(_lesson.Medal);
         setLevels(_lesson.Medal);
       } catch (error: any) {
-        console.error(error);
         return Alert.alert("Não foi possível obter medalhas", error?.message);
       }
     }
@@ -149,7 +146,6 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
           lessonId: _lesson.id,
         });
       } catch (error: any) {
-        console.error(error);
         Alert.alert("Não foi possível criar aula", error?.message);
       }
     }
@@ -167,7 +163,6 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
 
         setLesson(updatedLesson);
       } catch (error: any) {
-        console.error(error);
         Alert.alert("Não foi possível criar aula", error?.message);
       } finally {
         return navigation.pop(2);
@@ -202,7 +197,6 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
                   setIcon(uri);
                 })
                 .catch((error: any) => {
-                  console.error(error);
                   return Alert.alert(
                     "Não foi possível enviar a imagem",
                     error?.message
@@ -220,7 +214,6 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
                   setIcon(key);
                 })
                 .catch((error: any) => {
-                  console.error(error);
                   return Alert.alert(
                     "Não foi possível enviar a imagem",
                     error?.message
@@ -234,7 +227,6 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
         ]
       );
     } catch (error: any) {
-      console.error(error);
       Alert.alert("Não foi possível enviar imagem", error?.message);
     }
   };

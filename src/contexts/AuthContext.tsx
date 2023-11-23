@@ -3,6 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import jwtDecode from "jwt-decode";
 import AuthContextType, { IJwtPayload } from "../interfaces";
 import api, { createAxiosAuthInterceptor } from "../utils/api";
+import { Alert } from "react-native";
 
 export const AuthContext = createContext<AuthContextType | null>(null);
 
@@ -37,8 +38,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       loadToken();
 
       checkTokenExpiration(token);
-    } catch (error) {
-      return console.error(error);
+    } catch (error: any) {
+      return Alert.alert("ERROR", error?.message);
     } finally {
       return setLoading(false);
     }
@@ -62,8 +63,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       setUser(decodedUser);
 
       api.defaults.headers["Authorization"] = `Bearer ${token}`;
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      return Alert.alert("ERROR", error?.message);
     }
   };
 
@@ -73,8 +74,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         AsyncStorage.removeItem("jwtToken").then(() => handleSetToken(null)),
         AsyncStorage.removeItem("userData").then(() => setUser(null)),
       ]);
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      return Alert.alert("ERROR", error?.message);
     }
   };
 

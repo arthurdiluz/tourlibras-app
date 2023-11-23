@@ -26,7 +26,6 @@ const ProfessorLessonHomepageScreen = ({ navigation }: Props) => {
 
         setProfilePicture(profilePhoto);
       } catch (error: any) {
-        console.error(error);
         return Alert.alert("Could not load professor data", error?.message);
       }
     }
