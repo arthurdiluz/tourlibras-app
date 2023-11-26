@@ -5,7 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Alert, ListRenderItemInfo, Text, View } from "react-native";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import ArrowLeftIcon from "../../../components/Icons/ArrowLeftIcon";
-import { ILesson } from "../../../interfaces";
+import { ILessonOutput } from "../../../interfaces";
 import api from "../../../utils/api";
 import { useAuth } from "../../../contexts/AuthContext";
 import PhotoUploadImage from "../../../components/PhotoUploadImage";
@@ -15,13 +15,13 @@ type Props = NativeStackScreenProps<any>;
 
 const ProfessorListLevelScreen = ({ navigation }: Props) => {
   const { user } = useAuth();
-  const [lessons, setLessons] = useState<Array<ILesson>>([]);
+  const [lessons, setLessons] = useState<Array<ILessonOutput>>([]);
 
   useEffect(() => {
     async function fetchLesson() {
       try {
         if (!user) throw new Error("Usuário não encontrado");
-        const lessonsData: Array<ILesson> = (
+        const lessonsData: Array<ILessonOutput> = (
           await api.get(`/professor/${user.sub}/lesson`)
         ).data;
 
@@ -43,7 +43,7 @@ const ProfessorListLevelScreen = ({ navigation }: Props) => {
     return navigation.pop();
   };
 
-  const handleLesson = (lesson: ILesson) => {
+  const handleLesson = (lesson: ILessonOutput) => {
     return Alert.alert(
       `Aula "${lesson.title}" selecionada`,
       "O que deseja fazer com a aula?",
@@ -97,7 +97,7 @@ const ProfessorListLevelScreen = ({ navigation }: Props) => {
     );
   };
 
-  const renderItem = ({ item, index }: ListRenderItemInfo<ILesson>) => {
+  const renderItem = ({ item, index }: ListRenderItemInfo<ILessonOutput>) => {
     return (
       <View style={styles.renderItemLessonSection}>
         <View style={styles.renderItemLessonImage}>

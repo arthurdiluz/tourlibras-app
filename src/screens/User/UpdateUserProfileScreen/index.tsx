@@ -9,14 +9,14 @@ import TextInputComponent from "../../../components/input";
 import ButtonComponent from "../../../components/Button";
 import { useAuth } from "../../../contexts/AuthContext";
 import api from "../../../utils/api";
-import { IUser } from "../../../interfaces";
+import { IUserOutput } from "../../../interfaces";
 
 type Props = NativeStackScreenProps<any>;
 
 const UpdateUserProfileScreen = ({ navigation }: Props) => {
   const { user: _user } = useAuth();
 
-  const [user, setUser] = useState<IUser | null>(null);
+  const [user, setUser] = useState<IUserOutput | null>(null);
   const [newEmail, setNewEmail] = useState<string>("");
   const [currentPassword, setCurrentPassword] = useState<string>("");
   const [newPassword, setNewPassword] = useState<string>("");
@@ -26,7 +26,7 @@ const UpdateUserProfileScreen = ({ navigation }: Props) => {
     async function loadUserData() {
       try {
         const response = await api.get(`/user/${_user?.sub}`);
-        const data: IUser = response?.data;
+        const data: IUserOutput = response?.data;
 
         setNewEmail(data.email);
         setUser(data);

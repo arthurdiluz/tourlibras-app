@@ -6,7 +6,12 @@ import { Alert, ListRenderItemInfo, Platform, Text, View } from "react-native";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import styles from "./styles";
 import api from "../../../utils/api";
-import { ILesson, ILevel, IMedal, IProfessor } from "../../../interfaces";
+import {
+  ILessonLevelOutput,
+  ILessonOutput,
+  IMedalOutput,
+  IProfessor,
+} from "../../../interfaces";
 import ArrowLeftIcon from "../../../components/Icons/ArrowLeftIcon";
 import ButtonComponent from "../../../components/Button";
 import PhotoUploadImage from "../../../components/PhotoUploadImage";
@@ -28,13 +33,13 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
 
   const [isPickerVisible, setPickerVisible] = useState(os === "android");
   const [professor, setProfessor] = useState<IProfessor | null>(null);
-  const [medals, setMedals] = useState<Array<IMedal>>([]);
-  const [lesson, setLesson] = useState<ILesson | null>(null);
+  const [medals, setMedals] = useState<Array<IMedalOutput>>([]);
+  const [lesson, setLesson] = useState<ILessonOutput | null>(null);
 
   const [icon, setIcon] = useState<string>("");
   const [title, setTitle] = useState<string>("");
-  const [selectedMedal, setSelectedMedal] = useState<IMedal | null>(null);
-  const [levels, setLevels] = useState<Array<ILevel>>([]);
+  const [selectedMedal, setSelectedMedal] = useState<IMedalOutput | null>(null);
+  const [levels, setLevels] = useState<Array<ILessonLevelOutput>>([]);
 
   useEffect(() => {
     async function fetchProfessorData() {
@@ -65,7 +70,7 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
       if (!professor) throw new Error("Professor não encontrado");
 
       try {
-        const _medals: Array<IMedal> = (
+        const _medals: Array<IMedalOutput> = (
           await api.get(`/professor/${professor.id}/medal`)
         ).data;
 
@@ -80,7 +85,7 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
       if (!lessonId) return;
 
       try {
-        const _lesson: ILesson = (
+        const _lesson: ILessonOutput = (
           await api.get(`/professor/${professor?.id}/lesson/${lessonId}`)
         ).data;
 
@@ -88,7 +93,7 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
         setIcon(_lesson.icon);
         setTitle(_lesson.title);
         setSelectedMedal(_lesson.Medal);
-        setLevels(_lesson.Medal);
+        setLevels(_lesson.Levels);
       } catch (error: any) {
         return Alert.alert("Não foi possível obter medalhas", error?.message);
       }
@@ -104,7 +109,7 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
     setPickerVisible(!isPickerVisible);
   };
 
-  const handleChangeSelectedMedal = (value: IMedal | string) => {
+  const handleChangeSelectedMedal = (value: IMedalOutput | string) => {
     if (typeof value === "string") {
       const foundMedal = medals?.find((medal) => medal.name === value);
       return foundMedal && setSelectedMedal(foundMedal);
@@ -130,7 +135,7 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
             medalId: selectedMedal?.id || undefined,
             title,
           })
-        ).data as ILesson;
+        ).data as ILessonOutput;
 
         const key = await uploadImage({
           endpoint: `/professor/${professor?.id}/lesson/${_lesson.id}/icon`,
@@ -159,7 +164,7 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
             medalId: selectedMedal?.id || undefined,
             title,
           })
-        ).data as ILesson;
+        ).data as ILessonOutput;
 
         setLesson(updatedLesson);
       } catch (error: any) {
@@ -177,7 +182,9 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
   const handleDeleteLevel = () => {};
 
   const handleCreateLevel = () => {
-    return navigation.navigate("ProfessorCreateLevelScreen");
+    return navigation.navigate("ProfessorUpsertLessonLevelScreen", {
+      lessonId,
+    });
   };
 
   const handleUploadIcon = async () => {
@@ -231,7 +238,10 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
     }
   };
 
-  const renderItem = ({ item, index }: ListRenderItemInfo<ILevel>) => {
+  const renderItem = ({
+    item,
+    index,
+  }: ListRenderItemInfo<ILessonLevelOutput>) => {
     return (
       <CardComponent
         key={index.toString()}
