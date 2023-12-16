@@ -9,14 +9,14 @@ import TextInputComponent from "../../../components/input";
 import ButtonComponent from "../../../components/Button";
 import { useAuth } from "../../../contexts/AuthContext";
 import api from "../../../utils/api";
-import { IUser } from "../../../interfaces";
+import { IUserOutput } from "../../../interfaces";
 
 type Props = NativeStackScreenProps<any>;
 
 const UpdateUserProfileScreen = ({ navigation }: Props) => {
   const { user: _user } = useAuth();
 
-  const [user, setUser] = useState<IUser | null>(null);
+  const [user, setUser] = useState<IUserOutput | null>(null);
   const [newEmail, setNewEmail] = useState<string>("");
   const [currentPassword, setCurrentPassword] = useState<string>("");
   const [newPassword, setNewPassword] = useState<string>("");
@@ -26,12 +26,11 @@ const UpdateUserProfileScreen = ({ navigation }: Props) => {
     async function loadUserData() {
       try {
         const response = await api.get(`/user/${_user?.sub}`);
-        const data: IUser = response?.data;
+        const data: IUserOutput = response?.data;
 
         setNewEmail(data.email);
         setUser(data);
       } catch (error: any) {
-        console.error(error);
         return Alert.alert("Could not load user data", error?.message);
       }
     }
@@ -74,7 +73,6 @@ const UpdateUserProfileScreen = ({ navigation }: Props) => {
                   try {
                     return await api.delete(`/user/${user?.id}`);
                   } catch (error: any) {
-                    console.error(error);
                     return Alert.alert(
                       "Could not delete your account",
                       error?.message
@@ -87,7 +85,6 @@ const UpdateUserProfileScreen = ({ navigation }: Props) => {
         ]
       );
     } catch (error: any) {
-      console.error(error);
       return Alert.alert("Could not delete your account", error?.message);
     }
   };
@@ -110,7 +107,6 @@ const UpdateUserProfileScreen = ({ navigation }: Props) => {
 
       return handleGoBack();
     } catch (error: any) {
-      console.error(error);
       return Alert.alert("Could not update data", error?.message);
     }
   };

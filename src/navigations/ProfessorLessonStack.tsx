@@ -3,6 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import ProfessorLessonHomepageScreen from "../screens/Professor/LessonHomepageScreen";
 import ProfessorUpsertLessonScreen from "../screens/Professor/UpsertLessonScreen";
 import ProfessorListLevelScreen from "../screens/Professor/ListLevelScreen";
+import ProfessorUpsertLessonLevelScreen from "../screens/Professor/UpsertLessonLevelScreen";
 
 const Stack = createStackNavigator<any>();
 
@@ -25,6 +26,11 @@ const ProfessorLessonStack: React.FC = () => {
       <Stack.Screen
         name="ProfessorListLevelScreen"
         component={ProfessorListLevelScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="ProfessorUpsertLessonLevelScreen"
+        component={ProfessorUpsertLessonLevelScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

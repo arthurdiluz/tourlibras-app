@@ -5,7 +5,7 @@ import { Alert, Text, View } from "react-native";
 import styles from "./styles";
 import api from "../../../utils/api";
 import { useAuth } from "../../../contexts/AuthContext";
-import { IUser } from "../../../interfaces";
+import { IUserOutput } from "../../../interfaces";
 import UserImageComponent from "../../../components/UserImage";
 import ButtonComponent from "../../../components/Button";
 import { getImageUrlFromS3Key } from "../../../utils/file";
@@ -22,11 +22,10 @@ const ProfessorLessonHomepageScreen = ({ navigation }: Props) => {
 
       try {
         const { data } = await api.get(`/user/${user?.sub}`);
-        const { profilePhoto } = data as IUser;
+        const { profilePhoto } = data as IUserOutput;
 
-        setProfilePicture(profilePhoto);
+        setProfilePicture(profilePhoto || null);
       } catch (error: any) {
-        console.error(error);
         return Alert.alert("Could not load professor data", error?.message);
       }
     }

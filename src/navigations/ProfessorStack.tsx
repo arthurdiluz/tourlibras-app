@@ -31,7 +31,7 @@ const ProfessorStack: React.FC = () => {
         component={ProfessorLessonStack}
         options={{ headerShown: false }}
       />
-      {/* TODO: refactor */}
+      {/* TODO: refactor: create medals stack */}
       <Stack.Screen
         name="ProfessorManageMedals"
         component={ProfessorManageMedalsScreen}

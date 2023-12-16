@@ -85,7 +85,6 @@ const SignUpScreen = ({ navigation }: Props) => {
 
       return signIn(accessToken);
     } catch (error: any) {
-      console.error(error);
       return Alert.alert("Não foi possível criar usuário", error?.message);
     }
   };
@@ -108,7 +107,6 @@ const SignUpScreen = ({ navigation }: Props) => {
 
       return signIn(accessToken);
     } catch (error: any) {
-      console.error(error);
       return Alert.alert("Não foi possível criar usuário", error?.message);
     }
   };

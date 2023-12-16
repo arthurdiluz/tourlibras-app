@@ -26,7 +26,6 @@ const ProfessorHomepageScreen = ({ navigation }: Props) => {
 
         setProfessor(data as IProfessor);
       } catch (error: any) {
-        console.error(error);
         return Alert.alert(
           "Não foi possível obter dados do professor",
           error?.message

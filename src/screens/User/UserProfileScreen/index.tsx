@@ -6,7 +6,7 @@ import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "../../../contexts/AuthContext";
-import { IProfessor, IUser } from "../../../interfaces";
+import { IProfessor, IUserOutput } from "../../../interfaces";
 import { getImageUrlFromS3Key } from "../../../utils/file";
 import UserImageComponent from "../../../components/UserImage";
 import ArrowLeftIcon from "../../../components/Icons/ArrowLeftIcon";
@@ -35,7 +35,7 @@ const UserProfileScreen = ({ navigation }: Props) => {
     { name: "OSV" },
   ];
 
-  const [user, setUser] = useState<IUser | null>(null);
+  const [user, setUser] = useState<IUserOutput | null>(null);
   const [fullName, setFullname] = useState("");
   const [professor, setProfessor] = useState<IProfessor | null>(null);
   const [selectedGrammar, setSelectedGrammar] = useState("");
@@ -48,7 +48,8 @@ const UserProfileScreen = ({ navigation }: Props) => {
       if (!userContext) return navigation.navigate("UnauthenticatedStack");
 
       try {
-        const data: IUser = (await api.get(`/user/${userContext?.sub}`)).data;
+        const data: IUserOutput = (await api.get(`/user/${userContext?.sub}`))
+          .data;
 
         setFullname(data.fullName);
         setUser(data);
@@ -65,7 +66,6 @@ const UserProfileScreen = ({ navigation }: Props) => {
               setProfessor(professorData);
               setSelectedGrammar(professorData.grammar);
             } catch (error: any) {
-              console.error(error);
               return Alert.alert(
                 "Could not load professor data",
                 error?.message
@@ -81,7 +81,6 @@ const UserProfileScreen = ({ navigation }: Props) => {
             break;
         }
       } catch (error: any) {
-        console.error(error);
         return Alert.alert("Could not load user data", error?.message);
       }
     }
@@ -108,11 +107,10 @@ const UserProfileScreen = ({ navigation }: Props) => {
                     return {
                       ...prevUser,
                       profilePhoto: key,
-                    } as IUser;
+                    } as IUserOutput;
                   });
                 })
                 .catch((error: any) => {
-                  console.error(error);
                   return Alert.alert(
                     "Não foi possível enviar a imagem",
                     error?.message
@@ -132,11 +130,10 @@ const UserProfileScreen = ({ navigation }: Props) => {
                     return {
                       ...prevUser,
                       profilePhoto: key,
-                    } as IUser;
+                    } as IUserOutput;
                   });
                 })
                 .catch((error: any) => {
-                  console.error(error);
                   return Alert.alert(
                     "Não foi possível enviar a imagem",
                     error?.message
@@ -150,7 +147,6 @@ const UserProfileScreen = ({ navigation }: Props) => {
         ]
       );
     } catch (error: any) {
-      console.error(error);
       Alert.alert("Não foi possível enviar imagem", error?.message);
     }
   };
@@ -188,7 +184,6 @@ const UserProfileScreen = ({ navigation }: Props) => {
 
       return handleGoBack();
     } catch (error: any) {
-      console.error(error);
       return Alert.alert("Could not update data", error?.message);
     }
   };

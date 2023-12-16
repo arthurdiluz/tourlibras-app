@@ -53,7 +53,6 @@ export const uploadImageFromCamera = async ({
           })
             .then((key) => key)
             .catch((error: any) => {
-              console.error(error);
               throw new Error(error);
             })
       : uri;
@@ -79,8 +78,6 @@ export const uploadImageFromGallery = async ({
   if (selectedImage.assets) {
     const { uri } = selectedImage.assets[0];
 
-    console.log("uri:", uri);
-
     return uploadToAws
       ? endpoint &&
           (await uploadImage({
@@ -88,12 +85,8 @@ export const uploadImageFromGallery = async ({
             uri,
             token,
           })
-            .then((key) => {
-              console.log({ key });
-              return key;
-            })
+            .then((key) => key)
             .catch((error: any) => {
-              console.error(error);
               throw new Error(error);
             }))
       : uri;
