@@ -166,7 +166,14 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
           })
         ).data as ILessonOutput;
 
+        const key = await uploadImage({
+          endpoint: `/professor/${professor?.id}/lesson/${updatedLesson.id}/icon`,
+          uri: icon,
+          token,
+        });
+
         setLesson(updatedLesson);
+        setIcon(key);
       } catch (error: any) {
         Alert.alert("Não foi possível criar aula", error?.message);
       } finally {
@@ -177,13 +184,19 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
     return lessonId ? await updateLesson() : await createLesson();
   };
 
-  const handleUpdateLevel = () => {};
+  const handleUpdateLevel = (levelId?: number) => {
+    return navigation.navigate("ProfessorUpsertLessonLevelScreen", {
+      lessonId,
+      levelId,
+    });
+  };
 
   const handleDeleteLevel = () => {};
 
   const handleCreateLevel = () => {
     return navigation.navigate("ProfessorUpsertLessonLevelScreen", {
       lessonId,
+      levelValue: lesson && lesson?.Levels && lesson?.Levels?.length + 1,
     });
   };
 
@@ -238,6 +251,33 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
     }
   };
 
+  const handleLevelAction = (level: ILessonLevelOutput) => {
+    Alert.alert(
+      `Nível ${level.level} selecionada.`,
+      "Escolha a ação desejada:",
+      [
+        {
+          text: "Editar",
+          onPress: () => handleUpdateLevel(level.id),
+        },
+        {
+          text: "Remover",
+          style: "destructive",
+          onPress: async () => {
+            // TODO: create remove lesson
+            return Alert.alert(
+              `Nível ${level.level} da aula "${lesson?.title}" será removida`
+            );
+          },
+        },
+        {
+          text: "Cancelar",
+          style: "cancel",
+        },
+      ]
+    );
+  };
+
   const renderItem = ({
     item,
     index,
@@ -248,13 +288,13 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
         width={"100%"}
         style={"primary"}
         children={
-          <>
+          <TouchableOpacity onPress={() => handleLevelAction(item)}>
             <Text style={styles.cardTitle}>{`Nível ${item.level}`}</Text>
             <View style={styles.cardButtons}>
               <TouchableOpacity>
                 <Text
                   style={[styles.cardButtonText, { color: "#1B9CFC" }]}
-                  onPress={handleUpdateLevel}
+                  onPress={() => handleUpdateLevel()}
                 >
                   {"editar"}
                 </Text>
@@ -268,7 +308,7 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
                 </Text>
               </TouchableOpacity>
             </View>
-          </>
+          </TouchableOpacity>
         }
       />
     );

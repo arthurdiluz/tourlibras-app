@@ -119,6 +119,7 @@ export interface ILessonLevelOutput {
   earnedMoney: number;
   lessonId: number;
   Lesson: ILessonOutput;
+  LessonLevelExercises: ILevelExerciseOutput[];
 }
 
 export interface IAlternativeInput {
