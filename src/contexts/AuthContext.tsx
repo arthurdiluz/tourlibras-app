@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import jwtDecode from "jwt-decode";
 import AuthContextType, { IJwtPayload } from "../interfaces";
 import api, { createAxiosAuthInterceptor } from "../utils/api";
 import { Alert } from "react-native";
+import { getItemAsync, setItemAsync, deleteItemAsync } from "expo-secure-store";
 
 export const AuthContext = createContext<AuthContextType | null>(null);
 
@@ -19,7 +19,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     try {
       const loadUser = async (): Promise<void> => {
-        const userDataJSON = await AsyncStorage.getItem("userData");
+        const userDataJSON = await getItemAsync("userData", {
+          requireAuthentication: false,
+        });
 
         if (!userDataJSON) return;
 
@@ -27,7 +29,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       };
 
       const loadToken = async (): Promise<void> => {
-        const storageToken = await AsyncStorage.getItem("jwtToken");
+        const storageToken = await getItemAsync("jwtToken", {
+          requireAuthentication: false,
+        });
 
         if (!storageToken) return;
 
@@ -36,7 +40,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
       loadUser();
       loadToken();
-
       checkTokenExpiration(token);
     } catch (error: any) {
       return Alert.alert("ERROR", error?.message);
@@ -55,8 +58,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       const decodedUser: IJwtPayload = jwtDecode(jwtToken);
 
       await Promise.all([
-        AsyncStorage.setItem("jwtToken", jwtToken),
-        AsyncStorage.setItem("userData", JSON.stringify(decodedUser)),
+        setItemAsync("jwtToken", jwtToken, { requireAuthentication: false }),
+        setItemAsync("userData", JSON.stringify(decodedUser), {
+          requireAuthentication: false,
+        }),
       ]);
 
       handleSetToken(jwtToken);
@@ -71,8 +76,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const signOut = async (): Promise<void> => {
     try {
       await Promise.all([
-        AsyncStorage.removeItem("jwtToken").then(() => handleSetToken(null)),
-        AsyncStorage.removeItem("userData").then(() => setUser(null)),
+        deleteItemAsync("jwtToken").then(() => handleSetToken(null)),
+        deleteItemAsync("userData").then(() => setUser(null)),
       ]);
     } catch (error: any) {
       return Alert.alert("ERROR", error?.message);
@@ -98,9 +103,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 export const useAuth = () => {
   const context = useContext(AuthContext);
 
-  if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
+  if (!context) throw new Error("useAuth must be used within an AuthProvider");
 
   return context;
 };

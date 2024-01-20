@@ -11,6 +11,12 @@
           "cameraPermission": "Permita $(PRODUCT_NAME) acessar sua câmera"
         }
       ]
+      // [
+      //   "expo-secure-store",
+      //   {
+      //     "faceIDPermission": "Permita $(PRODUCT_NAME) acessar seu Face ID"
+      //   }
+      // ]
     ],
     "version": "1.0.0",
     "orientation": "portrait",
@@ -23,6 +29,9 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
+      // "config": {
+      //   "usesNonExemptEncryption": false
+      // },
       "supportsTablet": true,
       "bundleIdentifier": "com.arthurdiluz.tourlibras"
     },
