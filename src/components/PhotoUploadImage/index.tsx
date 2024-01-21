@@ -1,4 +1,4 @@
-import { Image, ImageSourcePropType, View } from "react-native";
+import { Image, ImageSourcePropType } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import PhotoUploadIcon from "../Icons/PhotoUpload";
 import styles from "./styles";

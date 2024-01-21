@@ -8,7 +8,7 @@ import { useAuth } from "../../../contexts/AuthContext";
 import { IUserOutput } from "../../../interfaces";
 import UserImageComponent from "../../../components/UserImage";
 import ButtonComponent from "../../../components/Button";
-import { getImageUrlFromS3Key } from "../../../utils/file";
+import { getMediaUrlFromS3Key } from "../../../utils/file";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -52,7 +52,7 @@ const ProfessorLessonHomepageScreen = ({ navigation }: Props) => {
         <UserImageComponent
           source={
             profilePicture
-              ? { uri: getImageUrlFromS3Key(profilePicture) }
+              ? { uri: getMediaUrlFromS3Key(profilePicture) }
               : undefined
           }
         />

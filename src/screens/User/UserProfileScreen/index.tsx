@@ -7,17 +7,17 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "../../../contexts/AuthContext";
 import { IProfessor, IUserOutput } from "../../../interfaces";
-import { getImageUrlFromS3Key } from "../../../utils/file";
 import UserImageComponent from "../../../components/UserImage";
 import ArrowLeftIcon from "../../../components/Icons/ArrowLeftIcon";
 import TextInputComponent from "../../../components/input";
 import { ROLE } from "../../../enums";
 import ButtonComponent from "../../../components/Button";
+import PickerComponent from "../../../components/PickerComponent";
 import {
   uploadImageFromCamera,
   uploadImageFromGallery,
 } from "../../../services/mediaUpload";
-import PickerComponent from "../../../components/PickerComponent";
+import { getMediaUrlFromS3Key } from "../../../utils/file";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -98,6 +98,7 @@ const UserProfileScreen = ({ navigation }: Props) => {
             text: "Câmera",
             onPress: async () =>
               uploadImageFromCamera({
+                uploadToAws: true,
                 endpoint: `/user/${userContext?.sub}/profile-picture`,
                 token,
               })
@@ -121,6 +122,7 @@ const UserProfileScreen = ({ navigation }: Props) => {
             text: "Galeria",
             onPress: async () =>
               uploadImageFromGallery({
+                uploadToAws: true,
                 endpoint: `/user/${userContext?.sub}/profile-picture`,
                 token,
               })
@@ -214,7 +216,7 @@ const UserProfileScreen = ({ navigation }: Props) => {
             style="secundary"
             source={
               user?.profilePhoto
-                ? { uri: getImageUrlFromS3Key(user?.profilePhoto) }
+                ? { uri: getMediaUrlFromS3Key(user?.profilePhoto) }
                 : undefined
             }
             onPress={handleUpdateImage}
