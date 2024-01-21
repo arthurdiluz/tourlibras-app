@@ -98,7 +98,9 @@ const ProfessorUpsertLessonLevelScreen = ({ navigation, route }: Props) => {
   };
 
   const handleCreateExercise = () => {
-    // TODO: implement exercise creation
+    return navigation.navigate("ProfessorUpsertLevelExercise", {
+      levelId,
+    });
   };
 
   const handleExperienceChange = (v: string) => {

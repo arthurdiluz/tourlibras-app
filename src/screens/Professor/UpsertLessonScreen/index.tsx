@@ -22,7 +22,7 @@ import {
   uploadImageFromCamera,
   uploadImageFromGallery,
 } from "../../../services/mediaUpload";
-import { getImageUrlFromS3Key, uploadImage } from "../../../utils/file";
+import { getMediaUrlFromS3Key, uploadMedia } from "../../../utils/file";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -129,7 +129,6 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
     async function createLesson() {
       try {
         // TODO: add validations
-
         const _lesson = (
           await api.post(`/professor/${professor?.id}/lesson`, {
             medalId: selectedMedal?.id || undefined,
@@ -137,11 +136,16 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
           })
         ).data as ILessonOutput;
 
-        const key = await uploadImage({
+        const key = await uploadMedia({
           endpoint: `/professor/${professor?.id}/lesson/${_lesson.id}/icon`,
           uri: icon,
           token,
         });
+
+        if (!key) {
+          await api.delete(`/professor/${professor?.id}/lesson/${_lesson.id}`);
+          return navigation.goBack();
+        }
 
         setIcon(key);
         setLesson(_lesson);
@@ -151,6 +155,7 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
           lessonId: _lesson.id,
         });
       } catch (error: any) {
+        console.error(error);
         Alert.alert("Não foi possível criar aula", error?.message);
       }
     }
@@ -166,11 +171,13 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
           })
         ).data as ILessonOutput;
 
-        const key = await uploadImage({
+        const key = await uploadMedia({
           endpoint: `/professor/${professor?.id}/lesson/${updatedLesson.id}/icon`,
           uri: icon,
           token,
         });
+
+        if (!key) return navigation.goBack();
 
         setLesson(updatedLesson);
         setIcon(key);
@@ -343,7 +350,7 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
           }}
         >
           <PhotoUploadImage
-            source={icon ? { uri: getImageUrlFromS3Key(icon) } : undefined}
+            source={icon ? { uri: getMediaUrlFromS3Key(icon) } : undefined}
             onPress={handleUploadIcon}
           />
         </View>

@@ -9,7 +9,7 @@ import { ILessonOutput } from "../../../interfaces";
 import api from "../../../utils/api";
 import { useAuth } from "../../../contexts/AuthContext";
 import PhotoUploadImage from "../../../components/PhotoUploadImage";
-import { getImageUrlFromS3Key } from "../../../utils/file";
+import { getMediaUrlFromS3Key } from "../../../utils/file";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -104,7 +104,7 @@ const ProfessorListLevelScreen = ({ navigation }: Props) => {
           <PhotoUploadImage
             key={index}
             source={
-              item?.icon ? { uri: getImageUrlFromS3Key(item.icon) } : undefined
+              item?.icon ? { uri: getMediaUrlFromS3Key(item.icon) } : undefined
             }
             onPress={() => handleLesson(item)}
           />
