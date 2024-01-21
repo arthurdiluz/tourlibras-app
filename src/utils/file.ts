@@ -31,7 +31,6 @@ export const uploadMedia = async ({
   };
 
   try {
-    // TODO: fix
     const { body, status } = await uploadAsync(
       `${baseURL}${endpoint}`,
       uri,
