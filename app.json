@@ -2,10 +2,7 @@
   "expo": {
     "name": "TourLibras",
     "slug": "tourlibras",
-    "platforms": [
-      "ios",
-      "android"
-    ],
+    "platforms": ["ios", "android"],
     "plugins": [
       [
         "expo-image-picker",
@@ -13,9 +10,9 @@
           "photosPermission": "Permita $(PRODUCT_NAME) acessar sua galeria",
           "cameraPermission": "Permita $(PRODUCT_NAME) acessar sua câmera"
         }
-      ],
-      "expo-font",
-      "expo-secure-store"
+      ]
+      // "expo-font",
+      // "expo-secure-store"
     ],
     "version": "1.0.0",
     "orientation": "portrait",
@@ -26,9 +23,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.arthurdiluz.tourlibras"
