@@ -377,7 +377,7 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
             selectedOption={selectedMedal?.name || "Nenhuma"}
             isPickerVisible={isPickerVisible}
             onValueChange={handleMedalValueChange}
-            style={"secundary"}
+            style={"secondary"}
           />
         </View>
         {lessonId && (

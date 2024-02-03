@@ -4,7 +4,7 @@ import ProfessorLessonHomepageScreen from "../screens/Professor/LessonHomepageSc
 import ProfessorUpsertLessonScreen from "../screens/Professor/UpsertLessonScreen";
 import ProfessorListLevelScreen from "../screens/Professor/ListLevelScreen";
 import ProfessorUpsertLessonLevelScreen from "../screens/Professor/UpsertLessonLevelScreen";
-import ProfessorUpsertLevelExercise from "../screens/Professor/UpsertLevelExercise";
+import ProfessorUpsertLessonLevelExerciseScreen from "../screens/Professor/UpsertLevelExercise";
 
 const Stack = createStackNavigator<any>();
 
@@ -35,8 +35,8 @@ const ProfessorLessonStack: React.FC = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="ProfessorUpsertLevelExercise"
-        component={ProfessorUpsertLevelExercise}
+        name="ProfessorUpsertLessonLevelExerciseScreen"
+        component={ProfessorUpsertLessonLevelExerciseScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
