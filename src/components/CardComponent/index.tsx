@@ -1,13 +1,14 @@
-import React, { Children } from "react";
-import { DimensionValue, Text, View } from "react-native";
+import React from "react";
+import { DimensionValue, View, TouchableOpacity } from "react-native";
 import styles from "./styles";
 
-type StyleOptions = "primary" | "secundary";
+type StyleOptions = "primary" | "secondary";
 
 type Props = {
   height?: DimensionValue | null;
   width?: DimensionValue | null;
   style?: StyleOptions;
+  onPress?: () => void;
   customStyle?: any;
   children: React.ReactNode;
 };
@@ -16,20 +17,25 @@ const CardComponent = ({
   height = "100%",
   width = "100%",
   style = "primary",
+  onPress,
   customStyle,
   children,
 }: Props) => {
-  return (
-    <View
-      style={[
-        styles.defaultBox,
-        styles[`${style}Box`],
-        { height, width },
-        customStyle,
-      ]}
-    >
+  const cardStyles = [
+    styles.defaultBox,
+    styles[`${style}Box`],
+    { height, width },
+    customStyle,
+  ];
+
+  return onPress ? (
+    <TouchableOpacity onPress={onPress} style={cardStyles}>
       {children}
-    </View>
+    </TouchableOpacity>
+  ) : (
+    <TouchableOpacity onPress={onPress} style={cardStyles}>
+      {children}
+    </TouchableOpacity>
   );
 };
 
