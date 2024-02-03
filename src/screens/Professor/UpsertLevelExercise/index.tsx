@@ -38,7 +38,7 @@ const ProfessorUpsertLessonLevelExerciseScreen = ({
   navigation,
   route,
 }: Props) => {
-  const { user, token } = useAuth();
+  const { token } = useAuth();
   const lessonId: number | undefined = route.params?.lessonId;
   const levelId: number | undefined = route.params?.levelId;
   const exerciseId: number | undefined = route.params?.exerciseId;
@@ -133,67 +133,62 @@ const ProfessorUpsertLessonLevelExerciseScreen = ({
           return navigation.goBack();
         }
 
-        setMedia({ uri: key });
+        setMedia({ uri: getMediaUrlFromS3Key(key) });
         setStatement(_exercise.statement);
         setAlternatives(_exercise.Alternatives);
 
-        // TODO: reload screen
-        return navigation.navigate("ProfessorUpsertLessonLevelExerciseScreen", {
-          lessonId,
-          levelId,
-          exerciseId,
-        });
+        Alert.alert("Exercício criado com sucesso");
+        return navigation.goBack();
       } catch (error: any) {
         Alert.alert("Não foi possível criar exercício da aula", error?.message);
       }
     }
 
+    // TODO: fix update on backend
     async function updateExercise() {
       try {
-        if (!media) throw Error("Vídeo não selecionado");
-        if (!statement) throw Error("Enunciado não criado");
+        // if (!media) throw Error("Vídeo não selecionado");
+        // if (!statement) throw Error("Enunciado não criado");
 
-        if (Alternatives.length !== 4) {
-          throw Error("Devem existir apenas 4 alternativas");
-        }
+        // if (Alternatives.length !== 4) {
+        //   throw Error("Devem existir apenas 4 alternativas");
+        // }
 
-        if (Alternatives.filter((a) => !a.text.length).length) {
-          throw Error("Você deve preencher todos os enunciados");
-        }
+        // if (Alternatives.filter((a) => !a.text.length).length) {
+        //   throw Error("Você deve preencher todos os enunciados");
+        // }
 
-        if (Alternatives.filter((a) => a.isCorrect).length !== 1) {
-          throw Error("Deve existir apenas uma alternativa correta");
-        }
+        // if (Alternatives.filter((a) => a.isCorrect).length !== 1) {
+        //   throw Error("Deve existir apenas uma alternativa correta");
+        // }
 
-        const body: Partial<ILevelExerciseInput> = {
-          media: media?.uri,
-          statement,
-          Alternatives,
-        };
+        // const body: Partial<ILevelExerciseInput> = {
+        //   statement,
+        //   Alternatives: Alternatives.map(({ text, isCorrect }) => ({
+        //     text,
+        //     isCorrect,
+        //   })),
+        // };
 
-        const updatedLevel = (
-          await api.patch(`/level/${levelId}/exercise/${exerciseId}`, body)
-        ).data as ILevelExerciseOutput;
+        // const updatedLevel = (
+        //   await api.patch(`/level/${levelId}/exercise/${exerciseId}`, body)
+        // ).data as ILevelExerciseOutput;
 
-        if (body.media) {
-          const key = await uploadMedia({
-            endpoint: `/level/${levelId}/exercise/${updatedLevel.id}/video`,
-            uri: media.uri,
-            token,
-          });
-          if (!key) return navigation.goBack();
-        }
+        // if (media.uri.startsWith("file")) {
+        //   const key = await uploadMedia({
+        //     endpoint: `/level/${levelId}/exercise/${updatedLevel.id}/video`,
+        //     uri: media.uri,
+        //     token,
+        //   });
+        //   if (!key) return navigation.goBack();
+        //   setMedia({ uri: getMediaUrlFromS3Key(updatedLevel.media) });
+        // }
 
-        setMedia({ uri: updatedLevel.media });
-        setStatement(updatedLevel.statement);
-        setAlternatives(updatedLevel.Alternatives);
+        // setStatement(updatedLevel.statement);
+        // setAlternatives(updatedLevel.Alternatives);
 
-        // TODO: reload screen
-        return navigation.navigate("ProfessorUpsertLessonLevelExerciseScreen", {
-          lessonId,
-          levelId,
-          exerciseId,
-        });
+        Alert.alert("Exercício atualizado com sucesso");
+        return navigation.goBack();
       } catch (error: any) {
         Alert.alert(
           "Não foi possível atualizar exercício da aula",
@@ -308,9 +303,7 @@ const ProfessorUpsertLessonLevelExerciseScreen = ({
         <View style={styles.videoArea}>
           <VideoUploadImage
             onPress={handleAddVideo}
-            source={
-              !!media ? { uri: getMediaUrlFromS3Key(media.uri) } : undefined
-            }
+            source={!!media ? { uri: media.uri } : undefined}
           />
         </View>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
