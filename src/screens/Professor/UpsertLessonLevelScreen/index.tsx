@@ -136,10 +136,18 @@ const ProfessorUpsertLessonLevelScreen = ({ navigation, route }: Props) => {
           onPress: async () => {
             try {
               await api.delete(`/level/${levelId}/exercise/${exercise.id}`);
-              return navigation.navigate("ProfessorUpsertLessonLevelScreen", {
-                lessonId,
-                levelId,
-              });
+              return setLevelData(
+                (prevLevelData: ILessonLevelOutput | null) => {
+                  if (!prevLevelData) return null;
+                  return {
+                    ...prevLevelData,
+                    LessonLevelExercises:
+                      prevLevelData.LessonLevelExercises?.filter(
+                        (e) => e.id !== exercise.id
+                      ),
+                  };
+                }
+              );
             } catch (error: any) {
               Alert.alert("Erro ao apagar aula", error?.message);
             }
