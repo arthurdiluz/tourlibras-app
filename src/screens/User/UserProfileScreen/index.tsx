@@ -213,7 +213,7 @@ const UserProfileScreen = ({ navigation }: Props) => {
       >
         <View style={styles.imageSection}>
           <UserImageComponent
-            style="secundary"
+            style="secondary"
             source={
               user?.profilePhoto
                 ? { uri: getMediaUrlFromS3Key(user?.profilePhoto) }
@@ -240,7 +240,7 @@ const UserProfileScreen = ({ navigation }: Props) => {
           <PickerComponent
             height={60}
             width={"100%"}
-            style={"secundary"}
+            style={"secondary"}
             optionsList={grammarList}
             onPickerPress={handleTogglePicker}
             selectedOption={selectedGrammar}

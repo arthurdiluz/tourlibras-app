@@ -7,7 +7,7 @@ import styles from "./styles";
 type Props = {
   height?: NumberProp;
   width?: NumberProp;
-  style?: "primary" | "secundary";
+  style?: "primary" | "secondary";
   source?: ImageSourcePropType | null;
   onPress?: () => void;
 };

@@ -14,7 +14,7 @@ type Props = {
   onValueChange: (value: any) => void;
   onPickerPress: () => void;
   key?: string | undefined;
-  style?: "primary" | "secundary";
+  style?: "primary" | "secondary";
 };
 
 const PickerComponent = ({

@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
 
   primaryOptionSectionSelect: {},
 
-  secundaryOptionSectionSelect: {
+  secondaryOptionSectionSelect: {
     borderColor: "#D9D9D9",
     borderWidth: 1,
   },
