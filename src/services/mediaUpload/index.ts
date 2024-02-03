@@ -118,29 +118,32 @@ export const uploadVideoFromGallery = async ({
   endpoint,
   uploadToAws = true,
 }: UploadProps) => {
-  if (!(await isPermissionGranted("gallery"))) {
-    return Alert.alert(
-      "Permissão necessária",
-      "Por favor, permita o app acessar sua galeria."
-    );
-  }
+  try {
+    if (!(await isPermissionGranted("gallery"))) {
+      throw Error("Acesso a galeria não permitido");
+    }
 
-  const selectedVideo = await launchImageLibraryAsync(videoOptions);
+    const selectedVideo = await launchImageLibraryAsync(videoOptions);
 
-  if (selectedVideo.assets) {
-    const { uri } = selectedVideo.assets[0];
+    if (selectedVideo.assets) {
+      const { uri } = selectedVideo.assets[0];
 
-    return uploadToAws
-      ? endpoint &&
-          (await uploadMedia({
-            endpoint,
-            uri,
-            token,
-          })
-            .then((key) => key)
-            .catch((error: any) => {
-              throw error;
-            }))
-      : uri;
+      return uploadToAws
+        ? endpoint &&
+            (await uploadMedia({
+              endpoint,
+              uri,
+              token,
+            })
+              .then((key) => key)
+              .catch((error: any) => {
+                throw error;
+              }))
+        : uri;
+    } else {
+      throw new Error("Não foi possível obter vídeo da galeria");
+    }
+  } catch (error) {
+    throw error;
   }
 };

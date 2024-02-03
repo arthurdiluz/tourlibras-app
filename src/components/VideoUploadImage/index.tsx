@@ -1,7 +1,8 @@
-import { Video, ResizeMode, AVPlaybackSource, AVPlaybackStatus } from "expo-av";
-import { useState } from "react";
+import React from "react";
+import { View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import PhotoUploadIcon from "../Icons/PhotoUpload";
+import { Video, ResizeMode, AVPlaybackSource } from "expo-av";
+import VideoUploadIcon from "../Icons/VideoUpload";
 import styles from "./styles";
 
 interface Props {
@@ -10,26 +11,23 @@ interface Props {
 }
 
 const VideoUploadImage = ({ source, onPress }: Props) => {
-  const [status, setStatus] = useState<AVPlaybackStatus>();
-
   return (
-    <TouchableOpacity style={styles.touchable} onPress={onPress}>
+    <TouchableOpacity
+      style={{ ...styles.touchable, ...(source && { width: "60%" }) }}
+      onPress={onPress}
+    >
       {source ? (
         <Video
           source={source}
           style={styles.video}
-          resizeMode={ResizeMode.CONTAIN}
-          onPlaybackStatusUpdate={(status) => setStatus(() => status)}
+          resizeMode={ResizeMode.COVER}
           isLooping={true}
           useNativeControls={true}
         />
       ) : (
-        <PhotoUploadIcon
-          style={styles.cover}
-          height={"90%"}
-          width={"90%"}
-          fill={"#FFF"}
-        />
+        <View style={styles.cover}>
+          <VideoUploadIcon height={130} width={130} />
+        </View>
       )}
     </TouchableOpacity>
   );

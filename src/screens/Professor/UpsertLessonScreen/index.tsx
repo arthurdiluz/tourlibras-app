@@ -2,7 +2,14 @@ import React, { useEffect, useState } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useAuth } from "../../../contexts/AuthContext";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Alert, ListRenderItemInfo, Platform, Text, View } from "react-native";
+import {
+  Alert,
+  Keyboard,
+  ListRenderItemInfo,
+  Platform,
+  Text,
+  View,
+} from "react-native";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import styles from "./styles";
 import api from "../../../utils/api";
@@ -90,7 +97,7 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
         ).data;
 
         setLesson(_lesson);
-        setIcon(_lesson.icon);
+        setIcon(getMediaUrlFromS3Key(_lesson?.icon));
         setTitle(_lesson.title);
         setSelectedMedal(_lesson.Medal);
         setLevels(_lesson.Levels);
@@ -126,6 +133,8 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
   };
 
   const handleSaveLesson = async () => {
+    Keyboard.dismiss();
+
     async function createLesson() {
       try {
         // TODO: add validations
@@ -147,7 +156,7 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
           return navigation.goBack();
         }
 
-        setIcon(key);
+        setIcon(getMediaUrlFromS3Key(key));
         setLesson(_lesson);
 
         // TODO: refresh screen
@@ -171,16 +180,18 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
           })
         ).data as ILessonOutput;
 
-        const key = await uploadMedia({
-          endpoint: `/professor/${professor?.id}/lesson/${updatedLesson.id}/icon`,
-          uri: icon,
-          token,
-        });
+        if (icon?.startsWith("file")) {
+          const key = await uploadMedia({
+            endpoint: `/professor/${professor?.id}/lesson/${updatedLesson.id}/icon`,
+            uri: icon,
+            token,
+          });
 
-        if (!key) return navigation.goBack();
+          if (!key) return navigation.goBack();
+          setIcon(getMediaUrlFromS3Key(key));
+        }
 
         setLesson(updatedLesson);
-        setIcon(key);
       } catch (error: any) {
         Alert.alert("Não foi possível criar aula", error?.message);
       } finally {
@@ -221,7 +232,7 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
               })
                 .then((uri) => {
                   if (!uri) throw new Error("Erro ao enviar imagem");
-                  setIcon(uri);
+                  setIcon(getMediaUrlFromS3Key(uri));
                 })
                 .catch((error: any) => {
                   return Alert.alert(
@@ -238,7 +249,7 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
               })
                 .then((key) => {
                   if (!key) throw new Error("Erro ao enviar imagem");
-                  setIcon(key);
+                  setIcon(getMediaUrlFromS3Key(key));
                 })
                 .catch((error: any) => {
                   return Alert.alert(
@@ -350,7 +361,7 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
           }}
         >
           <PhotoUploadImage
-            source={icon ? { uri: getMediaUrlFromS3Key(icon) } : undefined}
+            source={icon ? { uri: icon } : undefined}
             onPress={handleUploadIcon}
           />
         </View>
@@ -377,7 +388,7 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
             selectedOption={selectedMedal?.name || "Nenhuma"}
             isPickerVisible={isPickerVisible}
             onValueChange={handleMedalValueChange}
-            style={"secundary"}
+            style={"secondary"}
           />
         </View>
         {lessonId && (

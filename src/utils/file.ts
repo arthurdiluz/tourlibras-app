@@ -47,8 +47,10 @@ export const uploadMedia = async ({
 };
 
 export const getMediaUrlFromS3Key = (key: string) => {
-  return `https://tourlibras.s3.sa-east-1.amazonaws.com/${key}`.replace(
-    /\\/g,
-    "%5C"
-  );
+  return key.startsWith("file")
+    ? key
+    : `https://tourlibras.s3.sa-east-1.amazonaws.com/${key}`.replace(
+        /\\/g,
+        "%5C"
+      );
 };

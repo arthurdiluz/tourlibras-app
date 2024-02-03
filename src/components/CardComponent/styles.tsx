@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     borderColor: "#D9D9D9",
   },
 
-  secundaryBox: {},
+  secondaryBox: {},
 });
 
 export default styles;
