@@ -69,6 +69,55 @@ const styles = StyleSheet.create({
     fontSize: 24,
     textTransform: "uppercase",
   },
+
+  flatListContainer: {
+    flex: 1,
+  },
+
+  card: {
+    alignItems: "flex-start",
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    justifyContent: "space-between",
+  },
+
+  cardHeader: {
+    flexDirection: "row",
+    alignItems: "baseline",
+    gap: 8,
+  },
+
+  cardHeaderSubTitle: {
+    fontFamily: "Roboto",
+    fontWeight: "100",
+    fontSize: 16,
+    color: "#7F8C8D",
+  },
+
+  cardHeaderTitle: {
+    fontFamily: "Roboto",
+    fontSize: 22,
+    textTransform: "capitalize",
+  },
+
+  cardActionButtons: {
+    flexDirection: "row",
+    gap: 32,
+  },
+
+  cardActionButtonsEdit: {
+    fontFamily: "Roboto Bold",
+    fontSize: 16,
+    color: "#1B9CFC",
+    textTransform: "uppercase",
+  },
+
+  cardActionButtonsDelete: {
+    fontFamily: "Roboto Bold",
+    fontSize: 16,
+    color: "#E3000E",
+    textTransform: "uppercase",
+  },
 });
 
 export default styles;

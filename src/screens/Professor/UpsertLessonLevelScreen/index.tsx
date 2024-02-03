@@ -7,8 +7,9 @@ import ArrowLeftIcon from "../../../components/Icons/ArrowLeftIcon";
 import styles from "./styles";
 import TextInputComponent from "../../../components/input";
 import api from "../../../utils/api";
-import { ILessonLevelOutput } from "../../../interfaces";
+import { ILessonLevelOutput, ILevelExerciseOutput } from "../../../interfaces";
 import ButtonComponent from "../../../components/Button";
+import CardComponent from "../../../components/CardComponent";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -98,7 +99,8 @@ const ProfessorUpsertLessonLevelScreen = ({ navigation, route }: Props) => {
   };
 
   const handleCreateExercise = () => {
-    return navigation.navigate("ProfessorUpsertLevelExercise", {
+    return navigation.navigate("ProfessorUpsertLessonLevelExerciseScreen", {
+      lessonId,
       levelId,
     });
   };
@@ -115,9 +117,86 @@ const ProfessorUpsertLessonLevelScreen = ({ navigation, route }: Props) => {
     }
   };
 
-  const renderItem = ({ item, index }: ListRenderItemInfo<any>) => {
-    console.log({ item });
-    return <Text>{"item"}</Text>;
+  const handleEditExercise = async (exercise: ILevelExerciseOutput) => {
+    return navigation.navigate("ProfessorUpsertLessonLevelExerciseScreen", {
+      lessonId,
+      levelId,
+      exerciseId: exercise.id,
+    });
+  };
+
+  const handleDeleteExercise = (exercise: ILevelExerciseOutput) => {
+    return Alert.alert(
+      `Deseja remover o exercício?`,
+      "Esta ação é irreversível",
+      [
+        {
+          text: "Remover",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              await api.delete(`/level/${levelId}/exercise/${exercise.id}`);
+              return navigation.navigate("ProfessorUpsertLessonLevelScreen", {
+                lessonId,
+                levelId,
+              });
+            } catch (error: any) {
+              Alert.alert("Erro ao apagar aula", error?.message);
+            }
+          },
+        },
+
+        {
+          text: "Cancelar",
+          style: "cancel",
+        },
+      ]
+    );
+  };
+
+  const handleGoToExercise = (exercise: ILevelExerciseOutput) => {
+    return navigation.navigate("ProfessorUpsertLessonLevelExerciseScreen", {
+      lessonId,
+      levelId,
+      exerciseId: exercise.id,
+    });
+  };
+
+  const renderItem = ({
+    item,
+    index,
+  }: ListRenderItemInfo<ILevelExerciseOutput>) => {
+    return (
+      <CardComponent
+        key={index}
+        height={100}
+        width={"100%"}
+        style={"primary"}
+        customStyle={styles.card}
+      >
+        <TouchableOpacity
+          style={styles.cardHeader}
+          onPress={() => handleGoToExercise(item)}
+        >
+          <Text style={styles.cardHeaderSubTitle}>{`E${index + 1}`}</Text>
+          <Text style={styles.cardHeaderTitle}>{item.statement}</Text>
+        </TouchableOpacity>
+        <View style={styles.cardActionButtons}>
+          <Text
+            onPress={() => handleEditExercise(item)}
+            style={styles.cardActionButtonsEdit}
+          >
+            {"editar"}
+          </Text>
+          <Text
+            onPress={() => handleDeleteExercise(item)}
+            style={styles.cardActionButtonsDelete}
+          >
+            {"excluir"}
+          </Text>
+        </View>
+      </CardComponent>
+    );
   };
 
   return (
@@ -168,10 +247,12 @@ const ProfessorUpsertLessonLevelScreen = ({ navigation, route }: Props) => {
             />
           </View>
         </View>
-        {levelData?.LessonLevelExercises?.length ? (
+        {!!levelData?.LessonLevelExercises?.length ? (
           <FlatList
             data={levelData?.LessonLevelExercises}
             renderItem={renderItem}
+            keyExtractor={(item) => item?.id?.toString() || ""}
+            style={styles.flatListContainer}
           />
         ) : (
           levelId && (
