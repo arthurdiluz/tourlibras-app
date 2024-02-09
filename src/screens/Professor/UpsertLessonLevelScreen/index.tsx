@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Alert, ListRenderItemInfo, Text, View } from "react-native";
+import { Alert, Keyboard, ListRenderItemInfo, Text, View } from "react-native";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ArrowLeftIcon from "../../../components/Icons/ArrowLeftIcon";
@@ -50,6 +50,7 @@ const ProfessorUpsertLessonLevelScreen = ({ navigation, route }: Props) => {
   };
 
   const handleSaveLevel = async () => {
+    Keyboard.dismiss();
     async function createLevel() {
       try {
         // TODO: add validations
