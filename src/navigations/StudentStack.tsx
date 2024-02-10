@@ -2,9 +2,10 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import StudentProfileStack from "./StudentProfileStack";
 import StudentLessonsStack from "./LessonsStack";
-import { Ionicons } from "@expo/vector-icons";
 import StudentScoreboardStack from "./ScoreboardStack";
 import StudentStoreStack from "./StoreStack";
+import StudentSettingsStack from "./SettingsStack";
+import { Ionicons } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator<any>();
 
@@ -47,6 +48,16 @@ const StudentStack: React.FC = () => {
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="cart-outline" color={color} size={size} />
+          ),
+          headerShown: false,
+        }}
+      />
+      <Tab.Screen
+        name="Settings"
+        component={StudentSettingsStack}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="settings-outline" color={color} size={size} />
           ),
           headerShown: false,
         }}
