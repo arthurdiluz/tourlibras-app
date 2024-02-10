@@ -46,6 +46,7 @@ export interface IProfessor {
   Medals: Array<IMedalOutput>;
   Items: Array<IItemOutput>;
   Students: any[];
+  Lessons: ILessonOutput[];
 }
 
 export interface IMedalInput {
@@ -150,4 +151,20 @@ export interface ILevelExerciseOutput {
   levelId: number;
   Level: ILessonLevelOutput;
   Alternatives: IAlternativeOutput[];
+}
+
+export interface IStudent {
+  id: number;
+  createdAt: Date | string;
+  updatedAt: Date | string;
+  experience: number;
+  money: number;
+  theme: string;
+  userId: number;
+  professorId: number;
+  User: IUserOutput;
+  Professor: IProfessor | null;
+  Lessons: any[];
+  Medals: any[];
+  Items: any[];
 }
