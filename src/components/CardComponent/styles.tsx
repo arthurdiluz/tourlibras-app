@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
 
   primaryBox: {
     backgroundColor: "white",
-    borderColor: "#D9D9D9",
+    borderColor: "#F1F5F9",
   },
 
   secondaryBox: {},

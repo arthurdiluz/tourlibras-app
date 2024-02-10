@@ -5,6 +5,8 @@ import StudentSearchProfessorScreen from "../screens/Student/SearchProfessorScre
 import { useAuth } from "../contexts/AuthContext";
 import api from "../utils/api";
 import { IStudent } from "../interfaces";
+import UserProfileScreen from "../screens/User/UserProfileScreen";
+import UpdateUserProfileScreen from "../screens/User/UpdateUserProfileScreen";
 
 const Stack = createStackNavigator<any>();
 
@@ -33,6 +35,16 @@ const StudentStack: React.FC = () => {
           : "StudentSearchProfessorScreen"
       }
     >
+      <Stack.Screen
+        name="StudentProfile"
+        component={UserProfileScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="UpdateStudentProfile"
+        component={UpdateUserProfileScreen}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name="StudentHomepage"
         component={StudentHomepageScreen}

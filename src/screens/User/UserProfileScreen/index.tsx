@@ -6,7 +6,7 @@ import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "../../../contexts/AuthContext";
-import { IProfessor, IUserOutput } from "../../../interfaces";
+import { IProfessor, IStudent, IUserOutput } from "../../../interfaces";
 import UserImageComponent from "../../../components/UserImage";
 import ArrowLeftIcon from "../../../components/Icons/ArrowLeftIcon";
 import TextInputComponent from "../../../components/input";
@@ -23,9 +23,6 @@ type Props = NativeStackScreenProps<any>;
 
 const UserProfileScreen = ({ navigation }: Props) => {
   const platform = Platform.OS;
-  const scrollViewRef = useRef<any>(null);
-
-  const { user: userContext, token } = useAuth();
   const grammarList = [
     { name: "SVO" },
     { name: "SOV" },
@@ -35,9 +32,13 @@ const UserProfileScreen = ({ navigation }: Props) => {
     { name: "OSV" },
   ];
 
-  const [user, setUser] = useState<IUserOutput | null>(null);
-  const [fullName, setFullname] = useState("");
-  const [professor, setProfessor] = useState<IProfessor | null>(null);
+  const { user: userContext, token } = useAuth();
+  const scrollViewRef = useRef<any>(null);
+
+  const [user, setUser] = useState<IUserOutput>();
+  const [professor, setProfessor] = useState<IProfessor>();
+  const [student, setStudent] = useState<IStudent>();
+  const [fullName, setFullName] = useState("");
   const [selectedGrammar, setSelectedGrammar] = useState("");
   const [isPickerVisible, setPickerVisible] = useState<boolean>(
     platform === "android"
@@ -51,15 +52,15 @@ const UserProfileScreen = ({ navigation }: Props) => {
         const data: IUserOutput = (await api.get(`/user/${userContext?.sub}`))
           .data;
 
-        setFullname(data.fullName);
+        setFullName(data.fullName);
         setUser(data);
 
         switch (userContext.role) {
-          case "PROFESSOR":
+          case ROLE.PROFESSOR:
             try {
               const { Professor } = (await api.get(`/user/${userContext.sub}`))
                 ?.data;
-              const professorData: IProfessor = await (
+              const professorData: IProfessor = (
                 await api.get(`/professor/${Professor?.id}`)
               ).data;
 
@@ -73,8 +74,14 @@ const UserProfileScreen = ({ navigation }: Props) => {
             }
             break;
 
-          case "STUDENT":
-            // TODO: implement user case
+          case ROLE.STUDENT:
+            const { Student } = await (
+              await api.get(`/user/${userContext.sub}`)
+            )?.data;
+            const studentData: IStudent = await (
+              await api.get(`/student/${Student.id}`)
+            ).data;
+            setStudent(studentData);
             break;
 
           default:
@@ -99,7 +106,7 @@ const UserProfileScreen = ({ navigation }: Props) => {
             onPress: async () =>
               uploadImageFromCamera({
                 uploadToAws: true,
-                endpoint: `/user/${userContext?.sub}/profile-picture`,
+                endpoint: `/user/${user?.id}/profile-picture`,
                 token,
               })
                 .then((key) => {
@@ -123,7 +130,7 @@ const UserProfileScreen = ({ navigation }: Props) => {
             onPress: async () =>
               uploadImageFromGallery({
                 uploadToAws: true,
-                endpoint: `/user/${userContext?.sub}/profile-picture`,
+                endpoint: `/user/${user?.id}/profile-picture`,
                 token,
               })
                 .then((key) => {
@@ -153,7 +160,7 @@ const UserProfileScreen = ({ navigation }: Props) => {
     }
   };
 
-  const handleGoBack = () => navigation.goBack();
+  const handleGoBack = () => navigation.pop();
 
   const handleTogglePicker = () => {
     // TODO: fox scroll to end
@@ -161,7 +168,7 @@ const UserProfileScreen = ({ navigation }: Props) => {
     setPickerVisible(!isPickerVisible);
   };
 
-  const handleFullname = (name: string) => setFullname(name);
+  const handleFullName = (name: string) => setFullName(name);
 
   const handleGrammarValueChange = (grammar: string) => {
     setSelectedGrammar(grammar);
@@ -169,7 +176,11 @@ const UserProfileScreen = ({ navigation }: Props) => {
   };
 
   const handleCredentials = () => {
-    return navigation.navigate("UpdateProfessorProfile");
+    return navigation.navigate(
+      user?.role === ROLE.PROFESSOR
+        ? "UpdateProfessorProfile"
+        : "UpdateStudentProfile"
+    );
   };
 
   const handleSave = async () => {
@@ -182,7 +193,7 @@ const UserProfileScreen = ({ navigation }: Props) => {
         });
       }
 
-      await api.patch(`/user/${userContext?.sub}`, { fullName });
+      await api.patch(`/user/${user?.id}`, { fullName });
 
       return handleGoBack();
     } catch (error: any) {
@@ -227,26 +238,30 @@ const UserProfileScreen = ({ navigation }: Props) => {
             <Text style={styles.inputLabel}>{"Nome"}</Text>
             <TextInputComponent
               value={fullName}
-              onChangeText={handleFullname}
+              onChangeText={handleFullName}
               style={"secondary"}
               keyboardType={"default"}
               height={55}
               width={"100%"}
             />
           </View>
-          <Text style={styles.inputLabel}>
-            {"Escolha a gramática de suas aulas"}
-          </Text>
-          <PickerComponent
-            height={60}
-            width={"100%"}
-            style={"secondary"}
-            optionsList={grammarList}
-            onPickerPress={handleTogglePicker}
-            selectedOption={selectedGrammar}
-            isPickerVisible={isPickerVisible}
-            onValueChange={handleGrammarValueChange}
-          />
+          {user?.role === ROLE.PROFESSOR && (
+            <>
+              <Text style={styles.inputLabel}>
+                {"Escolha a gramática de suas aulas"}
+              </Text>
+              <PickerComponent
+                height={60}
+                width={"100%"}
+                style={"secondary"}
+                optionsList={grammarList}
+                onPickerPress={handleTogglePicker}
+                selectedOption={selectedGrammar}
+                isPickerVisible={isPickerVisible}
+                onValueChange={handleGrammarValueChange}
+              />
+            </>
+          )}
         </View>
       </ScrollView>
       <View style={styles.actionButtons}>
