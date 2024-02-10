@@ -2,7 +2,8 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import StudentProfileStack from "./StudentProfileStack";
 import StudentLessonsStack from "./LessonsStack";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import StudentScoreboardStack from "./ScoreboardStack";
 
 const Tab = createBottomTabNavigator<any>();
 
@@ -25,6 +26,17 @@ const StudentStack: React.FC = () => {
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="book-outline" color={color} size={size} />
+          ),
+          headerShown: false,
+        }}
+      />
+      {/* StudentScoreboardStack */}
+      <Tab.Screen
+        name="Scoreboard"
+        component={StudentScoreboardStack}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <MaterialIcons name="leaderboard" color={color} size={size} />
           ),
           headerShown: false,
         }}
