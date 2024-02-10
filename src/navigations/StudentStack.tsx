@@ -11,7 +11,11 @@ const Tab = createBottomTabNavigator<any>();
 
 const StudentStack: React.FC = () => {
   return (
-    <Tab.Navigator id="StudentStack" initialRouteName={"Profile"}>
+    <Tab.Navigator
+      id="StudentStack"
+      initialRouteName={"Profile"}
+      screenOptions={{ tabBarShowLabel: false }}
+    >
       <Tab.Screen
         name="Profile"
         component={StudentProfileStack}
