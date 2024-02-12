@@ -25,10 +25,13 @@ const StudentProfileStack: React.FC = () => {
   }, [user]);
 
   if (!student) return <></>;
+
   return (
     <Stack.Navigator
       id="StudentProfileStack"
-      initialRouteName={"StudentHomepage"}
+      initialRouteName={
+        student.professorId ? "StudentHomepage" : "StudentSearchProfessorScreen"
+      }
     >
       <Stack.Screen
         name="StudentProfile"
