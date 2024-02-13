@@ -37,10 +37,8 @@ const styles = StyleSheet.create({
   },
 
   emptyLevelMessageText: {
-    color: "black",
-    fontFamily: "Roboto Bold",
-    fontSize: 24,
-    textTransform: "uppercase",
+    fontSize: 28,
+    fontWeight: "300",
   },
 
   flatListContentContainerStyle: {

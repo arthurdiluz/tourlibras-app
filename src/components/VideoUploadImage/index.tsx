@@ -11,7 +11,7 @@ interface Props {
 }
 
 const VideoUploadImage = ({ source, onPress }: Props) => {
-  return (
+  return !!onPress ? (
     <TouchableOpacity
       style={{ ...styles.touchable, ...(source && { width: "60%" }) }}
       onPress={onPress}
@@ -30,6 +30,22 @@ const VideoUploadImage = ({ source, onPress }: Props) => {
         </View>
       )}
     </TouchableOpacity>
+  ) : (
+    <View style={{ ...styles.touchable, ...(source && { width: "60%" }) }}>
+      {source ? (
+        <Video
+          source={source}
+          style={styles.video}
+          resizeMode={ResizeMode.COVER}
+          isLooping={true}
+          useNativeControls={true}
+        />
+      ) : (
+        <View style={styles.cover}>
+          <VideoUploadIcon height={130} width={130} />
+        </View>
+      )}
+    </View>
   );
 };
 
