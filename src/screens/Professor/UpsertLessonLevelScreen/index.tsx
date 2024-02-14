@@ -64,7 +64,9 @@ const ProfessorUpsertLessonLevelScreen = ({ navigation, route }: Props) => {
         setLevelData(_level);
 
         return navigation.navigate("ProfessorUpsertLessonLevelScreen", {
+          lessonId,
           levelId: _level.id,
+          levelValue: _level.level,
         });
       } catch (error: any) {
         Alert.alert("Não foi possível criar nível da aula", error?.message);
@@ -85,7 +87,9 @@ const ProfessorUpsertLessonLevelScreen = ({ navigation, route }: Props) => {
 
         // TODO: refresh screen
         return navigation.navigate("ProfessorUpsertLessonLevelScreen", {
-          levelId: updatedLevel.id,
+          lessonId,
+          levelId,
+          levelValue,
         });
       } catch (error: any) {
         Alert.alert("Não foi possível atualizar nível da aula", error?.message);

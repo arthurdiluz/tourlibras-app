@@ -97,7 +97,6 @@ const styles = StyleSheet.create({
   cardHeaderTitle: {
     fontFamily: "Roboto",
     fontSize: 22,
-    textTransform: "capitalize",
   },
 
   cardActionButtons: {

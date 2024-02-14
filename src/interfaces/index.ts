@@ -33,7 +33,7 @@ export interface IUserOutput {
   profilePhoto?: string | null;
   role: string;
   Professor?: IProfessor | null;
-  Student: any;
+  Student?: IStudent | null;
 }
 
 export interface IProfessor {
@@ -45,7 +45,7 @@ export interface IProfessor {
   User: IUserOutput;
   Medals: Array<IMedalOutput>;
   Items: Array<IItemOutput>;
-  Students: any[];
+  Students: IStudent[];
   Lessons: ILessonOutput[];
 }
 
@@ -101,7 +101,7 @@ export interface ILessonOutput {
   medalId: number;
   Professor: IProfessor;
   Medal: IMedalOutput;
-  Students: Array<any>;
+  Students: Array<IStudent>;
   Levels: Array<ILessonLevelOutput>;
 }
 
@@ -121,6 +121,7 @@ export interface ILessonLevelOutput {
   lessonId: number;
   Lesson: ILessonOutput;
   LessonLevelExercises: ILevelExerciseOutput[];
+  LessonLevelDone: ILessonLevelDoneOutput[];
 }
 
 export interface IAlternativeInput {
@@ -164,7 +165,33 @@ export interface IStudent {
   professorId: number;
   User: IUserOutput;
   Professor: IProfessor | null;
-  Lessons: any[];
+  Lessons: IStudentLesson[];
   Medals: any[];
   Items: any[];
+}
+
+export interface IStudentLesson {
+  id: number;
+  createdAt: Date | string;
+  updatedAt: Date | string;
+  currentLevel: number;
+  isCompleted: boolean;
+  studentId: number;
+  lessonId: number;
+  // TODO: add more properties
+}
+
+export interface ILessonLevelDoneInput {
+  Answers: boolean[];
+}
+
+export interface ILessonLevelDoneOutput {
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+  isCorrectAttempt: boolean;
+  studentId: number;
+  levelId: number;
+  Student: IStudent;
+  Level: ILevelExerciseOutput;
 }
