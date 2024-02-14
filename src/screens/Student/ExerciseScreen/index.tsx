@@ -1,10 +1,11 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import { Alert, Text, View } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons, Octicons } from "@expo/vector-icons";
 import {
-  ILessonLevelDone,
+  ILessonLevelDoneInput,
+  ILessonLevelDoneOutput,
   ILessonLevelOutput,
   IStudent,
 } from "../../../interfaces";
@@ -45,7 +46,9 @@ const StudentExerciseScreen = ({ navigation, route }: Props) => {
   const [step, setStep] = useState<Step>({ index: 0, isCorrect: null });
   const [result, setResult] = useState<IResult>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [form, setForm] = useState<Partial<ILessonLevelDone>>({ Answers: [] });
+  const [form, setForm] = useState<Partial<ILessonLevelDoneInput>>({
+    Answers: [],
+  });
 
   const updateFormData = (update: boolean) => {
     setForm((prev) => ({
@@ -77,12 +80,11 @@ const StudentExerciseScreen = ({ navigation, route }: Props) => {
   const submit = async () => {
     setIsLoading(true);
     try {
-      // TODO: implement feature
-      // const response = await api.post(
-      //   `{{domain}}/student-lesson/${studentLessonId}/level-exercise/${1}/done`
-      // );
-      // console.log(response);
-      // return navigation.push("StudentLessonsStack");
+      await api.post(
+        `/student-lesson/${studentLessonId}/lesson-level/${level.id}/done`,
+        form
+      );
+      return navigation.push("StudentLessons");
     } catch (error: any) {
       console.error(error);
       Alert.alert("Não foi possível avaliar exercício", error?.message);

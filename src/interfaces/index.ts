@@ -121,6 +121,7 @@ export interface ILessonLevelOutput {
   lessonId: number;
   Lesson: ILessonOutput;
   LessonLevelExercises: ILevelExerciseOutput[];
+  LessonLevelDone: ILessonLevelDoneOutput[];
 }
 
 export interface IAlternativeInput {
@@ -180,6 +181,17 @@ export interface IStudentLesson {
   // TODO: add more properties
 }
 
-export interface ILessonLevelDone {
+export interface ILessonLevelDoneInput {
   Answers: boolean[];
+}
+
+export interface ILessonLevelDoneOutput {
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+  isCorrectAttempt: boolean;
+  studentId: number;
+  levelId: number;
+  Student: IStudent;
+  Level: ILevelExerciseOutput;
 }
