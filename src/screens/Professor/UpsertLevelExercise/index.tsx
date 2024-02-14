@@ -1,7 +1,8 @@
+import { useFocusEffect } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { AVPlaybackNativeSource, AVPlaybackSource } from "expo-av";
+import { AVPlaybackNativeSource } from "expo-av";
 import Checkbox from "expo-checkbox";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Alert,
   Keyboard,
@@ -56,26 +57,32 @@ const ProfessorUpsertLessonLevelExerciseScreen = ({
     getDefaultAlternatives(4)
   );
 
-  useEffect(() => {
-    async function fetchExerciseData() {
-      try {
-        const _exercise: ILevelExerciseOutput = (
-          await api.get(`/level/${levelId}/exercise/${exerciseId}`)
-        ).data;
+  const fetchExerciseData = async () => {
+    try {
+      const _exercise: ILevelExerciseOutput = (
+        await api.get(`/level/${levelId}/exercise/${exerciseId}`)
+      ).data;
 
-        setMedia({ uri: getMediaUrlFromS3Key(_exercise.media) });
-        setStatement(_exercise.statement);
-        setAlternatives(_exercise.Alternatives);
-      } catch (error: any) {
-        return Alert.alert(
-          "Não foi possível obter dados do exercício",
-          error?.message
-        );
-      }
+      setMedia({ uri: getMediaUrlFromS3Key(_exercise.media) });
+      setStatement(_exercise.statement);
+      setAlternatives(_exercise.Alternatives);
+    } catch (error: any) {
+      return Alert.alert(
+        "Não foi possível obter dados do exercício",
+        error?.message
+      );
     }
+  };
 
+  useEffect(() => {
     levelId && exerciseId && fetchExerciseData();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      levelId && exerciseId && fetchExerciseData();
+    }, [])
+  );
 
   const handleAddVideo = async () => {
     try {

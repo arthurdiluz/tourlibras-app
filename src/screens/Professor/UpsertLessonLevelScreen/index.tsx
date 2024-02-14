@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Alert, Keyboard, ListRenderItemInfo, Text, View } from "react-native";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
@@ -10,6 +10,7 @@ import api from "../../../utils/api";
 import { ILessonLevelOutput, ILevelExerciseOutput } from "../../../interfaces";
 import ButtonComponent from "../../../components/Button";
 import CardComponent from "../../../components/CardComponent";
+import { useFocusEffect } from "@react-navigation/native";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -23,27 +24,33 @@ const ProfessorUpsertLessonLevelScreen = ({ navigation, route }: Props) => {
   const [earnedXp, setEarnedXp] = useState<number>(0);
   const [earnedMoney, setEarnedMoney] = useState<number>(0);
 
-  useEffect(() => {
-    async function fetchLevelData() {
-      try {
-        const _level: ILessonLevelOutput = (
-          await api.get(`/lesson/${lessonId}/level/${levelId}`)
-        ).data;
+  const fetchLevelData = async () => {
+    try {
+      const _level: ILessonLevelOutput = (
+        await api.get(`/lesson/${lessonId}/level/${levelId}`)
+      ).data;
 
-        setLevelData(_level);
-        setLevel(_level.level ?? 0);
-        setEarnedXp(_level.earnedXp ?? 0);
-        setEarnedMoney(_level.earnedMoney ?? 0);
-      } catch (error: any) {
-        return Alert.alert(
-          "Não foi possível obter dados do professor",
-          error?.message
-        );
-      }
+      setLevelData(_level);
+      setLevel(_level.level ?? 0);
+      setEarnedXp(_level.earnedXp ?? 0);
+      setEarnedMoney(_level.earnedMoney ?? 0);
+    } catch (error: any) {
+      return Alert.alert(
+        "Não foi possível obter dados do professor",
+        error?.message
+      );
     }
+  };
 
+  useEffect(() => {
     lessonId && levelId && fetchLevelData();
-  }, []);
+  }, [lessonId, levelId]);
+
+  useFocusEffect(
+    useCallback(() => {
+      lessonId && levelId && fetchLevelData();
+    }, [lessonId, levelId, levelValue])
+  );
 
   const handleGoBack = () => {
     return navigation.goBack();
@@ -85,7 +92,6 @@ const ProfessorUpsertLessonLevelScreen = ({ navigation, route }: Props) => {
 
         setLevelData(updatedLevel);
 
-        // TODO: refresh screen
         return navigation.navigate("ProfessorUpsertLessonLevelScreen", {
           lessonId,
           levelId,

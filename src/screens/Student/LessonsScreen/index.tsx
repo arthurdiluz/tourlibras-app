@@ -31,7 +31,6 @@ const StudentLessonsScreen = ({ navigation }: Props) => {
   const [professor, setProfessor] = useState<IProfessor>();
   const [lessons, setLessons] = useState<ILessonOutput[]>([]);
 
-  // TODO: implement in all screens
   const init = async () => {
     try {
       const _user = (await api.get(`/user/${user?.sub}`)).data;
@@ -92,10 +91,10 @@ const StudentLessonsScreen = ({ navigation }: Props) => {
     progress?: IStudentLesson
   ) => {
     try {
-      if (!lesson.Levels.find((l) => l.level === progress?.currentLevel)) {
+      if (!lesson?.Levels?.find((l) => l.level === progress?.currentLevel)) {
         return Alert.alert(
           "Nível não existente",
-          `O nível ${progress?.currentLevel} deste exercício ainda não existe`
+          `O nível ${progress?.currentLevel} deste exercício ainda não foi criado`
         );
       }
 
@@ -123,8 +122,7 @@ const StudentLessonsScreen = ({ navigation }: Props) => {
         studentLessonId: progress.id,
       });
     } catch (error: any) {
-      console.error(error);
-      Alert.alert(
+      return Alert.alert(
         `Não foi possível iniciar aula "${lesson.title}"`,
         error?.message
       );

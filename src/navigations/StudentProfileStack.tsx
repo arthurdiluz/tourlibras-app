@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useFocusEffect } from "@react-navigation/native";
 import UserProfileScreen from "../screens/User/UserProfileScreen";
@@ -26,7 +26,7 @@ const StudentProfileStack: React.FC = () => {
   }, [user]);
 
   useFocusEffect(
-    React.useCallback(() => {
+    useCallback(() => {
       fetchStudent();
     }, [])
   );

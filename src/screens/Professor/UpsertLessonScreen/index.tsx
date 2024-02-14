@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useAuth } from "../../../contexts/AuthContext";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -30,6 +30,7 @@ import {
   uploadImageFromGallery,
 } from "../../../services/mediaUpload";
 import { getMediaUrlFromS3Key, uploadMedia } from "../../../utils/file";
+import { useFocusEffect } from "@react-navigation/native";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -48,67 +49,75 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
   const [selectedMedal, setSelectedMedal] = useState<IMedalOutput | null>(null);
   const [levels, setLevels] = useState<Array<ILessonLevelOutput>>([]);
 
-  useEffect(() => {
-    async function fetchProfessorData() {
-      if (!user) throw new Error("Usuário não encontrado");
+  const fetchProfessorData = async () => {
+    if (!user) throw new Error("Usuário não encontrado");
 
-      try {
-        const { Professor } = (await api.get(`/user/${user?.sub}`))?.data;
+    try {
+      const { Professor } = (await api.get(`/user/${user?.sub}`))?.data;
 
-        const professorData: IProfessor = (
-          await api.get(`/professor/${Professor?.id}`)
-        ).data;
+      const professorData: IProfessor = (
+        await api.get(`/professor/${Professor?.id}`)
+      ).data;
 
-        setProfessor(professorData);
-        setMedals(professorData.Medals);
-      } catch (error: any) {
-        return Alert.alert(
-          "Não foi possível obter dados do professor",
-          error?.message
-        );
-      }
+      setProfessor(professorData);
+      setMedals(professorData.Medals);
+    } catch (error: any) {
+      return Alert.alert(
+        "Não foi possível obter dados do professor",
+        error?.message
+      );
     }
+  };
 
+  const fetchMedalData = async () => {
+    if (!professor) throw new Error("Professor não encontrado");
+
+    try {
+      const _medals: Array<IMedalOutput> = (
+        await api.get(`/professor/${professor.id}/medal`)
+      ).data;
+
+      setMedals(_medals);
+    } catch (error: any) {
+      return Alert.alert("Não foi possível obter medalhas", error?.message);
+    }
+  };
+
+  const fetchLessonData = async () => {
+    if (!professor) throw new Error("Professor não encontrado");
+    if (!lessonId) return;
+
+    try {
+      const _lesson: ILessonOutput = (
+        await api.get(`/professor/${professor?.id}/lesson/${lessonId}`)
+      ).data;
+
+      setLesson(_lesson);
+      setIcon(getMediaUrlFromS3Key(_lesson?.icon));
+      setTitle(_lesson.title);
+      setSelectedMedal(_lesson.Medal);
+      setLevels(_lesson.Levels);
+    } catch (error: any) {
+      return Alert.alert("Não foi possível obter medalhas", error?.message);
+    }
+  };
+
+  useEffect(() => {
     fetchProfessorData();
   }, [user]);
 
   useEffect(() => {
-    async function fetchMedalData() {
-      if (!professor) throw new Error("Professor não encontrado");
-
-      try {
-        const _medals: Array<IMedalOutput> = (
-          await api.get(`/professor/${professor.id}/medal`)
-        ).data;
-
-        setMedals(_medals);
-      } catch (error: any) {
-        return Alert.alert("Não foi possível obter medalhas", error?.message);
-      }
-    }
-
-    async function fetchLessonData() {
-      if (!professor) throw new Error("Professor não encontrado");
-      if (!lessonId) return;
-
-      try {
-        const _lesson: ILessonOutput = (
-          await api.get(`/professor/${professor?.id}/lesson/${lessonId}`)
-        ).data;
-
-        setLesson(_lesson);
-        setIcon(getMediaUrlFromS3Key(_lesson?.icon));
-        setTitle(_lesson.title);
-        setSelectedMedal(_lesson.Medal);
-        setLevels(_lesson.Levels);
-      } catch (error: any) {
-        return Alert.alert("Não foi possível obter medalhas", error?.message);
-      }
-    }
-
     fetchMedalData();
     fetchLessonData();
-  }, [lessonId, professor?.id]);
+  }, [lessonId, professor]);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchProfessorData();
+      fetchMedalData();
+      fetchLessonData();
+    }, [user, lessonId, professor])
+  );
 
   const handleGoBack = () => navigation.goBack();
 
@@ -159,12 +168,10 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
         setIcon(getMediaUrlFromS3Key(key));
         setLesson(_lesson);
 
-        // TODO: refresh screen
         return navigation.navigate("ProfessorUpsertLessonScreen", {
           lessonId: _lesson.id,
         });
       } catch (error: any) {
-        console.error(error);
         Alert.alert("Não foi possível criar aula", error?.message);
       }
     }

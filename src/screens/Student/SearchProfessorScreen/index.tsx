@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Alert,
   Keyboard,
@@ -27,6 +27,7 @@ import { getMediaUrlFromS3Key } from "../../../utils/file";
 import UserImageComponent from "../../../components/UserImage";
 import Feather from "react-native-vector-icons/Feather";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { useFocusEffect } from "@react-navigation/native";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -71,7 +72,6 @@ const StudentSearchProfessorScreen = ({ navigation, route }: Props) => {
       [
         {
           text: "Cancelar",
-          onPress: () => console.log("Cancel Pressed"),
           style: "cancel",
         },
         {
@@ -91,32 +91,40 @@ const StudentSearchProfessorScreen = ({ navigation, route }: Props) => {
     );
   };
 
-  useEffect(() => {
+  const fetchStudent = async () => {
     try {
-      async function fetchStudent() {
-        const _student = (await api.get(`/student/${studentId}`))
-          .data as IStudent;
-        setStudent(_student);
-      }
-
-      studentId && fetchStudent();
+      const _student = (await api.get(`/student/${studentId}`))
+        .data as IStudent;
+      setStudent(_student);
     } catch (error: any) {
       return Alert.alert("Erro ao buscar dados", error?.message);
     }
+  };
+
+  const fetchProfessors = async () => {
+    const _professors = (
+      await api.get("/professor", {
+        params: { search, grammar, sortBy },
+      })
+    ).data as Array<IProfessor>;
+    setProfessors(_professors);
+  };
+
+  useEffect(() => {
+    studentId && fetchStudent();
   }, [studentId]);
 
   useEffect(() => {
-    async function fetchProfessors() {
-      const _professors = (
-        await api.get("/professor", {
-          params: { search, grammar, sortBy },
-        })
-      ).data as Array<IProfessor>;
-      setProfessors(_professors);
-    }
-
     studentId && fetchProfessors();
   }, [search, grammar, sortBy]);
+
+  useFocusEffect(
+    useCallback(() => {
+      studentId && fetchStudent();
+      studentId && fetchProfessors();
+      console.log("fetch");
+    }, [studentId, search, grammar, sortBy])
+  );
 
   const listHeaderComponent = () => {
     return (

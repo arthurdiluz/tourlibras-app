@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Alert, Platform, Text, View } from "react-native";
 import styles from "./styles";
 import api from "../../../utils/api";
@@ -18,6 +18,7 @@ import {
   uploadImageFromGallery,
 } from "../../../services/mediaUpload";
 import { getMediaUrlFromS3Key } from "../../../utils/file";
+import { useFocusEffect } from "@react-navigation/native";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -44,56 +45,59 @@ const UserProfileScreen = ({ navigation }: Props) => {
     platform === "android"
   );
 
-  useEffect(() => {
-    async function getUserData() {
-      if (!userContext) return navigation.navigate("UnauthenticatedStack");
+  const getUserData = async () => {
+    if (!userContext) return navigation.navigate("UnauthenticatedStack");
 
-      try {
-        const data: IUserOutput = (await api.get(`/user/${userContext?.sub}`))
-          .data;
+    try {
+      const data: IUserOutput = (await api.get(`/user/${userContext?.sub}`))
+        .data;
 
-        setFullName(data.fullName);
-        setUser(data);
+      setFullName(data.fullName);
+      setUser(data);
 
-        switch (userContext.role) {
-          case ROLE.PROFESSOR:
-            try {
-              const { Professor } = (await api.get(`/user/${userContext.sub}`))
-                ?.data;
-              const professorData: IProfessor = (
-                await api.get(`/professor/${Professor?.id}`)
-              ).data;
-
-              setProfessor(professorData);
-              setSelectedGrammar(professorData.grammar);
-            } catch (error: any) {
-              return Alert.alert(
-                "Could not load professor data",
-                error?.message
-              );
-            }
-            break;
-
-          case ROLE.STUDENT:
-            const { Student } = await (
-              await api.get(`/user/${userContext.sub}`)
-            )?.data;
-            const studentData: IStudent = await (
-              await api.get(`/student/${Student.id}`)
+      switch (userContext.role) {
+        case ROLE.PROFESSOR:
+          try {
+            const { Professor } = (await api.get(`/user/${userContext.sub}`))
+              ?.data;
+            const professorData: IProfessor = (
+              await api.get(`/professor/${Professor?.id}`)
             ).data;
-            setStudent(studentData);
-            break;
 
-          default:
-            break;
-        }
-      } catch (error: any) {
-        return Alert.alert("Could not load user data", error?.message);
+            setProfessor(professorData);
+            setSelectedGrammar(professorData.grammar);
+          } catch (error: any) {
+            return Alert.alert("Could not load professor data", error?.message);
+          }
+          break;
+
+        case ROLE.STUDENT:
+          const { Student } = await (
+            await api.get(`/user/${userContext.sub}`)
+          )?.data;
+          const studentData: IStudent = await (
+            await api.get(`/student/${Student.id}`)
+          ).data;
+          setStudent(studentData);
+          break;
+
+        default:
+          break;
       }
+    } catch (error: any) {
+      return Alert.alert("Could not load user data", error?.message);
     }
+  };
 
+  useEffect(() => {
     getUserData();
   }, [userContext]);
+
+  useFocusEffect(
+    useCallback(() => {
+      getUserData();
+    }, [])
+  );
 
   const handleUpdateImage = async () => {
     try {

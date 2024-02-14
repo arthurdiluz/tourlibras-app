@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import styles from "./styles";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -10,6 +10,7 @@ import api from "../../../utils/api";
 import { useAuth } from "../../../contexts/AuthContext";
 import PhotoUploadImage from "../../../components/PhotoUploadImage";
 import { getMediaUrlFromS3Key } from "../../../utils/file";
+import { useFocusEffect } from "@react-navigation/native";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -17,27 +18,33 @@ const ProfessorListLevelScreen = ({ navigation }: Props) => {
   const { user } = useAuth();
   const [lessons, setLessons] = useState<Array<ILessonOutput>>([]);
 
-  useEffect(() => {
-    async function fetchLesson() {
-      try {
-        if (!user) throw new Error("Usuário não encontrado");
-        const lessonsData: Array<ILessonOutput> = (
-          await api.get(`/professor/${user.sub}/lesson`)
-        ).data;
+  const fetchLesson = async () => {
+    try {
+      if (!user) throw new Error("Usuário não encontrado");
+      const lessonsData: Array<ILessonOutput> = (
+        await api.get(`/professor/${user.sub}/lesson`)
+      ).data;
 
-        lessonsData.sort(
-          (a, b) =>
-            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-        );
+      lessonsData.sort(
+        (a, b) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      );
 
-        setLessons(lessonsData);
-      } catch (error: any) {
-        return Alert.alert("Não foi possível obter as aulas", error?.message);
-      }
+      setLessons(lessonsData);
+    } catch (error: any) {
+      return Alert.alert("Não foi possível obter as aulas", error?.message);
     }
+  };
 
+  useEffect(() => {
     fetchLesson();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchLesson();
+    }, [])
+  );
 
   const handleGoBack = () => {
     return navigation.pop();
