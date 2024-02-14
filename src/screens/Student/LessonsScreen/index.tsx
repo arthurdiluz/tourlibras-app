@@ -99,29 +99,38 @@ const StudentLessonsScreen = ({ navigation }: Props) => {
 
   const handleLesson = async (
     lesson: ILessonOutput,
-    studentLesson?: IStudentLesson
+    progress?: IStudentLesson
   ) => {
     if (itemLoading) return;
 
     try {
+      let studentLesson = progress;
       setItemLoading(lesson.id);
 
       if (!student) throw new Error("Estudante não encontrado");
 
-      if (
-        !student.Lessons.find((l) => l.lessonId === lesson.id) ||
-        !studentLesson
-      ) {
-        await api.post(`/student/${student.id}/lesson/${lesson.id}`, {
-          currentLevel: studentLesson?.currentLevel || 1,
-          isCompleted: false,
+      if (!studentLesson) {
+        studentLesson = (
+          await api.post(`/student/${student.id}/lesson/${lesson.id}`, {
+            currentLevel: 1,
+            isCompleted: false,
+          })
+        ).data as IStudentLesson;
+
+        setStudent((prevStudent) => {
+          if (!studentLesson || !prevStudent) return prevStudent;
+          const updatedLessons = [...prevStudent.Lessons];
+          updatedLessons.push(studentLesson);
+          return {
+            ...prevStudent,
+            Lessons: updatedLessons,
+          };
         });
-        return navigation.navigate("Lessons");
       }
 
       if (
         !lesson.Levels ||
-        !lesson.Levels.find((l) => l.level === studentLesson.currentLevel)
+        !lesson.Levels.find((l) => l.level === studentLesson?.currentLevel)
       ) {
         return Alert.alert(
           "Nível não existente",
@@ -143,7 +152,7 @@ const StudentLessonsScreen = ({ navigation }: Props) => {
       return navigation.navigate("StudentExercise", {
         student: JSON.stringify(student),
         level: JSON.stringify(level),
-        studentLessonId: studentLesson.id,
+        studentLessonId: studentLesson?.id,
       });
     } catch (error: any) {
       return Alert.alert(
@@ -156,7 +165,7 @@ const StudentLessonsScreen = ({ navigation }: Props) => {
   };
 
   const renderItem = ({ item, index }: ListRenderItemInfo<ILessonOutput>) => {
-    const studentLesson = student?.Lessons[index] || undefined;
+    const progress = student?.Lessons.find((l) => l.lessonId === item.id);
 
     return (
       <View style={styles.renderItemLessonSection}>
@@ -169,7 +178,7 @@ const StudentLessonsScreen = ({ navigation }: Props) => {
             source={
               item?.icon ? { uri: getMediaUrlFromS3Key(item.icon) } : undefined
             }
-            onPress={() => handleLesson(item, studentLesson)}
+            onPress={() => handleLesson(item, progress)}
           />
         </TouchableHighlight>
         <View style={styles.renderItemLessonLevelBubble}>
@@ -177,8 +186,7 @@ const StudentLessonsScreen = ({ navigation }: Props) => {
             {itemLoading === item.id ? (
               <ActivityIndicator size="large" color="white" />
             ) : (
-              student?.Lessons.find((l) => l.lessonId === item.id)
-                ?.currentLevel ?? "Iniciar"
+              progress?.currentLevel ?? "Iniciar"
             )}
           </Text>
         </View>

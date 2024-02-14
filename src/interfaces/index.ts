@@ -178,7 +178,9 @@ export interface IStudentLesson {
   isCompleted: boolean;
   studentId: number;
   lessonId: number;
-  // TODO: add more properties
+  Student: IStudent;
+  Lesson: ILessonOutput;
+  DoneLevels: ILessonLevelDoneOutput[];
 }
 
 export interface ILessonLevelDoneInput {
