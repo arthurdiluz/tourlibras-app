@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { Alert, Text, View } from "react-native";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons, Octicons } from "@expo/vector-icons";
 import {
   ILessonLevelDoneInput,
-  ILessonLevelDoneOutput,
   ILessonLevelOutput,
   IStudent,
 } from "../../../interfaces";
@@ -13,28 +11,48 @@ import { Exercise } from "./Exercise";
 import styles from "./styles";
 import ButtonComponent from "../../../components/Button";
 import api from "../../../utils/api";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { ParamListBase, RouteProp } from "@react-navigation/native";
+
+type Props = {
+  navigation: StackNavigationProp<ParamListBase, string>;
+  route: RouteProp<ParamListBase, string>;
+};
+
+interface RouteParams {
+  student: string;
+  level: string;
+  studentLessonId: string;
+}
 
 export interface Step {
   index: number;
   isCorrect?: boolean | null;
 }
 
-type Props = NativeStackScreenProps<any>;
 type IResult = {
   trueCount: number;
   totalCount: number;
   threshold: number;
 };
 
-const StudentExerciseScreen = ({ navigation, route }: Props) => {
-  const student: IStudent | undefined = JSON.parse(route.params?.student);
-  const level: ILessonLevelOutput | undefined = JSON.parse(route.params?.level);
-  const studentLessonId: number | undefined = Number.parseInt(
-    route.params?.studentLessonId
-  );
+const StudentExerciseScreen: React.FC<Props> = ({ navigation, route }) => {
+  const {
+    student: _student,
+    level: _level,
+    studentLessonId: _studentLessonId,
+  } = route.params as RouteParams;
+
+  const student: IStudent | undefined = JSON.parse(_student);
+  const level: ILessonLevelOutput | undefined = JSON.parse(_level);
+  const studentLessonId: number | undefined = Number.parseInt(_studentLessonId);
+
   const exercises = level?.LessonLevelExercises;
 
-  if (!exercises) return navigation.goBack();
+  if (!exercises) {
+    navigation.goBack();
+    return null;
+  }
 
   const [steps, setSteps] = useState<Step[]>(
     exercises.flatMap((_, index) => ({
