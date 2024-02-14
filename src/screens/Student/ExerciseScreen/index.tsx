@@ -104,9 +104,10 @@ const StudentExerciseScreen: React.FC<Props> = ({ navigation, route }) => {
       );
       return navigation.push("StudentLessons");
     } catch (error: any) {
-      console.error(error);
       Alert.alert("Não foi possível avaliar exercício", error?.message);
       return setIsLoading(false);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -164,7 +165,7 @@ const StudentExerciseScreen: React.FC<Props> = ({ navigation, route }) => {
       <View style={styles.exerciseScreen}>
         {step?.index < steps?.length ? (
           <Exercise
-            key={step?.index}
+            key={step.index}
             exercise={exercises[step?.index]}
             handleForwardStep={handleForwardStep}
           />

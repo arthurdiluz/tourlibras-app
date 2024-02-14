@@ -1,5 +1,6 @@
+import { useFocusEffect } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Alert, ListRenderItemInfo, Text, View } from "react-native";
 import {
   FlatList,
@@ -30,26 +31,32 @@ const StudentLessonsScreen = ({ navigation }: Props) => {
   const [professor, setProfessor] = useState<IProfessor>();
   const [lessons, setLessons] = useState<ILessonOutput[]>([]);
 
-  useEffect(() => {
-    async function init() {
-      try {
-        const _user = (await api.get(`/user/${user?.sub}`)).data;
-        const _student = (await api.get(`/student/${_user?.Student?.id}`)).data;
+  // TODO: implement in all screens
+  const init = async () => {
+    try {
+      const _user = (await api.get(`/user/${user?.sub}`)).data;
+      const _student = (await api.get(`/student/${_user?.Student?.id}`)).data;
 
-        const _professor = (
-          await api.get(`/professor/${_student?.professorId}`)
-        ).data as IProfessor;
+      const _professor = (await api.get(`/professor/${_student?.professorId}`))
+        .data as IProfessor;
 
-        setStudent(_student);
-        setProfessor(_professor);
-      } catch (error: any) {
-        Alert.alert("Não foi possível obter dados do usuário", error?.message);
-        return navigation.goBack();
-      }
+      setStudent(_student);
+      setProfessor(_professor);
+    } catch (error: any) {
+      Alert.alert("Não foi possível obter dados do usuário", error?.message);
+      return navigation.goBack();
     }
+  };
 
+  useEffect(() => {
     init();
-  }, []);
+  }, [refreshing]);
+
+  useFocusEffect(
+    useCallback(() => {
+      init();
+    }, [])
+  );
 
   useEffect(() => {
     async function fetchLessons() {
