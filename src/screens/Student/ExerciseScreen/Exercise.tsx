@@ -44,7 +44,6 @@ export const Exercise = ({ exercise, handleForwardStep }: Props) => {
       <Text style={styles.statement}>{exercise.statement}</Text>
       <FlatList
         data={exercise.Alternatives}
-        keyExtractor={({ id }) => id.toString()}
         renderItem={renderItem}
         style={styles.flatListContainer}
       />
