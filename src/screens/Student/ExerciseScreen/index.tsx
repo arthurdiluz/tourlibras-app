@@ -52,7 +52,7 @@ const StudentExerciseScreen: React.FC<Props> = ({ navigation, route }) => {
     Alert.alert(
       "Nível não existente",
       level?.level
-        ? `O nível ${level.level}} deste exercício ainda não possui aulas`
+        ? `O nível ${level.level} deste exercício ainda não possui aulas`
         : `Esta aula ainda não possui níveis`
     );
 
@@ -108,7 +108,7 @@ const StudentExerciseScreen: React.FC<Props> = ({ navigation, route }) => {
         `/student-lesson/${studentLessonId}/lesson-level/${level.id}/done`,
         form
       );
-      return navigation.push("StudentLessons");
+      return navigation.popToTop();
     } catch (error: any) {
       Alert.alert("Não foi possível avaliar exercício", error?.message);
       return setIsLoading(false);
@@ -171,7 +171,9 @@ const StudentExerciseScreen: React.FC<Props> = ({ navigation, route }) => {
       <View style={styles.exerciseScreen}>
         {step?.index < steps?.length ? (
           <Exercise
-            key={step.index}
+            key={`exercise-${step.index}-${step.isCorrect}-${
+              exercises[step?.index]
+            }-${steps.length}`}
             exercise={exercises[step?.index]}
             handleForwardStep={handleForwardStep}
           />
