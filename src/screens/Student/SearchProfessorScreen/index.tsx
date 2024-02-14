@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Alert,
   Keyboard,
@@ -12,11 +12,10 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import {
   FlatList,
   TouchableHighlight,
-  TouchableOpacity,
   TouchableWithoutFeedback,
 } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
-import ArrowLeftIcon from "../../../components/Icons/ArrowLeftIcon";
+import { Ionicons } from "@expo/vector-icons";
 import TextInputComponent from "../../../components/input";
 import { GRAMMAR, PROFESSOR_SORT_BY } from "../../../enums";
 import { IProfessor, IStudent } from "../../../interfaces";
@@ -26,7 +25,7 @@ import styles from "./styles";
 import { getMediaUrlFromS3Key } from "../../../utils/file";
 import UserImageComponent from "../../../components/UserImage";
 import Feather from "react-native-vector-icons/Feather";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import { useFocusEffect } from "@react-navigation/native";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -51,7 +50,7 @@ const StudentSearchProfessorScreen = ({ navigation, route }: Props) => {
   const [professors, setProfessors] = useState<Array<IProfessor>>([]);
   const [isPickerVisible, setPickerVisible] = useState(os === "android");
 
-  const handleGoBack = () => {}; // TODO: add navigation handler
+  const handleGoBack = () => navigation.goBack();
   const handleChangeSearch = (text: string) => setSearch(text);
   const handleTogglePicker = () => setPickerVisible((prev) => !prev);
 
@@ -71,7 +70,6 @@ const StudentSearchProfessorScreen = ({ navigation, route }: Props) => {
       [
         {
           text: "Cancelar",
-          onPress: () => console.log("Cancel Pressed"),
           style: "cancel",
         },
         {
@@ -91,32 +89,39 @@ const StudentSearchProfessorScreen = ({ navigation, route }: Props) => {
     );
   };
 
-  useEffect(() => {
+  const fetchStudent = async () => {
     try {
-      async function fetchStudent() {
-        const _student = (await api.get(`/student/${studentId}`))
-          .data as IStudent;
-        setStudent(_student);
-      }
-
-      studentId && fetchStudent();
+      const _student = (await api.get(`/student/${studentId}`))
+        .data as IStudent;
+      setStudent(_student);
     } catch (error: any) {
       return Alert.alert("Erro ao buscar dados", error?.message);
     }
+  };
+
+  const fetchProfessors = async () => {
+    const _professors = (
+      await api.get("/professor", {
+        params: { search, grammar, sortBy },
+      })
+    ).data as Array<IProfessor>;
+    setProfessors(_professors);
+  };
+
+  useEffect(() => {
+    studentId && fetchStudent();
   }, [studentId]);
 
   useEffect(() => {
-    async function fetchProfessors() {
-      const _professors = (
-        await api.get("/professor", {
-          params: { search, grammar, sortBy },
-        })
-      ).data as Array<IProfessor>;
-      setProfessors(_professors);
-    }
-
     studentId && fetchProfessors();
   }, [search, grammar, sortBy]);
+
+  useFocusEffect(
+    useCallback(() => {
+      studentId && fetchStudent();
+      studentId && fetchProfessors();
+    }, [])
+  );
 
   const listHeaderComponent = () => {
     return (
@@ -216,14 +221,12 @@ const StudentSearchProfessorScreen = ({ navigation, route }: Props) => {
       <View style={styles.topMenu}>
         <View style={styles.ArrowLeft}>
           {student?.professorId && (
-            <TouchableOpacity onPress={handleGoBack}>
-              <ArrowLeftIcon
-                height={40}
-                width={40}
-                fillOpacity={0}
-                stroke={"#1B9CFC"}
-              />
-            </TouchableOpacity>
+            <Ionicons
+              name="arrow-back"
+              size={32}
+              color={"#1B9CFC"}
+              onPress={handleGoBack}
+            />
           )}
         </View>
         <Text style={styles.panelText}>{"Buscar professor"}</Text>

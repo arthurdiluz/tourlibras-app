@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Alert, Text, View } from "react-native";
@@ -9,6 +9,7 @@ import { IProfessor } from "../../../interfaces";
 import UserImageComponent from "../../../components/UserImage";
 import ButtonComponent from "../../../components/Button";
 import { getMediaUrlFromS3Key } from "../../../utils/file";
+import { useFocusEffect } from "@react-navigation/native";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -16,25 +17,31 @@ const ProfessorHomepageScreen = ({ navigation }: Props) => {
   const { user, signOut } = useAuth();
   const [professor, setProfessor] = useState<IProfessor | null>(null);
 
-  useEffect(() => {
-    async function getProfessorData() {
-      if (!user) throw new Error("Usuário não encontrado");
+  const init = async () => {
+    try {
+      if (!user) return;
 
-      try {
-        const { Professor } = (await api.get(`/user/${user?.sub}`))?.data;
-        const { data } = await api.get(`/professor/${Professor?.id}`);
+      const { Professor } = (await api.get(`/user/${user?.sub}`))?.data;
+      const { data } = await api.get(`/professor/${Professor?.id}`);
 
-        setProfessor(data as IProfessor);
-      } catch (error: any) {
-        return Alert.alert(
-          "Não foi possível obter dados do professor",
-          error?.message
-        );
-      }
+      setProfessor(data as IProfessor);
+    } catch (error: any) {
+      return Alert.alert(
+        "Não foi possível obter dados do professor",
+        error?.message
+      );
     }
+  };
 
-    getProfessorData();
+  useEffect(() => {
+    user && init();
   }, [user]);
+
+  useFocusEffect(
+    useCallback(() => {
+      user && init();
+    }, [])
+  );
 
   const handleViewProfile = () => {
     return navigation.navigate("ProfessorProfile");

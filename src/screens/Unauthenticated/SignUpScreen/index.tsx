@@ -14,8 +14,8 @@ import UserCircleIcon from "../../../components/Icons/UserCircleIcon";
 import TextInputComponent from "../../../components/input";
 import IonIcons from "react-native-vector-icons/Ionicons";
 import ButtonComponent from "../../../components/Button";
-import ArrowLeftIcon from "../../../components/Icons/ArrowLeftIcon";
 import PickerComponent from "../../../components/PickerComponent";
+import { Ionicons } from "@expo/vector-icons";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -123,9 +123,12 @@ const SignUpScreen = ({ navigation }: Props) => {
         contentContainerStyle={{ alignItems: "center" }}
       >
         <View style={styles.ArrowLeft}>
-          <TouchableOpacity onPress={handleGoBack}>
-            <ArrowLeftIcon height={40} width={40} fillOpacity={0} />
-          </TouchableOpacity>
+          <Ionicons
+            name="arrow-back"
+            size={32}
+            color={"white"}
+            onPress={handleGoBack}
+          />
         </View>
         <View style={styles.userCircle}>
           <UserCircleIcon height={140} width={140} fillOpacity={0} />

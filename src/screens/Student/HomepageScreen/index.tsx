@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Alert, Image, ListRenderItemInfo, Text, View } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -14,6 +14,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import AntDesign from "react-native-vector-icons/AntDesign";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { FlatList } from "react-native-gesture-handler";
+import { useFocusEffect } from "@react-navigation/native";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -24,28 +25,28 @@ const StudentHomepageScreen = ({ navigation, route }: Props) => {
 
   const handleEditProfile = () => navigation.navigate("StudentProfile");
 
-  useEffect(() => {
-    navigation.addListener("focus", () =>
-      navigation.navigate("StudentHomepage", { studentId })
-    );
-  }, [navigation]);
-
-  useEffect(() => {
-    async function fetchStudent() {
-      try {
-        const _student = (await api.get(`/student/${studentId}`))
-          .data as IStudent;
-        setStudent(_student);
-      } catch (error: any) {
-        return Alert.alert(
-          "Não foi possível obter dados do aluno",
-          error?.message
-        );
-      }
+  const fetchStudent = async () => {
+    try {
+      const _student = (await api.get(`/student/${studentId}`))
+        .data as IStudent;
+      setStudent(_student);
+    } catch (error: any) {
+      return Alert.alert(
+        "Não foi possível obter dados do aluno",
+        error?.message
+      );
     }
+  };
 
+  useEffect(() => {
     studentId && fetchStudent();
   }, [studentId]);
+
+  useFocusEffect(
+    useCallback(() => {
+      studentId && fetchStudent();
+    }, [])
+  );
 
   const renderItem = ({ item, index }: ListRenderItemInfo<IMedalOutput>) => {
     return (
@@ -80,7 +81,7 @@ const StudentHomepageScreen = ({ navigation, route }: Props) => {
         <MaterialCommunityIcons
           style={styles.topMenuIcon}
           name={"circle-edit-outline"}
-          size={36}
+          size={32}
           color={"#1B9CFC"}
           onPress={handleEditProfile}
         />

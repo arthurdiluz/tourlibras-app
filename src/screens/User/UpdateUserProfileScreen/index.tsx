@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Alert, Text, View } from "react-native";
 import styles from "./styles";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import ArrowLeftIcon from "../../../components/Icons/ArrowLeftIcon";
+import { Ionicons } from "@expo/vector-icons";
 import TextInputComponent from "../../../components/input";
 import ButtonComponent from "../../../components/Button";
 import { useAuth } from "../../../contexts/AuthContext";
 import api from "../../../utils/api";
 import { IUserOutput } from "../../../interfaces";
+import { useFocusEffect } from "@react-navigation/native";
 
 type Props = NativeStackScreenProps<any>;
 
 const UpdateUserProfileScreen = ({ navigation }: Props) => {
-  const { user: _user } = useAuth();
+  const { user: auth } = useAuth();
 
   const [user, setUser] = useState<IUserOutput | null>(null);
   const [newEmail, setNewEmail] = useState<string>("");
@@ -22,21 +22,29 @@ const UpdateUserProfileScreen = ({ navigation }: Props) => {
   const [newPassword, setNewPassword] = useState<string>("");
   const [newPasswordConfirm, setNewPasswordConfirm] = useState<string>("");
 
-  useEffect(() => {
-    async function loadUserData() {
-      try {
-        const response = await api.get(`/user/${_user?.sub}`);
-        const data: IUserOutput = response?.data;
+  const init = async () => {
+    try {
+      if (!auth) return;
 
-        setNewEmail(data.email);
-        setUser(data);
-      } catch (error: any) {
-        return Alert.alert("Could not load user data", error?.message);
-      }
+      const response = await api.get(`/user/${auth?.sub}`);
+      const data: IUserOutput = response?.data;
+
+      setNewEmail(data.email);
+      setUser(data);
+    } catch (error: any) {
+      return Alert.alert("Could not load user data", error?.message);
     }
+  };
 
-    loadUserData();
-  }, [_user]);
+  useEffect(() => {
+    auth && init();
+  }, [auth]);
+
+  useFocusEffect(
+    useCallback(() => {
+      auth && init();
+    }, [])
+  );
 
   const handleGoBack = () => navigation.goBack();
 
@@ -114,16 +122,13 @@ const UpdateUserProfileScreen = ({ navigation }: Props) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.topMenu}>
-        {/* TODO: fix "go back" button */}
         <View style={styles.ArrowLeft}>
-          <TouchableOpacity onPress={handleGoBack}>
-            <ArrowLeftIcon
-              height={40}
-              width={40}
-              fillOpacity={0}
-              stroke={"#1B9CFC"}
-            />
-          </TouchableOpacity>
+          <Ionicons
+            name="arrow-back"
+            size={32}
+            color={"#1B9CFC"}
+            onPress={handleGoBack}
+          />
         </View>
         <Text style={styles.panelText}>{"email e senha"}</Text>
       </View>

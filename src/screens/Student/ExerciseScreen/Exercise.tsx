@@ -1,10 +1,4 @@
-import {
-  Alert,
-  ListRenderItemInfo,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { ListRenderItemInfo, StyleSheet, Text, View } from "react-native";
 import { IAlternativeOutput, ILevelExerciseOutput } from "../../../interfaces";
 import VideoUploadImage from "../../../components/VideoUploadImage";
 import { FlatList } from "react-native-gesture-handler";
@@ -17,15 +11,13 @@ type Props = {
 };
 
 export const Exercise = ({ exercise, handleForwardStep }: Props) => {
+  if (!exercise) return <></>;
+
   const handlePress = (a: IAlternativeOutput) => handleForwardStep(a.isCorrect);
 
-  const renderItem = ({
-    item,
-    index,
-  }: ListRenderItemInfo<IAlternativeOutput>) => {
+  const renderItem = ({ item }: ListRenderItemInfo<IAlternativeOutput>) => {
     return (
       <CardComponent
-        key={index}
         customStyle={styles.card}
         onPress={() => handlePress(item)}
       >

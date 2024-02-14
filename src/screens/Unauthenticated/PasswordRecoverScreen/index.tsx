@@ -4,7 +4,7 @@ import { Alert, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ButtonComponent from "../../../components/Button";
-import ArrowLeftIcon from "../../../components/Icons/ArrowLeftIcon";
+import { Ionicons } from "@expo/vector-icons";
 import KeyIcon from "../../../components/Icons/KeyIcon";
 import TextInputComponent from "../../../components/input";
 import styles from "./styles";
@@ -33,9 +33,12 @@ const PasswordRecoverScreen = ({ navigation, route }: Props) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.ArrowLeft}>
-        <TouchableOpacity onPress={handleGoBack}>
-          <ArrowLeftIcon height={40} width={40} fillOpacity={0} />
-        </TouchableOpacity>
+        <Ionicons
+          name="arrow-back"
+          size={32}
+          color={"white"}
+          onPress={handleGoBack}
+        />
       </View>
       <View style={styles.firstSection}>
         <KeyIcon height={76} width={76} />

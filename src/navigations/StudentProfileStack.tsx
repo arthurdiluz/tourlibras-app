@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useFocusEffect } from "@react-navigation/native";
 import UserProfileScreen from "../screens/User/UserProfileScreen";
@@ -15,19 +15,19 @@ const StudentProfileStack: React.FC = () => {
   const { user } = useAuth();
   const [student, setStudent] = useState<IStudent>();
 
-  const fetchStudent = async () => {
+  const init = async () => {
     const _user = (await api.get(`/user/${user?.sub}`)).data;
     const _student = (await api.get(`/student/${_user?.Student?.id}`)).data;
     setStudent(_student);
   };
 
   useEffect(() => {
-    fetchStudent();
+    user && init();
   }, [user]);
 
   useFocusEffect(
-    React.useCallback(() => {
-      fetchStudent();
+    useCallback(() => {
+      user && init();
     }, [])
   );
 

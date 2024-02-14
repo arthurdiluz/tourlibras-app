@@ -11,15 +11,17 @@ const styles = StyleSheet.create({
   },
 
   topMenu: {
-    height: "10%",
+    height: "8%",
     width: "90%",
-    alignContent: "center",
+    flexDirection: "row",
     justifyContent: "center",
-    marginBottom: "5%",
+    alignItems: "center",
+    marginBottom: "2%",
   },
 
   ArrowLeft: {
     position: "absolute",
+    left: 0,
   },
 
   panelText: {

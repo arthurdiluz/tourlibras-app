@@ -31,9 +31,10 @@ const StudentLessonsScreen = ({ navigation }: Props) => {
   const [professor, setProfessor] = useState<IProfessor>();
   const [lessons, setLessons] = useState<ILessonOutput[]>([]);
 
-  // TODO: implement in all screens
   const init = async () => {
     try {
+      if (!user) return;
+
       const _user = (await api.get(`/user/${user?.sub}`)).data;
       const _student = (await api.get(`/student/${_user?.Student?.id}`)).data;
 
@@ -48,42 +49,43 @@ const StudentLessonsScreen = ({ navigation }: Props) => {
     }
   };
 
+  const fetchLessons = async () => {
+    try {
+      if (!student) return;
+
+      const lessonsData = (
+        await api.get(`/professor/${student?.professorId}/lesson`)
+      ).data as ILessonOutput[];
+
+      const filteredLessons = lessonsData.filter(
+        (lesson) =>
+          lesson?.Levels?.length &&
+          lesson?.Levels?.filter((level) => level?.LessonLevelExercises?.length)
+      );
+
+      setLessons(filteredLessons);
+    } catch (error: any) {
+      Alert.alert("Não foi possível obter aulas", error?.message);
+      return navigation.goBack();
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
   useEffect(() => {
-    init();
-  }, [refreshing]);
+    user && init();
+  }, [user, refreshing]);
+
+  useEffect(() => {
+    student && fetchLessons();
+  }, [student, refreshing]);
 
   useFocusEffect(
     useCallback(() => {
-      init();
+      user && init();
+      student && fetchLessons();
     }, [])
   );
-
-  useEffect(() => {
-    async function fetchLessons() {
-      try {
-        const lessonsData = (
-          await api.get(`/professor/${student?.professorId}/lesson`)
-        ).data as ILessonOutput[];
-
-        const filteredLessons = lessonsData.filter(
-          (lesson) =>
-            lesson?.Levels?.length &&
-            lesson?.Levels?.filter(
-              (level) => level?.LessonLevelExercises?.length
-            )
-        );
-
-        setLessons(filteredLessons);
-      } catch (error: any) {
-        Alert.alert("Não foi possível obter aulas", error?.message);
-        return navigation.goBack();
-      } finally {
-        setRefreshing(false);
-      }
-    }
-
-    student && fetchLessons();
-  }, [student, refreshing]);
 
   const onRefresh = () => setRefreshing(true);
 
@@ -92,27 +94,33 @@ const StudentLessonsScreen = ({ navigation }: Props) => {
     progress?: IStudentLesson
   ) => {
     try {
-      if (!lesson.Levels.find((l) => l.level === progress?.currentLevel)) {
-        return Alert.alert(
-          "Nível não existente",
-          `O nível ${progress?.currentLevel} deste exercício ainda não existe`
-        );
-      }
+      if (!student) throw new Error("Estudante não encontrado");
 
-      if (!student?.Lessons.find((l) => l.id === lesson.id) || !progress) {
-        await api.post(`/student/${student?.id}/lesson/${lesson.id}`, {
+      if (!student.Lessons.find((l) => l.id === lesson.id) || !progress) {
+        await api.post(`/student/${student.id}/lesson/${lesson.id}`, {
           currentLevel: progress?.currentLevel || 1,
           isCompleted: false,
         });
+        return navigation.navigate("Lessons");
+      }
 
-        return navigation.navigate("StudentLessons");
+      if (
+        !lesson.Levels ||
+        !lesson.Levels.find((l) => l.level === progress?.currentLevel)
+      ) {
+        return Alert.alert(
+          "Nível não existente",
+          progress?.currentLevel
+            ? `O nível ${progress?.currentLevel} deste exercício ainda não foi criado`
+            : `Esta aula ainda não possui níveis`
+        );
       }
 
       const levelId = lesson.Levels.find(
-        (level) => level.level === progress.currentLevel
+        (level) => level.level === progress?.currentLevel
       )?.id;
 
-      if (!levelId) Alert.alert("Nível não encontrado");
+      if (!levelId) return Alert.alert("Nível não encontrado");
 
       const level = (await api.get(`/lesson/${lesson.id}/level/${levelId}`))
         .data as ILessonLevelOutput;
@@ -123,8 +131,7 @@ const StudentLessonsScreen = ({ navigation }: Props) => {
         studentLessonId: progress.id,
       });
     } catch (error: any) {
-      console.error(error);
-      Alert.alert(
+      return Alert.alert(
         `Não foi possível iniciar aula "${lesson.title}"`,
         error?.message
       );
@@ -160,7 +167,7 @@ const StudentLessonsScreen = ({ navigation }: Props) => {
       <View style={styles.header}>
         <Text
           style={styles.headerTitle}
-        >{`Aulas - Prof. ${professor?.User.fullName}`}</Text>
+        >{`Aulas - Prof. ${professor?.User?.fullName}`}</Text>
         <Text
           style={styles.headerSubTitle}
         >{`Gramática ${professor?.grammar}`}</Text>

@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import styles from "./styles";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Alert, ListRenderItemInfo, Text, View } from "react-native";
-import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
-import ArrowLeftIcon from "../../../components/Icons/ArrowLeftIcon";
+import { FlatList } from "react-native-gesture-handler";
+import { Ionicons } from "@expo/vector-icons";
 import { ILessonOutput } from "../../../interfaces";
 import api from "../../../utils/api";
 import { useAuth } from "../../../contexts/AuthContext";
 import PhotoUploadImage from "../../../components/PhotoUploadImage";
 import { getMediaUrlFromS3Key } from "../../../utils/file";
+import { useFocusEffect } from "@react-navigation/native";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -17,30 +18,37 @@ const ProfessorListLevelScreen = ({ navigation }: Props) => {
   const { user } = useAuth();
   const [lessons, setLessons] = useState<Array<ILessonOutput>>([]);
 
-  useEffect(() => {
-    async function fetchLesson() {
-      try {
-        if (!user) throw new Error("Usuário não encontrado");
-        const lessonsData: Array<ILessonOutput> = (
-          await api.get(`/professor/${user.sub}/lesson`)
-        ).data;
+  const fetchLesson = async () => {
+    try {
+      if (!user) return;
 
-        lessonsData.sort(
-          (a, b) =>
-            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-        );
+      const lessonsData: Array<ILessonOutput> = (
+        await api.get(`/professor/${user.sub}/lesson`)
+      ).data;
 
-        setLessons(lessonsData);
-      } catch (error: any) {
-        return Alert.alert("Não foi possível obter as aulas", error?.message);
-      }
+      lessonsData.sort(
+        (a, b) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      );
+
+      setLessons(lessonsData);
+    } catch (error: any) {
+      return Alert.alert("Não foi possível obter as aulas", error?.message);
     }
+  };
 
-    fetchLesson();
-  }, []);
+  useEffect(() => {
+    user && fetchLesson();
+  }, [user]);
+
+  useFocusEffect(
+    useCallback(() => {
+      user && fetchLesson();
+    }, [])
+  );
 
   const handleGoBack = () => {
-    return navigation.pop();
+    return navigation.goBack();
   };
 
   const handleLesson = (lesson: ILessonOutput) => {
@@ -117,16 +125,13 @@ const ProfessorListLevelScreen = ({ navigation }: Props) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.topMenu}>
-        {/* TODO: fix "go back" button */}
         <View style={styles.ArrowLeft}>
-          <TouchableOpacity onPress={handleGoBack}>
-            <ArrowLeftIcon
-              height={40}
-              width={40}
-              fillOpacity={0}
-              stroke={"#1B9CFC"}
-            />
-          </TouchableOpacity>
+          <Ionicons
+            name="arrow-back"
+            size={32}
+            color={"#1B9CFC"}
+            onPress={handleGoBack}
+          />
         </View>
         <Text style={styles.panelText}>{"Editar aula"}</Text>
       </View>

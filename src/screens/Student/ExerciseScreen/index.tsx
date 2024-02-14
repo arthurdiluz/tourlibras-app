@@ -46,10 +46,16 @@ const StudentExerciseScreen: React.FC<Props> = ({ navigation, route }) => {
   const student: IStudent | undefined = JSON.parse(_student);
   const level: ILessonLevelOutput | undefined = JSON.parse(_level);
   const studentLessonId: number | undefined = Number.parseInt(_studentLessonId);
-
   const exercises = level?.LessonLevelExercises;
 
-  if (!exercises) {
+  if (!level || !exercises?.length) {
+    Alert.alert(
+      "Nível não existente",
+      level?.level
+        ? `O nível ${level.level}} deste exercício ainda não possui aulas`
+        : `Esta aula ainda não possui níveis`
+    );
+
     navigation.goBack();
     return null;
   }

@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
   userSectionRight: {
     height: 120,
     width: 120,
-    marginLeft: 2.5,
+    marginLeft: "5%",
   },
 
   sectionTitle: {
