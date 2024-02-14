@@ -92,6 +92,13 @@ const StudentLessonsScreen = ({ navigation }: Props) => {
     progress?: IStudentLesson
   ) => {
     try {
+      if (!lesson.Levels.find((l) => l.level === progress?.currentLevel)) {
+        return Alert.alert(
+          "Nível não existente",
+          `O nível ${progress?.currentLevel} deste exercício ainda não existe`
+        );
+      }
+
       if (!student?.Lessons.find((l) => l.id === lesson.id) || !progress) {
         await api.post(`/student/${student?.id}/lesson/${lesson.id}`, {
           currentLevel: progress?.currentLevel || 1,
