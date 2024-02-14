@@ -19,7 +19,7 @@ import {
   IMedalOutput,
   IProfessor,
 } from "../../../interfaces";
-import ArrowLeftIcon from "../../../components/Icons/ArrowLeftIcon";
+import { Ionicons } from "@expo/vector-icons";
 import ButtonComponent from "../../../components/Button";
 import PhotoUploadImage from "../../../components/PhotoUploadImage";
 import TextInputComponent from "../../../components/input";
@@ -70,7 +70,7 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
   };
 
   const fetchMedalData = async () => {
-    if (!professor) throw new Error("Professor não encontrado");
+    if (!professor) return;
 
     try {
       const _medals: Array<IMedalOutput> = (
@@ -84,7 +84,7 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
   };
 
   const fetchLessonData = async () => {
-    if (!professor) throw new Error("Professor não encontrado");
+    if (!professor) return;
     if (!lessonId) return;
 
     try {
@@ -103,20 +103,20 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
   };
 
   useEffect(() => {
-    fetchProfessorData();
+    user && fetchProfessorData();
   }, [user]);
 
   useEffect(() => {
-    fetchMedalData();
-    fetchLessonData();
+    professor && fetchMedalData();
+    professor && lessonId && fetchLessonData();
   }, [lessonId, professor]);
 
   useFocusEffect(
     useCallback(() => {
-      fetchProfessorData();
-      fetchMedalData();
-      fetchLessonData();
-    }, [user, lessonId, professor])
+      user && fetchProfessorData();
+      professor && fetchMedalData();
+      professor && lessonId && fetchLessonData();
+    }, [])
   );
 
   const handleGoBack = () => navigation.goBack();
@@ -319,7 +319,7 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
               <TouchableOpacity>
                 <Text
                   style={[styles.cardButtonText, { color: "#1B9CFC" }]}
-                  onPress={() => handleUpdateLevel()}
+                  onPress={() => handleUpdateLevel(item.id)}
                 >
                   {"editar"}
                 </Text>
@@ -342,16 +342,13 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.topMenu}>
-        {/* TODO: fix "go back" button */}
         <View style={styles.ArrowLeft}>
-          <TouchableOpacity onPress={handleGoBack}>
-            <ArrowLeftIcon
-              height={40}
-              width={40}
-              fillOpacity={0}
-              stroke={"#1B9CFC"}
-            />
-          </TouchableOpacity>
+          <Ionicons
+            name="arrow-back"
+            size={32}
+            color={"#1B9CFC"}
+            onPress={handleGoBack}
+          />
         </View>
         <Text style={styles.panelText}>{"Cadastrar aula"}</Text>
         <View style={styles.saveTextArea}>

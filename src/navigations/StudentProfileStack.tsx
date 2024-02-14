@@ -15,19 +15,19 @@ const StudentProfileStack: React.FC = () => {
   const { user } = useAuth();
   const [student, setStudent] = useState<IStudent>();
 
-  const fetchStudent = async () => {
+  const init = async () => {
     const _user = (await api.get(`/user/${user?.sub}`)).data;
     const _student = (await api.get(`/student/${_user?.Student?.id}`)).data;
     setStudent(_student);
   };
 
   useEffect(() => {
-    fetchStudent();
+    user && init();
   }, [user]);
 
   useFocusEffect(
     useCallback(() => {
-      fetchStudent();
+      user && init();
     }, [])
   );
 

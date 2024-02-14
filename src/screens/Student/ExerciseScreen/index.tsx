@@ -51,10 +51,12 @@ const StudentExerciseScreen: React.FC<Props> = ({ navigation, route }) => {
   if (!level || !exercises?.length) {
     Alert.alert(
       "Nível não existente",
-      `O nível ${level?.level} deste exercício ainda não possui aulas`
+      level?.level
+        ? `O nível ${level.level}} deste exercício ainda não possui aulas`
+        : `Esta aula ainda não possui níveis`
     );
 
-    navigation.pop();
+    navigation.goBack();
     return null;
   }
 

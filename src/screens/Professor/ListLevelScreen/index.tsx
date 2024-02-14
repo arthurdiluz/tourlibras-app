@@ -3,8 +3,8 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import styles from "./styles";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Alert, ListRenderItemInfo, Text, View } from "react-native";
-import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
-import ArrowLeftIcon from "../../../components/Icons/ArrowLeftIcon";
+import { FlatList } from "react-native-gesture-handler";
+import { Ionicons } from "@expo/vector-icons";
 import { ILessonOutput } from "../../../interfaces";
 import api from "../../../utils/api";
 import { useAuth } from "../../../contexts/AuthContext";
@@ -20,7 +20,8 @@ const ProfessorListLevelScreen = ({ navigation }: Props) => {
 
   const fetchLesson = async () => {
     try {
-      if (!user) throw new Error("Usuário não encontrado");
+      if (!user) return;
+
       const lessonsData: Array<ILessonOutput> = (
         await api.get(`/professor/${user.sub}/lesson`)
       ).data;
@@ -37,17 +38,17 @@ const ProfessorListLevelScreen = ({ navigation }: Props) => {
   };
 
   useEffect(() => {
-    fetchLesson();
-  }, []);
+    user && fetchLesson();
+  }, [user]);
 
   useFocusEffect(
     useCallback(() => {
-      fetchLesson();
+      user && fetchLesson();
     }, [])
   );
 
   const handleGoBack = () => {
-    return navigation.pop();
+    return navigation.goBack();
   };
 
   const handleLesson = (lesson: ILessonOutput) => {
@@ -124,16 +125,13 @@ const ProfessorListLevelScreen = ({ navigation }: Props) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.topMenu}>
-        {/* TODO: fix "go back" button */}
         <View style={styles.ArrowLeft}>
-          <TouchableOpacity onPress={handleGoBack}>
-            <ArrowLeftIcon
-              height={40}
-              width={40}
-              fillOpacity={0}
-              stroke={"#1B9CFC"}
-            />
-          </TouchableOpacity>
+          <Ionicons
+            name="arrow-back"
+            size={32}
+            color={"#1B9CFC"}
+            onPress={handleGoBack}
+          />
         </View>
         <Text style={styles.panelText}>{"Editar aula"}</Text>
       </View>

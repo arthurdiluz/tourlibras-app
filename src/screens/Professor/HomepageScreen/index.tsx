@@ -18,9 +18,9 @@ const ProfessorHomepageScreen = ({ navigation }: Props) => {
   const [professor, setProfessor] = useState<IProfessor | null>(null);
 
   const init = async () => {
-    if (!user) throw new Error("Usuário não encontrado");
-
     try {
+      if (!user) return;
+
       const { Professor } = (await api.get(`/user/${user?.sub}`))?.data;
       const { data } = await api.get(`/professor/${Professor?.id}`);
 
@@ -34,12 +34,12 @@ const ProfessorHomepageScreen = ({ navigation }: Props) => {
   };
 
   useEffect(() => {
-    init();
+    user && init();
   }, [user]);
 
   useFocusEffect(
     useCallback(() => {
-      init();
+      user && init();
     }, [])
   );
 

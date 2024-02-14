@@ -19,7 +19,7 @@ import {
 } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CardComponent from "../../../components/CardComponent";
-import ArrowLeftIcon from "../../../components/Icons/ArrowLeftIcon";
+import { Ionicons } from "@expo/vector-icons";
 import TextInputComponent from "../../../components/input";
 import VideoUploadImage from "../../../components/VideoUploadImage";
 import { useAuth } from "../../../contexts/AuthContext";
@@ -51,13 +51,14 @@ const ProfessorUpsertLessonLevelExerciseScreen = ({
     }));
   };
 
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [media, setMedia] = useState<AVPlaybackNativeSource>();
   const [statement, setStatement] = useState<string>();
   const [Alternatives, setAlternatives] = useState<IAlternativeInput[]>(
     getDefaultAlternatives(4)
   );
 
-  const fetchExerciseData = async () => {
+  const init = async () => {
     try {
       const _exercise: ILevelExerciseOutput = (
         await api.get(`/level/${levelId}/exercise/${exerciseId}`)
@@ -75,17 +76,18 @@ const ProfessorUpsertLessonLevelExerciseScreen = ({
   };
 
   useEffect(() => {
-    levelId && exerciseId && fetchExerciseData();
-  }, []);
+    levelId && exerciseId && init();
+  }, [levelId, exerciseId]);
 
   useFocusEffect(
     useCallback(() => {
-      levelId && exerciseId && fetchExerciseData();
+      levelId && exerciseId && init();
     }, [])
   );
 
   const handleAddVideo = async () => {
     try {
+      setIsLoading(true);
       const key = await uploadVideoFromGallery({ uploadToAws: false });
       if (!key) throw new Error("Não foi possível adicionar vídeo");
       setMedia({ uri: key });
@@ -98,12 +100,16 @@ const ProfessorUpsertLessonLevelExerciseScreen = ({
     } catch (error: any) {
       Alert.alert("Erro ao adicionar vídeo", error?.message);
       throw error;
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleSaveExercise = async () => {
     async function createExercise() {
       try {
+        setIsLoading(true);
+
         if (!media) throw Error("Vídeo não selecionado");
         if (!statement) throw Error("Enunciado não criado");
 
@@ -143,10 +149,12 @@ const ProfessorUpsertLessonLevelExerciseScreen = ({
         setMedia({ uri: getMediaUrlFromS3Key(key) });
         setStatement(_exercise.statement);
         setAlternatives(_exercise.Alternatives);
+        setIsLoading(false);
 
         Alert.alert("Exercício criado com sucesso");
         return navigation.goBack();
       } catch (error: any) {
+        setIsLoading(false);
         Alert.alert("Não foi possível criar exercício da aula", error?.message);
       }
     }
@@ -154,6 +162,7 @@ const ProfessorUpsertLessonLevelExerciseScreen = ({
     // TODO: fix update on backend
     async function updateExercise() {
       try {
+        setIsLoading(true);
         // if (!media) throw Error("Vídeo não selecionado");
         // if (!statement) throw Error("Enunciado não criado");
 
@@ -193,10 +202,12 @@ const ProfessorUpsertLessonLevelExerciseScreen = ({
 
         // setStatement(updatedLevel.statement);
         // setAlternatives(updatedLevel.Alternatives);
+        setIsLoading(false);
 
         Alert.alert("Exercício atualizado com sucesso");
         return navigation.goBack();
       } catch (error: any) {
+        setIsLoading(false);
         Alert.alert(
           "Não foi possível atualizar exercício da aula",
           error?.message
@@ -286,19 +297,16 @@ const ProfessorUpsertLessonLevelExerciseScreen = ({
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.topMenu}>
-        {/* TODO: fix "go back" button */}
         <View style={styles.ArrowLeft}>
-          <TouchableOpacity onPress={handleGoBack}>
-            <ArrowLeftIcon
-              height={40}
-              width={40}
-              fillOpacity={0}
-              stroke={"#1B9CFC"}
-            />
-          </TouchableOpacity>
+          <Ionicons
+            name="arrow-back"
+            size={32}
+            color={"#1B9CFC"}
+            onPress={handleGoBack}
+          />
         </View>
         <View style={styles.saveTextArea}>
-          <TouchableOpacity onPress={handleSaveExercise}>
+          <TouchableOpacity onPress={handleSaveExercise} disabled={isLoading}>
             <Text style={[styles.saveTextButton]}>{"salvar"}</Text>
           </TouchableOpacity>
         </View>
@@ -329,8 +337,6 @@ const ProfessorUpsertLessonLevelExerciseScreen = ({
           data={Alternatives}
           renderItem={renderItem}
           style={styles.flatListContainer}
-          // keyExtractor={({ text }) => text}
-          // extraData={statement}
         />
       </KeyboardAvoidingView>
     </SafeAreaView>

@@ -2,13 +2,13 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Alert, Platform, Text, View } from "react-native";
 import styles from "./styles";
 import api from "../../../utils/api";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import { ScrollView } from "react-native-gesture-handler";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "../../../contexts/AuthContext";
 import { IProfessor, IStudent, IUserOutput } from "../../../interfaces";
 import UserImageComponent from "../../../components/UserImage";
-import ArrowLeftIcon from "../../../components/Icons/ArrowLeftIcon";
+import Ionicons from "react-native-vector-icons/Ionicons";
 import TextInputComponent from "../../../components/input";
 import { ROLE } from "../../../enums";
 import ButtonComponent from "../../../components/Button";
@@ -90,12 +90,12 @@ const UserProfileScreen = ({ navigation }: Props) => {
   };
 
   useEffect(() => {
-    getUserData();
+    userContext && getUserData();
   }, [userContext]);
 
   useFocusEffect(
     useCallback(() => {
-      getUserData();
+      userContext && getUserData();
     }, [])
   );
 
@@ -164,7 +164,7 @@ const UserProfileScreen = ({ navigation }: Props) => {
     }
   };
 
-  const handleGoBack = () => navigation.pop();
+  const handleGoBack = () => navigation.goBack();
 
   const handleTogglePicker = () => {
     // TODO: fox scroll to end
@@ -208,16 +208,13 @@ const UserProfileScreen = ({ navigation }: Props) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.topMenu}>
-        {/* TODO: fix "go back" button */}
         <View style={styles.ArrowLeft}>
-          <TouchableOpacity onPress={handleGoBack}>
-            <ArrowLeftIcon
-              height={40}
-              width={40}
-              fillOpacity={0}
-              stroke={"#1B9CFC"}
-            />
-          </TouchableOpacity>
+          <Ionicons
+            name="arrow-back"
+            size={32}
+            color={"#1B9CFC"}
+            onPress={handleGoBack}
+          />
         </View>
         <Text style={styles.panelText}>{"Meu perfil"}</Text>
       </View>

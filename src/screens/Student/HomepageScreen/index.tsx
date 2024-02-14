@@ -81,7 +81,7 @@ const StudentHomepageScreen = ({ navigation, route }: Props) => {
         <MaterialCommunityIcons
           style={styles.topMenuIcon}
           name={"circle-edit-outline"}
-          size={36}
+          size={32}
           color={"#1B9CFC"}
           onPress={handleEditProfile}
         />

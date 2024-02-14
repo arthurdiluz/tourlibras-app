@@ -3,7 +3,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Alert, Keyboard, ListRenderItemInfo, Text, View } from "react-native";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
-import ArrowLeftIcon from "../../../components/Icons/ArrowLeftIcon";
+import { Ionicons } from "@expo/vector-icons";
 import styles from "./styles";
 import TextInputComponent from "../../../components/input";
 import api from "../../../utils/api";
@@ -49,7 +49,7 @@ const ProfessorUpsertLessonLevelScreen = ({ navigation, route }: Props) => {
   useFocusEffect(
     useCallback(() => {
       lessonId && levelId && fetchLevelData();
-    }, [lessonId, levelId, levelValue])
+    }, [])
   );
 
   const handleGoBack = () => {
@@ -221,16 +221,13 @@ const ProfessorUpsertLessonLevelScreen = ({ navigation, route }: Props) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.topMenu}>
-        {/* TODO: fix "go back" button */}
         <View style={styles.ArrowLeft}>
-          <TouchableOpacity onPress={handleGoBack}>
-            <ArrowLeftIcon
-              height={40}
-              width={40}
-              fillOpacity={0}
-              stroke={"#1B9CFC"}
-            />
-          </TouchableOpacity>
+          <Ionicons
+            name="arrow-back"
+            size={32}
+            color={"#1B9CFC"}
+            onPress={handleGoBack}
+          />
         </View>
         <Text style={styles.panelText}>
           {level ? `Nível ${level}` : "novo nível"}
