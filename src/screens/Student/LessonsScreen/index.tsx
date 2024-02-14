@@ -1,7 +1,14 @@
 import { useFocusEffect } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { it } from "date-fns/locale";
 import { useCallback, useEffect, useState } from "react";
-import { Alert, ListRenderItemInfo, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Alert,
+  ListRenderItemInfo,
+  Text,
+  View,
+} from "react-native";
 import {
   FlatList,
   RefreshControl,
@@ -26,7 +33,8 @@ type Props = NativeStackScreenProps<any>;
 const StudentLessonsScreen = ({ navigation }: Props) => {
   const { user } = useAuth();
 
-  const [refreshing, setRefreshing] = useState(false);
+  const [itemLoading, setItemLoading] = useState<number>();
+  const [refreshing, setRefreshing] = useState<boolean>(false);
   const [student, setStudent] = useState<IStudent>();
   const [professor, setProfessor] = useState<IProfessor>();
   const [lessons, setLessons] = useState<ILessonOutput[]>([]);
@@ -91,14 +99,21 @@ const StudentLessonsScreen = ({ navigation }: Props) => {
 
   const handleLesson = async (
     lesson: ILessonOutput,
-    progress?: IStudentLesson
+    studentLesson?: IStudentLesson
   ) => {
+    if (itemLoading) return;
+
     try {
+      setItemLoading(lesson.id);
+
       if (!student) throw new Error("Estudante não encontrado");
 
-      if (!student.Lessons.find((l) => l.id === lesson.id) || !progress) {
+      if (
+        !student.Lessons.find((l) => l.lessonId === lesson.id) ||
+        !studentLesson
+      ) {
         await api.post(`/student/${student.id}/lesson/${lesson.id}`, {
-          currentLevel: progress?.currentLevel || 1,
+          currentLevel: studentLesson?.currentLevel || 1,
           isCompleted: false,
         });
         return navigation.navigate("Lessons");
@@ -106,18 +121,18 @@ const StudentLessonsScreen = ({ navigation }: Props) => {
 
       if (
         !lesson.Levels ||
-        !lesson.Levels.find((l) => l.level === progress?.currentLevel)
+        !lesson.Levels.find((l) => l.level === studentLesson.currentLevel)
       ) {
         return Alert.alert(
           "Nível não existente",
-          progress?.currentLevel
-            ? `O nível ${progress?.currentLevel} deste exercício ainda não foi criado`
+          studentLesson?.currentLevel
+            ? `O nível ${studentLesson?.currentLevel} deste exercício ainda não foi criado`
             : `Esta aula ainda não possui níveis`
         );
       }
 
       const levelId = lesson.Levels.find(
-        (level) => level.level === progress?.currentLevel
+        (level) => level.level === studentLesson?.currentLevel
       )?.id;
 
       if (!levelId) return Alert.alert("Nível não encontrado");
@@ -128,33 +143,43 @@ const StudentLessonsScreen = ({ navigation }: Props) => {
       return navigation.navigate("StudentExercise", {
         student: JSON.stringify(student),
         level: JSON.stringify(level),
-        studentLessonId: progress.id,
+        studentLessonId: studentLesson.id,
       });
     } catch (error: any) {
       return Alert.alert(
         `Não foi possível iniciar aula "${lesson.title}"`,
         error?.message
       );
+    } finally {
+      setItemLoading(undefined);
     }
   };
 
   const renderItem = ({ item, index }: ListRenderItemInfo<ILessonOutput>) => {
-    const progress = student?.Lessons[index] || undefined;
+    const studentLesson = student?.Lessons[index] || undefined;
 
     return (
       <View style={styles.renderItemLessonSection}>
-        <TouchableHighlight style={styles.renderItemLessonImage}>
+        <TouchableHighlight
+          style={styles.renderItemLessonImage}
+          disabled={!!itemLoading}
+        >
           <PhotoUploadImage
             key={index}
             source={
               item?.icon ? { uri: getMediaUrlFromS3Key(item.icon) } : undefined
             }
-            onPress={() => handleLesson(item, progress)}
+            onPress={() => handleLesson(item, studentLesson)}
           />
         </TouchableHighlight>
         <View style={styles.renderItemLessonLevelBubble}>
           <Text style={styles.renderItemLessonLevelBubbleText}>
-            {progress?.currentLevel ?? "Iniciar"}
+            {itemLoading === item.id ? (
+              <ActivityIndicator size="large" color="white" />
+            ) : (
+              student?.Lessons.find((l) => l.lessonId === item.id)
+                ?.currentLevel ?? "Iniciar"
+            )}
           </Text>
         </View>
         <Text style={styles.renderItemLessonText}>{item.title}</Text>

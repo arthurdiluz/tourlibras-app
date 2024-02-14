@@ -187,7 +187,6 @@ const ProfessorUpsertLessonLevelScreen = ({ navigation, route }: Props) => {
   }: ListRenderItemInfo<ILevelExerciseOutput>) => {
     return (
       <CardComponent
-        key={index}
         height={100}
         width={"100%"}
         style={"primary"}

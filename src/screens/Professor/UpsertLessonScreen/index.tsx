@@ -309,7 +309,6 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
   }: ListRenderItemInfo<ILessonLevelOutput>) => {
     return (
       <CardComponent
-        key={index.toString()}
         width={"100%"}
         style={"primary"}
         children={

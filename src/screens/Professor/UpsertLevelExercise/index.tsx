@@ -228,7 +228,7 @@ const ProfessorUpsertLessonLevelExerciseScreen = ({
   }: ListRenderItemInfo<IAlternativeInput>) => {
     return (
       <CardComponent
-        key={index}
+        key={`alternative-${index}-${item.text}-${item.isCorrect.valueOf}`}
         height={225}
         width={"100%"}
         style={"primary"}
