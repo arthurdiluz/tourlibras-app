@@ -8,7 +8,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "../../../contexts/AuthContext";
 import { IProfessor, IStudent, IUserOutput } from "../../../interfaces";
 import UserImageComponent from "../../../components/UserImage";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import { Ionicons } from "@expo/vector-icons";
 import TextInputComponent from "../../../components/input";
 import { ROLE } from "../../../enums";
 import ButtonComponent from "../../../components/Button";

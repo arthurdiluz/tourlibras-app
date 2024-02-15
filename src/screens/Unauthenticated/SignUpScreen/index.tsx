@@ -12,10 +12,9 @@ import styles from "./styles";
 import api from "../../../utils/api";
 import UserCircleIcon from "../../../components/Icons/UserCircleIcon";
 import TextInputComponent from "../../../components/input";
-import IonIcons from "react-native-vector-icons/Ionicons";
+import { Ionicons } from "@expo/vector-icons";
 import ButtonComponent from "../../../components/Button";
 import PickerComponent from "../../../components/PickerComponent";
-import { Ionicons } from "@expo/vector-icons";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -170,7 +169,7 @@ const SignUpScreen = ({ navigation }: Props) => {
                 onPress={handleTogglePasswordVisibility}
                 style={styles.passwordToggle}
               >
-                <IonIcons
+                <Ionicons
                   name={isPasswordHidden ? "eye-off" : "eye"}
                   size={20}
                   color={"#FFF"}

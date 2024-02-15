@@ -10,9 +10,11 @@ import { ptBR } from "date-fns/locale";
 import UserImageComponent from "../../../components/UserImage";
 import { getMediaUrlFromS3Key } from "../../../utils/file";
 import CardComponent from "../../../components/CardComponent";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import AntDesign from "react-native-vector-icons/AntDesign";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import {
+  MaterialCommunityIcons,
+  AntDesign,
+  MaterialIcons,
+} from "@expo/vector-icons";
 import { FlatList } from "react-native-gesture-handler";
 import { useFocusEffect } from "@react-navigation/native";
 
