@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
   medalCardImage: {
     height: "100%",
     width: "100%",
-    borderRadius: 10,
+    borderRadius: 16,
   },
 
   medalCardSection: {

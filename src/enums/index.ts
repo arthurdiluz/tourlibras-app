@@ -16,3 +16,8 @@ export enum PROFESSOR_SORT_BY {
   Students = "Students",
   Lessons = "Lessons",
 }
+
+export enum STUDENT_SORT_BY {
+  Experience = "Experience",
+  Money = "Money",
+}

@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
   },
 
   inputCustomStyle: {
-    borderRadius: 10,
+    borderRadius: 16,
     marginBottom: 20,
   },
 
