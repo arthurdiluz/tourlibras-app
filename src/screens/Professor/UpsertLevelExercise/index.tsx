@@ -1,8 +1,7 @@
-import { useFocusEffect } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { AVPlaybackNativeSource } from "expo-av";
+import React, { useEffect, useState } from "react";
 import Checkbox from "expo-checkbox";
-import { useCallback, useEffect, useState } from "react";
 import {
   Alert,
   Keyboard,
@@ -79,12 +78,6 @@ const ProfessorUpsertLessonLevelExerciseScreen = ({
     levelId && exerciseId && init();
   }, [levelId, exerciseId]);
 
-  useFocusEffect(
-    useCallback(() => {
-      levelId && exerciseId && init();
-    }, [])
-  );
-
   const handleAddVideo = async () => {
     try {
       setIsLoading(true);
@@ -152,8 +145,10 @@ const ProfessorUpsertLessonLevelExerciseScreen = ({
         setIsLoading(false);
 
         Alert.alert("Exercício criado com sucesso");
-        return navigation.goBack();
+        return navigation.navigate("ProfessorUpsertLessonScreen");
       } catch (error: any) {
+        console.error(error);
+
         setIsLoading(false);
         Alert.alert("Não foi possível criar exercício da aula", error?.message);
       }
@@ -228,7 +223,6 @@ const ProfessorUpsertLessonLevelExerciseScreen = ({
   }: ListRenderItemInfo<IAlternativeInput>) => {
     return (
       <CardComponent
-        key={`alternative-${index}-${item.text}-${item.isCorrect.valueOf}`}
         height={225}
         width={"100%"}
         style={"primary"}

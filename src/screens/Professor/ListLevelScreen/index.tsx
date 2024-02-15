@@ -5,7 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Alert, ListRenderItemInfo, Text, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
-import { ILessonOutput } from "../../../interfaces";
+import { ILessonOutput, IUserOutput } from "../../../interfaces";
 import api from "../../../utils/api";
 import { useAuth } from "../../../contexts/AuthContext";
 import PhotoUploadImage from "../../../components/PhotoUploadImage";
@@ -19,11 +19,12 @@ const ProfessorListLevelScreen = ({ navigation }: Props) => {
   const [lessons, setLessons] = useState<Array<ILessonOutput>>([]);
 
   const fetchLesson = async () => {
+    if (!user) return;
     try {
-      if (!user) return;
-
+      const { Professor } = (await api.get(`/user/${user.sub}`))
+        .data as IUserOutput;
       const lessonsData: Array<ILessonOutput> = (
-        await api.get(`/professor/${user.sub}/lesson`)
+        await api.get(`/professor/${Professor?.id}/lesson`)
       ).data;
 
       lessonsData.sort(

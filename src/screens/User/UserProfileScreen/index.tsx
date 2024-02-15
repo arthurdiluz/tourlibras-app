@@ -167,7 +167,7 @@ const UserProfileScreen = ({ navigation }: Props) => {
   const handleGoBack = () => navigation.goBack();
 
   const handleTogglePicker = () => {
-    // TODO: fox scroll to end
+    // TODO: fix scroll to end
     scrollViewRef?.current?.scrollToEnd({ animated: true });
     setPickerVisible(!isPickerVisible);
   };
