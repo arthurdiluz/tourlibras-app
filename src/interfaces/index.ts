@@ -167,7 +167,7 @@ export interface IStudent {
   Professor: IProfessor | null;
   Lessons: IStudentLesson[];
   Medals: any[];
-  Items: any[];
+  Items: IStudentItem[];
 }
 
 export interface IStudentLesson {
@@ -189,11 +189,29 @@ export interface ILessonLevelDoneInput {
 
 export interface ILessonLevelDoneOutput {
   id: number;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date | string;
+  updatedAt: Date | string;
   isCorrectAttempt: boolean;
   studentId: number;
   levelId: number;
   Student: IStudent;
   Level: ILevelExerciseOutput;
+}
+
+export interface IGetItemOutput {
+  id: number;
+  createdAt: Date | string;
+  updatedAt: Date | string;
+  itemId: number;
+  studentId: number;
+  Student: IStudent;
+  Item: IItemOutput;
+}
+
+export interface IStudentItem {
+  id: number;
+  createdAt: Date | string;
+  updatedAt: Date | string;
+  itemId: number;
+  studentId: number;
 }

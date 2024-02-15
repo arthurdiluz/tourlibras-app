@@ -147,8 +147,6 @@ const ProfessorUpsertLessonLevelExerciseScreen = ({
         Alert.alert("Exercício criado com sucesso");
         return navigation.navigate("ProfessorUpsertLessonScreen");
       } catch (error: any) {
-        console.error(error);
-
         setIsLoading(false);
         Alert.alert("Não foi possível criar exercício da aula", error?.message);
       }

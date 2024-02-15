@@ -28,14 +28,12 @@ const CardComponent = ({
     customStyle,
   ];
 
-  return onPress ? (
+  return !!onPress ? (
     <TouchableOpacity onPress={onPress} style={cardStyles}>
       {children}
     </TouchableOpacity>
   ) : (
-    <TouchableOpacity onPress={onPress} style={cardStyles}>
-      {children}
-    </TouchableOpacity>
+    <View style={cardStyles}>{children}</View>
   );
 };
 
