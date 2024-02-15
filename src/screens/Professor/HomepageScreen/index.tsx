@@ -48,15 +48,15 @@ const ProfessorHomepageScreen = ({ navigation }: Props) => {
   };
 
   const handleManageLessons = () => {
-    return navigation.navigate("ProfessorManageLessons");
+    return navigation.navigate("ProfessorLessonsStack");
   };
 
   const handleManageMedals = () => {
-    return navigation.navigate("ProfessorManageMedals");
+    return navigation.navigate("ProfessorMedalsStack");
   };
 
   const handleManageStudents = () => {
-    return navigation.navigate("ProfessorManageStudents");
+    return navigation.navigate("ProfessorStudentsStack");
   };
 
   const handleSignOut = () => {

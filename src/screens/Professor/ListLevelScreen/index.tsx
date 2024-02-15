@@ -134,7 +134,7 @@ const ProfessorListLevelScreen = ({ navigation }: Props) => {
             onPress={handleGoBack}
           />
         </View>
-        <Text style={styles.panelText}>{"Editar aula"}</Text>
+        <Text style={styles.panelText}>{"Aulas"}</Text>
       </View>
       {lessons ? (
         <FlatList

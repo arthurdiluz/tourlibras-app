@@ -52,25 +52,27 @@ export interface IProfessor {
 export interface IMedalInput {
   name: string;
   description: string;
-  media: string;
+  media?: string;
 }
 
 export interface IMedalOutput {
   id: number;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date | string;
+  updatedAt: Date | string;
   name: string;
   description: string;
-  media: string;
+  media?: string;
   professorId: number;
   Professor: IProfessor;
+  Students: IStudent[];
+  Lessons: ILessonOutput[];
 }
 
 export interface IItemInput {
   name: string;
   description: string;
   price: number;
-  media: string;
+  media?: string;
 }
 
 export interface IItemOutput {
@@ -80,7 +82,7 @@ export interface IItemOutput {
   name: string;
   description: string;
   price: number;
-  media: string;
+  media?: string;
   professorId: number;
   Professor: IProfessor;
 }

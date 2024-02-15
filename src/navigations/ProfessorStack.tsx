@@ -28,17 +28,17 @@ const ProfessorStack: React.FC = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="ProfessorManageLessons"
+        name="ProfessorLessonsStack"
         component={ProfessorLessonStack}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="ProfessorManageMedals"
+        name="ProfessorMedalsStack"
         component={ProfessorMedalStack}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="ProfessorManageStudents"
+        name="ProfessorStudentsStack"
         component={ProfessorStudentsScreen}
         options={{ headerShown: false }}
       />
