@@ -24,7 +24,8 @@ const ProfessorUpsertLessonLevelScreen = ({ navigation, route }: Props) => {
   const [earnedXp, setEarnedXp] = useState<number>(0);
   const [earnedMoney, setEarnedMoney] = useState<number>(0);
 
-  const fetchLevelData = async () => {
+  const init = async () => {
+    if (!lessonId || !levelId) return;
     try {
       const _level: ILessonLevelOutput = (
         await api.get(`/lesson/${lessonId}/level/${levelId}`)
@@ -43,12 +44,12 @@ const ProfessorUpsertLessonLevelScreen = ({ navigation, route }: Props) => {
   };
 
   useEffect(() => {
-    lessonId && levelId && fetchLevelData();
+    init();
   }, [lessonId, levelId]);
 
   useFocusEffect(
     useCallback(() => {
-      lessonId && levelId && fetchLevelData();
+      init();
     }, [])
   );
 
@@ -58,6 +59,7 @@ const ProfessorUpsertLessonLevelScreen = ({ navigation, route }: Props) => {
 
   const handleSaveLevel = async () => {
     Keyboard.dismiss();
+
     async function createLevel() {
       try {
         // TODO: add validations
@@ -266,7 +268,9 @@ const ProfessorUpsertLessonLevelScreen = ({ navigation, route }: Props) => {
           <FlatList
             data={levelData?.LessonLevelExercises}
             renderItem={renderItem}
-            keyExtractor={(item) => item?.id?.toString() || ""}
+            keyExtractor={({ id }) =>
+              id?.toString() || new Date().getTime().toString()
+            }
             style={styles.flatListContainer}
           />
         ) : (

@@ -103,6 +103,7 @@ const StudentExerciseScreen: React.FC<Props> = ({ navigation, route }) => {
 
   const submit = async () => {
     setIsLoading(true);
+
     try {
       await api.post(
         `/student-lesson/${studentLessonId}/lesson-level/${level.id}/done`,

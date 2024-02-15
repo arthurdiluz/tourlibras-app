@@ -136,7 +136,7 @@ const ProfessorUpsertLessonLevelExerciseScreen = ({
 
         if (!key) {
           await api.delete(`/level/${levelId}/exercise/${_exercise.id}`);
-          return navigation.goBack();
+          return navigation.popToTop();
         }
 
         setMedia({ uri: getMediaUrlFromS3Key(key) });
