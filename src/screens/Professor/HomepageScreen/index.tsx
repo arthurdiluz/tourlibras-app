@@ -55,6 +55,10 @@ const ProfessorHomepageScreen = ({ navigation }: Props) => {
     return navigation.navigate("ProfessorManageMedals");
   };
 
+  const handleManageStudents = () => {
+    return navigation.navigate("ProfessorManageStudents");
+  };
+
   const handleSignOut = () => {
     return signOut();
   };
@@ -86,6 +90,11 @@ const ProfessorHomepageScreen = ({ navigation }: Props) => {
           title="gerenciar medalhas"
           height={60}
           onPress={handleManageMedals}
+        />
+        <ButtonComponent
+          title="gerenciar alunos"
+          height={60}
+          onPress={handleManageStudents}
         />
       </View>
       <View style={styles.signOutButton}>
