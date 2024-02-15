@@ -1,6 +1,5 @@
 import { useFocusEffect } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { it } from "date-fns/locale";
 import { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -119,11 +118,9 @@ const StudentLessonsScreen = ({ navigation }: Props) => {
 
         setStudent((prevStudent) => {
           if (!studentLesson || !prevStudent) return prevStudent;
-          const updatedLessons = [...prevStudent.Lessons];
-          updatedLessons.push(studentLesson);
           return {
             ...prevStudent,
-            Lessons: updatedLessons,
+            Lessons: [...prevStudent.Lessons, studentLesson],
           };
         });
       }

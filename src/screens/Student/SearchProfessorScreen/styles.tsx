@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   },
 
   inputCustomStyle: {
-    borderRadius: 10,
+    borderRadius: 16,
     marginBottom: 20,
   },
 
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     marginTop: 40,
     borderColor: "#f1f8ff",
     borderWidth: 2,
-    borderRadius: 10,
+    borderRadius: 16,
   },
 
   searchOptions: {
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     borderColor: "#F5F5F4",
     borderWidth: 0.5,
-    borderRadius: 10,
+    borderRadius: 16,
   },
 
   listHeaderComponentButton: {
