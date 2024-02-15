@@ -64,6 +64,7 @@ const StudentStoreScreen = () => {
           if (!prev || !Student?.Items.length) return prev;
           return {
             ...prev,
+            money: prev.money - item.price,
             Items: Student.Items,
           };
         });
