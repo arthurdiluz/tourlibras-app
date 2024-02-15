@@ -106,7 +106,6 @@ const styles = StyleSheet.create({
   cardMiddle: {
     justifyContent: "center",
     gap: 5,
-    width: "50%",
   },
 
   cardMiddleText: {
@@ -118,7 +117,9 @@ const styles = StyleSheet.create({
   cardRight: {
     alignItems: "flex-end",
     justifyContent: "center",
-    marginRight: 8,
+    marginRight: 2,
+    marginLeft: 4,
+    flex: 1,
   },
 
   cardMetricsItemsText: {
