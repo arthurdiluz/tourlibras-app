@@ -84,28 +84,26 @@ const styles = StyleSheet.create({
     marginVertical: 2.5,
     borderBottomColor: "#E2E8F0",
     borderBottomWidth: 1,
-    borderBottomEndRadius: 50,
-    borderBottomStartRadius: 50,
-    paddingHorizontal: 10,
+    borderBottomEndRadius: 75,
+    borderBottomStartRadius: 75,
+    paddingHorizontal: 8,
     alignItems: "center",
   },
 
   cardIndex: {
-    fontSize: 20,
+    fontSize: 16,
     fontFamily: "Roboto",
-    marginRight: 8,
     marginLeft: 4,
   },
 
   cardPhoto: {
-    height: 80,
-    width: 80,
-    marginRight: 8,
+    height: 64,
+    width: 64,
+    marginRight: 2,
   },
 
   cardMiddle: {
-    justifyContent: "center",
-    gap: 5,
+    maxWidth: "60%",
   },
 
   cardMiddleText: {
@@ -115,11 +113,10 @@ const styles = StyleSheet.create({
   },
 
   cardRight: {
+    flex: 1,
     alignItems: "flex-end",
     justifyContent: "center",
-    marginRight: 2,
     marginLeft: 4,
-    flex: 1,
   },
 
   cardMetricsItemsText: {
