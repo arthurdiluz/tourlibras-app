@@ -3,7 +3,7 @@ import { Alert, Image, ListRenderItemInfo, Text, View } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styles from "./styles";
-import { IMedalOutput, IStudent } from "../../../interfaces";
+import { IStudent, IStudentMedal } from "../../../interfaces";
 import api from "../../../utils/api";
 import { formatRelative } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -50,7 +50,7 @@ const StudentHomepageScreen = ({ navigation, route }: Props) => {
     }, [])
   );
 
-  const renderItem = ({ item, index }: ListRenderItemInfo<IMedalOutput>) => {
+  const renderItem = ({ item, index }: ListRenderItemInfo<IStudentMedal>) => {
     return (
       <View
         style={[
@@ -64,12 +64,26 @@ const StudentHomepageScreen = ({ navigation, route }: Props) => {
         ]}
       >
         <View style={styles.medalCardImageSection}>
-          <Image style={styles.medalCardImage} source={{ uri: item.media }} />
+          {!!item?.Medal?.media?.length ? (
+            <Image
+              source={{ uri: getMediaUrlFromS3Key(item.Medal.media) }}
+              height={80}
+              width={80}
+              resizeMode="cover"
+              style={{ borderRadius: 50 }}
+            />
+          ) : (
+            <MaterialCommunityIcons
+              name="medal-outline"
+              color={"#F1C40F"}
+              size={80}
+            />
+          )}
         </View>
         <View style={styles.medalCardSection}>
-          <Text style={styles.medalCardSectionTitle}>{item.name}</Text>
+          <Text style={styles.medalCardSectionTitle}>{item.Medal.name}</Text>
           <Text style={styles.medalCardSectionSubTitle}>
-            {item.description}
+            {item.Medal.description}
           </Text>
         </View>
       </View>
@@ -159,7 +173,7 @@ const StudentHomepageScreen = ({ navigation, route }: Props) => {
           <Text style={styles.sectionTitle}>{"Medalhas"}</Text>
           {student?.Medals?.length ? (
             <FlatList
-              data={student?.Medals || []}
+              data={student.Medals || []}
               renderItem={renderItem}
               style={styles.flatListContainer}
               keyExtractor={({ id }) => id.toString()}
