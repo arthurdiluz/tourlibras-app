@@ -64,6 +64,9 @@ const StudentStack: React.FC = () => {
             <Ionicons name="settings-outline" color={color} size={size} />
           ),
           headerShown: false,
+          tabBarStyle: { backgroundColor: "#1B9CFC" },
+          tabBarActiveTintColor: "white",
+          tabBarInactiveTintColor: "#BFDBFE",
         }}
       />
     </Tab.Navigator>
