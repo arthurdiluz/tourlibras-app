@@ -1,0 +1,133 @@
+import { Platform, StatusBar, StyleSheet } from "react-native";
+
+const styles = StyleSheet.create({
+  container: {
+    width: "100%",
+    height: "100%",
+    flex: 1,
+    alignItems: "center",
+    backgroundColor: "#fff",
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+  },
+
+  topMenu: {
+    height: "8%",
+    width: "90%",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  ArrowLeft: {
+    position: "absolute",
+    left: 0,
+  },
+
+  panelText: {
+    color: "#1B9CFC",
+    textAlign: "center",
+    fontFamily: "Roboto Bold",
+    fontSize: 24,
+    fontWeight: "600",
+  },
+
+  flexContainer: {
+    width: "90%",
+    flex: 1,
+  },
+
+  inputCustomStyle: {
+    borderRadius: 16,
+  },
+
+  flatListContainer: {
+    flex: 1,
+    marginTop: 16,
+    borderColor: "#f1f8ff",
+    borderWidth: 2,
+    borderRadius: 16,
+  },
+
+  listHeaderComponent: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    marginHorizontal: "6%",
+    marginTop: 16,
+  },
+
+  listHeaderComponentButtons: {
+    flexDirection: "row",
+    borderColor: "#F5F5F4",
+    borderWidth: 0.5,
+    borderRadius: 16,
+  },
+
+  listHeaderComponentButton: {
+    paddingVertical: 20,
+    paddingHorizontal: 15,
+  },
+
+  listHeaderComponentActiveButton: {
+    backgroundColor: "#1B9CFC",
+  },
+
+  listHeaderComponentInactiveButton: {
+    backgroundColor: "#F8FAFC",
+  },
+
+  listHeaderComponentButtonText: {
+    fontFamily: "Roboto Bold",
+    fontSize: 16,
+    color: "#A0A0A0",
+  },
+
+  card: {
+    height: 100,
+    width: "100%",
+    gap: 8,
+    flexDirection: "row",
+    marginVertical: 2.5,
+    borderBottomColor: "#E2E8F0",
+    borderBottomWidth: 1,
+    borderBottomEndRadius: 75,
+    borderBottomStartRadius: 75,
+    paddingHorizontal: 8,
+    alignItems: "center",
+  },
+
+  cardIndex: {
+    fontSize: 16,
+    fontFamily: "Roboto",
+    marginLeft: 4,
+  },
+
+  cardPhoto: {
+    height: 64,
+    width: 64,
+    marginRight: 2,
+  },
+
+  cardMiddle: {
+    maxWidth: "60%",
+  },
+
+  cardMiddleText: {
+    fontSize: 16,
+    fontFamily: "Roboto Bold",
+    color: "#A0A0A0",
+  },
+
+  cardRight: {
+    flex: 1,
+    alignItems: "flex-end",
+    justifyContent: "center",
+    marginLeft: 4,
+  },
+
+  cardMetricsItemsText: {
+    fontSize: 16,
+    fontFamily: "Roboto",
+  },
+});
+
+export default styles;
