@@ -103,6 +103,7 @@ const StudentExerciseScreen: React.FC<Props> = ({ navigation, route }) => {
 
   const submit = async () => {
     setIsLoading(true);
+
     try {
       await api.post(
         `/student-lesson/${studentLessonId}/lesson-level/${level.id}/done`,
@@ -171,9 +172,7 @@ const StudentExerciseScreen: React.FC<Props> = ({ navigation, route }) => {
       <View style={styles.exerciseScreen}>
         {step?.index < steps?.length ? (
           <Exercise
-            key={`exercise-${step.index}-${step.isCorrect}-${
-              exercises[step?.index]
-            }-${steps.length}`}
+            key={`${step.index}-${new Date().getTime()}`}
             exercise={exercises[step?.index]}
             handleForwardStep={handleForwardStep}
           />

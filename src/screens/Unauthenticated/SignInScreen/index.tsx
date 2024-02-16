@@ -5,7 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import styles from "./styles";
 import TextInputComponent from "../../../components/input";
 import UserCircleIcon from "../../../components/Icons/UserCircleIcon";
-import IonIcons from "react-native-vector-icons/Ionicons";
+import { Ionicons } from "@expo/vector-icons";
 import ButtonComponent from "../../../components/Button";
 import { useAuth } from "../../../contexts/AuthContext";
 import api from "../../../utils/api";
@@ -81,7 +81,7 @@ const SignInScreen = ({ navigation }: Props) => {
               onPress={handeTogglePasswordVisibility}
               style={styles.passwordToggle}
             >
-              <IonIcons
+              <Ionicons
                 name={isPasswordHidden ? "eye-off" : "eye"}
                 size={20}
                 color={"#FFF"}

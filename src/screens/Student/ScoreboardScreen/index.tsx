@@ -61,8 +61,9 @@ const StudentScoreboardScreen = ({ navigation }: Props) => {
   }, [user, sortBy, search]);
 
   const handleOpenProfile = (student: IStudent) => {
-    // TODO: implement friend profile
-    Alert.alert(`Perfil de ${student?.User.fullName}`);
+    return navigation.navigate("StudentFriendProfile", {
+      student: JSON.stringify(student),
+    });
   };
 
   const listHeaderComponent = () => {
@@ -119,6 +120,7 @@ const StudentScoreboardScreen = ({ navigation }: Props) => {
       <TouchableHighlight
         underlayColor={"#F8FAFC"}
         onPress={() => handleOpenProfile(item)}
+        disabled={user?.sub === item.userId}
       >
         <View style={styles.card} key={index}>
           <Text style={styles.cardIndex}>{index + 1}</Text>
@@ -156,7 +158,7 @@ const StudentScoreboardScreen = ({ navigation }: Props) => {
         <TextInputComponent
           height={50}
           width={"100%"}
-          placeholder={"Pesquise pelo professor"}
+          placeholder={"Pesquise pelo nome do aluno"}
           style={"secondary"}
           customStyle={styles.inputCustomStyle}
           value={search}

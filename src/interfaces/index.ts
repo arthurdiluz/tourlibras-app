@@ -52,25 +52,27 @@ export interface IProfessor {
 export interface IMedalInput {
   name: string;
   description: string;
-  media: string;
+  media?: string;
 }
 
 export interface IMedalOutput {
   id: number;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date | string;
+  updatedAt: Date | string;
   name: string;
   description: string;
-  media: string;
+  media?: string;
   professorId: number;
   Professor: IProfessor;
+  Students: IStudent[];
+  Lessons: ILessonOutput[];
 }
 
 export interface IItemInput {
   name: string;
   description: string;
   price: number;
-  media: string;
+  media?: string;
 }
 
 export interface IItemOutput {
@@ -80,7 +82,7 @@ export interface IItemOutput {
   name: string;
   description: string;
   price: number;
-  media: string;
+  media?: string;
   professorId: number;
   Professor: IProfessor;
 }
@@ -166,8 +168,8 @@ export interface IStudent {
   User: IUserOutput;
   Professor: IProfessor | null;
   Lessons: IStudentLesson[];
-  Medals: any[];
-  Items: any[];
+  Medals: IStudentMedal[];
+  Items: IStudentItem[];
 }
 
 export interface IStudentLesson {
@@ -183,17 +185,45 @@ export interface IStudentLesson {
   DoneLevels: ILessonLevelDoneOutput[];
 }
 
+export interface IStudentMedal {
+  id: number;
+  createdAt: Date | string;
+  updatedAt: Date | string;
+  amount: number;
+  medalId: number;
+  studentId: number;
+  Medal: IMedalOutput;
+}
+
 export interface ILessonLevelDoneInput {
   Answers: boolean[];
 }
 
 export interface ILessonLevelDoneOutput {
   id: number;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date | string;
+  updatedAt: Date | string;
   isCorrectAttempt: boolean;
   studentId: number;
   levelId: number;
   Student: IStudent;
   Level: ILevelExerciseOutput;
+}
+
+export interface IGetItemOutput {
+  id: number;
+  createdAt: Date | string;
+  updatedAt: Date | string;
+  itemId: number;
+  studentId: number;
+  Student: IStudent;
+  Item: IItemOutput;
+}
+
+export interface IStudentItem {
+  id: number;
+  createdAt: Date | string;
+  updatedAt: Date | string;
+  itemId: number;
+  studentId: number;
 }

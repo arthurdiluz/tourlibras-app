@@ -136,7 +136,7 @@ const ProfessorUpsertLessonLevelExerciseScreen = ({
 
         if (!key) {
           await api.delete(`/level/${levelId}/exercise/${_exercise.id}`);
-          return navigation.goBack();
+          return navigation.popToTop();
         }
 
         setMedia({ uri: getMediaUrlFromS3Key(key) });
@@ -147,8 +147,6 @@ const ProfessorUpsertLessonLevelExerciseScreen = ({
         Alert.alert("Exercício criado com sucesso");
         return navigation.navigate("ProfessorUpsertLessonScreen");
       } catch (error: any) {
-        console.error(error);
-
         setIsLoading(false);
         Alert.alert("Não foi possível criar exercício da aula", error?.message);
       }

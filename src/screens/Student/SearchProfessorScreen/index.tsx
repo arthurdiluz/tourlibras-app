@@ -24,7 +24,7 @@ import PickerComponent from "../../../components/PickerComponent";
 import styles from "./styles";
 import { getMediaUrlFromS3Key } from "../../../utils/file";
 import UserImageComponent from "../../../components/UserImage";
-import Feather from "react-native-vector-icons/Feather";
+import { Feather } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 
 type Props = NativeStackScreenProps<any>;

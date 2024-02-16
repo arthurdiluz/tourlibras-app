@@ -11,7 +11,7 @@ const Stack = createStackNavigator<any>();
 const ProfessorLessonStack: React.FC = () => {
   return (
     <Stack.Navigator
-      id="ProfessorLessonStack"
+      id="ProfessorLessonsStack"
       initialRouteName="ProfessorLessonHomepageScreen"
     >
       <Stack.Screen

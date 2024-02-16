@@ -1,54 +1,28 @@
-import { useCallback, useEffect, useState } from "react";
-import { Alert, Image, ListRenderItemInfo, Text, View } from "react-native";
+import React from "react";
+import { Image, Text, View, ListRenderItemInfo } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { SafeAreaView } from "react-native-safe-area-context";
-import styles from "./styles";
-import { IStudent, IStudentMedal } from "../../../interfaces";
-import api from "../../../utils/api";
 import { formatRelative } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import UserImageComponent from "../../../components/UserImage";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { IStudent, IStudentMedal } from "../../../interfaces";
 import { getMediaUrlFromS3Key } from "../../../utils/file";
+import UserImageComponent from "../../../components/UserImage";
 import CardComponent from "../../../components/CardComponent";
 import {
   MaterialCommunityIcons,
   AntDesign,
   MaterialIcons,
+  Ionicons,
 } from "@expo/vector-icons";
-import { FlatList } from "react-native-gesture-handler";
-import { useFocusEffect } from "@react-navigation/native";
+import styles from "./styles";
 
 type Props = NativeStackScreenProps<any>;
 
-const StudentHomepageScreen = ({ navigation, route }: Props) => {
-  const studentId = route.params?.studentId;
+const StudentFriendProfileScreen = ({ navigation, route }: Props) => {
+  const student: IStudent = JSON.parse(route.params?.student);
 
-  const [student, setStudent] = useState<IStudent>();
-
-  const handleEditProfile = () => navigation.navigate("StudentProfile");
-
-  const fetchStudent = async () => {
-    try {
-      const _student = (await api.get(`/student/${studentId}`))
-        .data as IStudent;
-      setStudent(_student);
-    } catch (error: any) {
-      return Alert.alert(
-        "Não foi possível obter dados do aluno",
-        error?.message
-      );
-    }
-  };
-
-  useEffect(() => {
-    studentId && fetchStudent();
-  }, [studentId]);
-
-  useFocusEffect(
-    useCallback(() => {
-      studentId && fetchStudent();
-    }, [])
-  );
+  const handleGoBack = () => navigation.goBack();
 
   const renderItem = ({ item, index }: ListRenderItemInfo<IStudentMedal>) => {
     return (
@@ -93,14 +67,16 @@ const StudentHomepageScreen = ({ navigation, route }: Props) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.topMenu}>
-        <Text style={styles.topMenuText}>{"Perfil"}</Text>
-        <MaterialCommunityIcons
-          style={styles.topMenuIcon}
-          name={"circle-edit-outline"}
+        <Ionicons
+          name="arrow-back"
           size={32}
           color={"#1B9CFC"}
-          onPress={handleEditProfile}
+          onPress={handleGoBack}
+          style={{ position: "absolute", left: 0 }}
         />
+        <Text style={styles.topMenuText}>{`Perfil de ${
+          student.User.fullName.split(" ")[0]
+        }`}</Text>
       </View>
       <View style={styles.main}>
         <View style={styles.userSection}>
@@ -191,4 +167,4 @@ const StudentHomepageScreen = ({ navigation, route }: Props) => {
   );
 };
 
-export default StudentHomepageScreen;
+export default StudentFriendProfileScreen;

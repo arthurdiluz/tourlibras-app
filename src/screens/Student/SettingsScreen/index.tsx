@@ -13,7 +13,7 @@ import { getMediaUrlFromS3Key } from "../../../utils/file";
 type Props = NativeStackScreenProps<any>;
 
 const StudentSettingsScreen = ({ navigation }: Props) => {
-  const { user: auth, token, signOut } = useAuth();
+  const { user: auth, signOut } = useAuth();
 
   const [user, setUser] = useState<IUserOutput>();
 
@@ -32,8 +32,7 @@ const StudentSettingsScreen = ({ navigation }: Props) => {
     auth && init();
   }, [auth]);
 
-  // TODO: add view professor profile
-  const handleViewProfessor = () => {};
+  const handleViewProfessor = () => navigation.navigate("StudentProfessor");
 
   const logOut = () => signOut();
 

@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   default: {
-    borderRadius: 50,
+    borderRadius: 48,
     justifyContent: "center",
     shadowColor: "#000",
     shadowOpacity: 0.1,
@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     color: "#FFF",
     textAlign: "center",
     fontFamily: "Roboto Bold",
-    fontSize: 20,
+    fontSize: 18,
     textTransform: "uppercase",
   },
 

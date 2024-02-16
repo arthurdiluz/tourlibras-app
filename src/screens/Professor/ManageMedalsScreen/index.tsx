@@ -39,13 +39,9 @@ const ProfessorManageMedalsScreen = ({ navigation }: Props) => {
     }, [])
   );
 
-  const handleCreateLesson = () => {};
-
-  const handleManageLesson = () => {};
-
-  const handleGoBack = () => {
-    return navigation.goBack();
-  };
+  const handleGoBack = () => navigation.goBack();
+  const handleCreateMedal = () => navigation.navigate("ProfessorUpsertMedal");
+  const handleManageMedal = () => navigation.navigate("ProfessorListMedal");
 
   return (
     <SafeAreaView style={styles.container}>
@@ -60,10 +56,10 @@ const ProfessorManageMedalsScreen = ({ navigation }: Props) => {
         />
       </View>
       <View style={styles.menuButtons}>
-        <ButtonComponent title="criar medalha" onPress={handleCreateLesson} />
+        <ButtonComponent title="criar medalha" onPress={handleCreateMedal} />
         <ButtonComponent
-          title="editar/remover medalha"
-          onPress={handleManageLesson}
+          title="visualizar/gerenciar medalhas"
+          onPress={handleManageMedal}
         />
       </View>
       <View style={styles.goBackButton}>
