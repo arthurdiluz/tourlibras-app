@@ -10,6 +10,7 @@ import UserImageComponent from "../../../components/UserImage";
 import ButtonComponent from "../../../components/Button";
 import { getMediaUrlFromS3Key } from "../../../utils/file";
 import { useFocusEffect } from "@react-navigation/native";
+import { getErrorMessage } from "../../../utils/error";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -25,10 +26,10 @@ const ProfessorHomepageScreen = ({ navigation }: Props) => {
       const { data } = await api.get(`/professor/${Professor?.id}`);
 
       setProfessor(data as IProfessor);
-    } catch (error: any) {
+    } catch (error) {
       return Alert.alert(
         "Não foi possível obter dados do professor",
-        error?.message
+        getErrorMessage(error)
       );
     }
   };

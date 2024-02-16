@@ -11,6 +11,7 @@ import { useAuth } from "../../../contexts/AuthContext";
 import PhotoUploadImage from "../../../components/PhotoUploadImage";
 import { getMediaUrlFromS3Key } from "../../../utils/file";
 import { useFocusEffect } from "@react-navigation/native";
+import { getErrorMessage } from "../../../utils/error";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -33,8 +34,11 @@ const ProfessorListLevelScreen = ({ navigation }: Props) => {
       );
 
       setLessons(lessonsData);
-    } catch (error: any) {
-      return Alert.alert("Não foi possível obter as aulas", error?.message);
+    } catch (error) {
+      return Alert.alert(
+        "Não foi possível obter as aulas",
+        getErrorMessage(error)
+      );
     }
   };
 
@@ -81,8 +85,11 @@ const ProfessorListLevelScreen = ({ navigation }: Props) => {
                       setLessons((prevLessons) =>
                         prevLessons.filter((l) => l.id !== lesson.id)
                       );
-                    } catch (error: any) {
-                      Alert.alert("Erro ao apagar aula", error?.message);
+                    } catch (error) {
+                      return Alert.alert(
+                        "Erro ao apagar aula",
+                        getErrorMessage(error)
+                      );
                     }
                   },
                 },

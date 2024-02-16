@@ -31,6 +31,7 @@ import { uploadVideoFromGallery } from "../../../services/mediaUpload";
 import api from "../../../utils/api";
 import { getMediaUrlFromS3Key, uploadMedia } from "../../../utils/file";
 import styles from "./styles";
+import { getErrorMessage } from "../../../utils/error";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -66,10 +67,10 @@ const ProfessorUpsertLessonLevelExerciseScreen = ({
       setMedia({ uri: getMediaUrlFromS3Key(_exercise.media) });
       setStatement(_exercise.statement);
       setAlternatives(_exercise.Alternatives);
-    } catch (error: any) {
+    } catch (error) {
       return Alert.alert(
         "Não foi possível obter dados do exercício",
-        error?.message
+        getErrorMessage(error)
       );
     }
   };
@@ -90,8 +91,8 @@ const ProfessorUpsertLessonLevelExerciseScreen = ({
         levelId,
         exerciseId,
       });
-    } catch (error: any) {
-      Alert.alert("Erro ao adicionar vídeo", error?.message);
+    } catch (error) {
+      Alert.alert("Erro ao adicionar vídeo", getErrorMessage(error));
       throw error;
     } finally {
       setIsLoading(false);
@@ -146,9 +147,12 @@ const ProfessorUpsertLessonLevelExerciseScreen = ({
 
         Alert.alert("Exercício criado com sucesso");
         return navigation.navigate("ProfessorUpsertLessonScreen");
-      } catch (error: any) {
+      } catch (error) {
         setIsLoading(false);
-        Alert.alert("Não foi possível criar exercício da aula", error?.message);
+        return Alert.alert(
+          "Não foi possível criar exercício da aula",
+          getErrorMessage(error)
+        );
       }
     }
 
@@ -199,11 +203,11 @@ const ProfessorUpsertLessonLevelExerciseScreen = ({
 
         Alert.alert("Exercício atualizado com sucesso");
         return navigation.goBack();
-      } catch (error: any) {
+      } catch (error) {
         setIsLoading(false);
         Alert.alert(
-          "Não foi possível atualizar exercício da aula",
-          error?.message
+          "Erro ao atualizar exercício da aula",
+          getErrorMessage(error)
         );
       }
     }

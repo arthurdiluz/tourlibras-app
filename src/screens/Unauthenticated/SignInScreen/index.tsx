@@ -9,6 +9,7 @@ import { Ionicons } from "@expo/vector-icons";
 import ButtonComponent from "../../../components/Button";
 import { useAuth } from "../../../contexts/AuthContext";
 import api from "../../../utils/api";
+import { getErrorMessage } from "../../../utils/error";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -41,8 +42,8 @@ const SignInScreen = ({ navigation }: Props) => {
       const accessToken = data?.accessToken as string;
 
       return signIn(accessToken);
-    } catch (error: any) {
-      Alert.alert("Error", error?.message);
+    } catch (error) {
+      return Alert.alert("Erro ao entrar", getErrorMessage(error));
     }
   };
 

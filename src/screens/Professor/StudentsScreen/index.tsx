@@ -18,6 +18,7 @@ import UserImageComponent from "../../../components/UserImage";
 import { IProfessor, IStudent, IUserOutput } from "../../../interfaces";
 import { STUDENT_SORT_BY } from "../../../enums";
 import styles from "./styles";
+import { getErrorMessage } from "../../../utils/error";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -56,9 +57,8 @@ const ProfessorStudentsScreen = ({ navigation }: Props) => {
       setStudents(_students);
       setProfessor(_professor);
       setLoading(false);
-    } catch (error: any) {
-      setLoading(false);
-      return Alert.alert("Erro ao buscar estudantes", error?.message);
+    } catch (error) {
+      return Alert.alert("Erro ao buscar estudantes", getErrorMessage(error));
     }
   };
 
@@ -75,8 +75,8 @@ const ProfessorStudentsScreen = ({ navigation }: Props) => {
       try {
         await api.delete(`/professor/${professor.id}/student/${student.id}`);
         setStudents((prev) => prev.filter((s) => s.id !== student.id));
-      } catch (error: any) {
-        Alert.alert("Erro ao sair da turma", error?.message);
+      } catch (error) {
+        return Alert.alert("Erro ao sair da turma", getErrorMessage(error));
       }
     };
 

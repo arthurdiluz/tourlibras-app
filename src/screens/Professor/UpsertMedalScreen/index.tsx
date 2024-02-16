@@ -21,6 +21,7 @@ import TextInputComponent from "../../../components/input";
 import PhotoUploadImage from "../../../components/PhotoUploadImage";
 import { Ionicons } from "@expo/vector-icons";
 import styles from "./styles";
+import { getErrorMessage } from "../../../utils/error";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -54,8 +55,11 @@ const ProfessorUpsertMedalScreen = ({ navigation, route }: Props) => {
       }
 
       setProfessor(_professor);
-    } catch (error: any) {
-      return Alert.alert("Erro ao buscar dados", error?.message);
+    } catch (error) {
+      return Alert.alert(
+        "Erro ao buscar dados da medalha",
+        getErrorMessage(error)
+      );
     }
   };
 
@@ -113,8 +117,8 @@ const ProfessorUpsertMedalScreen = ({ navigation, route }: Props) => {
           },
         ]
       );
-    } catch (error: any) {
-      Alert.alert("Não foi possível enviar imagem", error?.message);
+    } catch (error) {
+      Alert.alert("Não foi possível enviar imagem", getErrorMessage(error));
     }
   };
 
@@ -149,8 +153,11 @@ const ProfessorUpsertMedalScreen = ({ navigation, route }: Props) => {
         setDescription(medal.description);
 
         return navigation.navigate("ProfessorListMedal");
-      } catch (error: any) {
-        return Alert.alert("Não foi possível criar aula", error?.message);
+      } catch (error) {
+        return Alert.alert(
+          "Não foi possível criar aula",
+          getErrorMessage(error)
+        );
       }
     }
 
@@ -176,8 +183,11 @@ const ProfessorUpsertMedalScreen = ({ navigation, route }: Props) => {
 
         setName(medal.name);
         setDescription(medal.description);
-      } catch (error: any) {
-        Alert.alert("Não foi possível criar aula", error?.message);
+      } catch (error) {
+        return Alert.alert(
+          "Não foi possível criar aula",
+          getErrorMessage(error)
+        );
       } finally {
         return navigation.pop(2);
       }

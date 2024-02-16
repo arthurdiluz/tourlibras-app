@@ -11,6 +11,7 @@ import { ILessonLevelOutput, ILevelExerciseOutput } from "../../../interfaces";
 import ButtonComponent from "../../../components/Button";
 import CardComponent from "../../../components/CardComponent";
 import { useFocusEffect } from "@react-navigation/native";
+import { getErrorMessage } from "../../../utils/error";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -35,10 +36,10 @@ const ProfessorUpsertLessonLevelScreen = ({ navigation, route }: Props) => {
       setLevel(_level.level ?? 0);
       setEarnedXp(_level.earnedXp ?? 0);
       setEarnedMoney(_level.earnedMoney ?? 0);
-    } catch (error: any) {
+    } catch (error) {
       return Alert.alert(
-        "Não foi possível obter dados do professor",
-        error?.message
+        "Erro ao obter dados do nível",
+        getErrorMessage(error)
       );
     }
   };
@@ -77,8 +78,11 @@ const ProfessorUpsertLessonLevelScreen = ({ navigation, route }: Props) => {
           levelId: _level.id,
           levelValue: _level.level,
         });
-      } catch (error: any) {
-        Alert.alert("Não foi possível criar nível da aula", error?.message);
+      } catch (error) {
+        return Alert.alert(
+          "Não foi possível criar nível da aula",
+          getErrorMessage(error)
+        );
       }
     }
 
@@ -99,8 +103,11 @@ const ProfessorUpsertLessonLevelScreen = ({ navigation, route }: Props) => {
           levelId,
           levelValue,
         });
-      } catch (error: any) {
-        Alert.alert("Não foi possível atualizar nível da aula", error?.message);
+      } catch (error) {
+        return Alert.alert(
+          "Não foi possível atualizar nível da aula",
+          getErrorMessage(error)
+        );
       }
     }
 
@@ -161,8 +168,8 @@ const ProfessorUpsertLessonLevelScreen = ({ navigation, route }: Props) => {
                   };
                 }
               );
-            } catch (error: any) {
-              Alert.alert("Erro ao apagar aula", error?.message);
+            } catch (error) {
+              return Alert.alert("Erro ao apagar aula", getErrorMessage(error));
             }
           },
         },

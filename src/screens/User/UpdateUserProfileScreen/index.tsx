@@ -10,6 +10,7 @@ import { useAuth } from "../../../contexts/AuthContext";
 import api from "../../../utils/api";
 import { IUserOutput } from "../../../interfaces";
 import { useFocusEffect } from "@react-navigation/native";
+import { getErrorMessage } from "../../../utils/error";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -31,8 +32,11 @@ const UpdateUserProfileScreen = ({ navigation }: Props) => {
 
       setNewEmail(data.email);
       setUser(data);
-    } catch (error: any) {
-      return Alert.alert("Could not load user data", error?.message);
+    } catch (error) {
+      return Alert.alert(
+        "Erro ao carregar os dados do usuário",
+        getErrorMessage(error)
+      );
     }
   };
 
@@ -80,10 +84,10 @@ const UpdateUserProfileScreen = ({ navigation }: Props) => {
                   }
                   try {
                     return await api.delete(`/user/${user?.id}`);
-                  } catch (error: any) {
+                  } catch (error) {
                     return Alert.alert(
-                      "Could not delete your account",
-                      error?.message
+                      "Erro ao deletar conta",
+                      getErrorMessage(error)
                     );
                   }
                 }
@@ -92,8 +96,8 @@ const UpdateUserProfileScreen = ({ navigation }: Props) => {
           },
         ]
       );
-    } catch (error: any) {
-      return Alert.alert("Could not delete your account", error?.message);
+    } catch (error) {
+      return Alert.alert("Erro ao deletar sua conta", getErrorMessage(error));
     }
   };
 
@@ -114,8 +118,11 @@ const UpdateUserProfileScreen = ({ navigation }: Props) => {
       Object.keys(data).length && (await api.patch(`/user/${user?.id}`, data));
 
       return handleGoBack();
-    } catch (error: any) {
-      return Alert.alert("Could not update data", error?.message);
+    } catch (error) {
+      return Alert.alert(
+        "Erro ao atualizar seus dados",
+        getErrorMessage(error)
+      );
     }
   };
 

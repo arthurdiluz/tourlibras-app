@@ -9,6 +9,7 @@ import { IUserOutput } from "../../../interfaces";
 import UserImageComponent from "../../../components/UserImage";
 import ButtonComponent from "../../../components/Button";
 import { getMediaUrlFromS3Key } from "../../../utils/file";
+import { getErrorMessage } from "../../../utils/error";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -23,8 +24,11 @@ const StudentSettingsScreen = ({ navigation }: Props) => {
     try {
       const _user = (await api.get(`/user/${auth?.sub}`)).data as IUserOutput;
       setUser(_user);
-    } catch (error: any) {
-      return Alert.alert("Não foi possível carregar os dados", error?.message);
+    } catch (error) {
+      return Alert.alert(
+        "Erro ao carregar dados do usuário",
+        getErrorMessage(error)
+      );
     }
   };
 

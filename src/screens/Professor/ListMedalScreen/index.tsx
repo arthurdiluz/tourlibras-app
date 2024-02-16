@@ -10,6 +10,7 @@ import { getMediaUrlFromS3Key } from "../../../utils/file";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
+import { getErrorMessage } from "../../../utils/error";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -28,8 +29,11 @@ const ProfessorListMedalScreen = ({ navigation }: Props) => {
       ).data as IMedalOutput[];
 
       setMedals(_medals);
-    } catch (error: any) {
-      return Alert.alert("Não foi possível obter as aulas", error?.message);
+    } catch (error) {
+      return Alert.alert(
+        "Não foi possível obter as aulas",
+        getErrorMessage(error)
+      );
     }
   };
 
@@ -71,8 +75,11 @@ const ProfessorListMedalScreen = ({ navigation }: Props) => {
                         `/professor/${medal.professorId}/medal/${medal.id}`
                       );
                       setMedals((p) => p.filter((m) => m.id !== medal.id));
-                    } catch (error: any) {
-                      Alert.alert("Erro ao apagar medalha", error?.message);
+                    } catch (error) {
+                      Alert.alert(
+                        "Erro ao apagar medalha",
+                        getErrorMessage(error)
+                      );
                     }
                   },
                 },

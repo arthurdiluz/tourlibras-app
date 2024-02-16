@@ -31,6 +31,7 @@ import {
 } from "../../../services/mediaUpload";
 import { getMediaUrlFromS3Key, uploadMedia } from "../../../utils/file";
 import { useFocusEffect } from "@react-navigation/native";
+import { getErrorMessage } from "../../../utils/error";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -61,10 +62,10 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
 
       setProfessor(professorData);
       setMedals(professorData.Medals);
-    } catch (error: any) {
+    } catch (error) {
       return Alert.alert(
         "Não foi possível obter dados do professor",
-        error?.message
+        getErrorMessage(error)
       );
     }
   };
@@ -78,8 +79,11 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
       ).data;
 
       setMedals(_medals);
-    } catch (error: any) {
-      return Alert.alert("Não foi possível obter medalhas", error?.message);
+    } catch (error) {
+      return Alert.alert(
+        "Não foi possível obter medalhas",
+        getErrorMessage(error)
+      );
     }
   };
 
@@ -97,8 +101,11 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
       setTitle(_lesson.title);
       setSelectedMedal(_lesson.Medal);
       setLevels(_lesson.Levels);
-    } catch (error: any) {
-      return Alert.alert("Não foi possível obter medalhas", error?.message);
+    } catch (error) {
+      return Alert.alert(
+        "Não foi possível obter medalhas",
+        getErrorMessage(error)
+      );
     }
   };
 
@@ -171,8 +178,11 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
         return navigation.navigate("ProfessorUpsertLessonScreen", {
           lessonId: _lesson.id,
         });
-      } catch (error: any) {
-        Alert.alert("Não foi possível criar aula", error?.message);
+      } catch (error) {
+        return Alert.alert(
+          "Não foi possível criar aula",
+          getErrorMessage(error)
+        );
       }
     }
 
@@ -199,8 +209,11 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
         }
 
         setLesson(updatedLesson);
-      } catch (error: any) {
-        Alert.alert("Não foi possível criar aula", error?.message);
+      } catch (error) {
+        return Alert.alert(
+          "Não foi possível criar aula",
+          getErrorMessage(error)
+        );
       } finally {
         return navigation.pop(2);
       }
@@ -271,8 +284,11 @@ const ProfessorUpsertLessonScreen = ({ navigation, route }: Props) => {
           },
         ]
       );
-    } catch (error: any) {
-      Alert.alert("Não foi possível enviar imagem", error?.message);
+    } catch (error) {
+      return Alert.alert(
+        "Não foi possível enviar imagem",
+        getErrorMessage(error)
+      );
     }
   };
 

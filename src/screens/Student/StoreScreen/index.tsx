@@ -16,6 +16,7 @@ import { FlatList } from "react-native-gesture-handler";
 import CardComponent from "../../../components/CardComponent";
 import ButtonComponent from "../../../components/Button";
 import { Ionicons } from "@expo/vector-icons";
+import { getErrorMessage } from "../../../utils/error";
 
 const StudentStoreScreen = () => {
   const { user } = useAuth();
@@ -37,8 +38,11 @@ const StudentStoreScreen = () => {
 
       setStudent(_student);
       setItems(_items);
-    } catch (error: any) {
-      return Alert.alert("Não foi possível carregar os dados", error?.message);
+    } catch (error) {
+      return Alert.alert(
+        "Erro ao carregar os dados do usuário",
+        getErrorMessage(error)
+      );
     }
   };
 
@@ -68,19 +72,11 @@ const StudentStoreScreen = () => {
             Items: Student.Items,
           };
         });
-      } catch (error: any) {
-        if (error.response) {
-          const { data } = error.response;
-          return Alert.alert(
-            `Não foi possível obter item "${item.name}"`,
-            data.message || "Erro desconhecido"
-          );
-        } else {
-          return Alert.alert(
-            `Não foi possível obter item "${item.name}"`,
-            error.message || "Erro desconhecido"
-          );
-        }
+      } catch (error) {
+        return Alert.alert(
+          `Não foi possível obter item "${item.name}"`,
+          getErrorMessage(error)
+        );
       }
     };
 

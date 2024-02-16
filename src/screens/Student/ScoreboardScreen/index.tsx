@@ -17,6 +17,7 @@ import UserImageComponent from "../../../components/UserImage";
 import { getMediaUrlFromS3Key } from "../../../utils/file";
 import TextInputComponent from "../../../components/input";
 import { useAuth } from "../../../contexts/AuthContext";
+import { getErrorMessage } from "../../../utils/error";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -50,9 +51,8 @@ const StudentScoreboardScreen = ({ navigation }: Props) => {
 
       setStudents(_students);
       setLoading(false);
-    } catch (error: any) {
-      setLoading(false);
-      return Alert.alert("Erro ao buscar estudantes", error?.message);
+    } catch (error) {
+      return Alert.alert("Erro ao buscar estudantes", getErrorMessage(error));
     }
   };
 

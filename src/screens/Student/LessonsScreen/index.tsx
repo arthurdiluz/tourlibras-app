@@ -24,6 +24,7 @@ import {
   IStudentLesson,
 } from "../../../interfaces";
 import api from "../../../utils/api";
+import { getErrorMessage } from "../../../utils/error";
 import { getMediaUrlFromS3Key } from "../../../utils/file";
 import styles from "./styles";
 
@@ -50,9 +51,11 @@ const StudentLessonsScreen = ({ navigation }: Props) => {
 
       setStudent(_student);
       setProfessor(_professor);
-    } catch (error: any) {
-      Alert.alert("Não foi possível obter dados do usuário", error?.message);
-      return navigation.goBack();
+    } catch (error) {
+      return Alert.alert(
+        "Não foi possível obter dados do usuário",
+        getErrorMessage(error)
+      );
     }
   };
 
@@ -71,9 +74,11 @@ const StudentLessonsScreen = ({ navigation }: Props) => {
       );
 
       setLessons(filteredLessons);
-    } catch (error: any) {
-      Alert.alert("Não foi possível obter aulas", error?.message);
-      return navigation.goBack();
+    } catch (error) {
+      return Alert.alert(
+        "Não foi possível obter aulas",
+        getErrorMessage(error)
+      );
     } finally {
       setRefreshing(false);
     }
@@ -151,10 +156,10 @@ const StudentLessonsScreen = ({ navigation }: Props) => {
         level: JSON.stringify(level),
         studentLessonId: studentLesson?.id,
       });
-    } catch (error: any) {
+    } catch (error) {
       return Alert.alert(
         `Não foi possível iniciar aula "${lesson.title}"`,
-        error?.message
+        getErrorMessage(error)
       );
     } finally {
       setItemLoading(undefined);

@@ -10,6 +10,7 @@ import UserImageComponent from "../../../components/UserImage";
 import ButtonComponent from "../../../components/Button";
 import { getMediaUrlFromS3Key } from "../../../utils/file";
 import { useFocusEffect } from "@react-navigation/native";
+import { getErrorMessage } from "../../../utils/error";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -24,8 +25,11 @@ const ProfessorManageMedalsScreen = ({ navigation }: Props) => {
       const { profilePhoto } = data as IUserOutput;
 
       setProfilePicture(profilePhoto || null);
-    } catch (error: any) {
-      return Alert.alert("Could not load professor data", error?.message);
+    } catch (error) {
+      return Alert.alert(
+        "Could not load professor data",
+        getErrorMessage(error)
+      );
     }
   };
 

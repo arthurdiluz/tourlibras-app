@@ -13,6 +13,7 @@ import ButtonComponent from "../../../components/Button";
 import api from "../../../utils/api";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { ParamListBase, RouteProp } from "@react-navigation/native";
+import { getErrorMessage } from "../../../utils/error";
 
 type Props = {
   navigation: StackNavigationProp<ParamListBase, string>;
@@ -109,12 +110,12 @@ const StudentExerciseScreen: React.FC<Props> = ({ navigation, route }) => {
         `/student-lesson/${studentLessonId}/lesson-level/${level.id}/done`,
         form
       );
-      return navigation.popToTop();
-    } catch (error: any) {
-      Alert.alert("Não foi possível avaliar exercício", error?.message);
-      return setIsLoading(false);
-    } finally {
+
       setIsLoading(false);
+      return navigation.popToTop();
+    } catch (error) {
+      Alert.alert("Não foi possível avaliar exercício", getErrorMessage(error));
+      return setIsLoading(false);
     }
   };
 
