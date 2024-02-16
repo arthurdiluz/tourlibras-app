@@ -26,6 +26,7 @@ import { getMediaUrlFromS3Key } from "../../../utils/file";
 import UserImageComponent from "../../../components/UserImage";
 import { Feather } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
+import { getErrorMessage } from "../../../utils/error";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -80,8 +81,11 @@ const StudentSearchProfessorScreen = ({ navigation, route }: Props) => {
             try {
               await api.post(`/student/${studentId}/professor/${professor.id}`);
               return navigation.navigate("StudentHomepage", { studentId });
-            } catch (error: any) {
-              Alert.alert("Não foi possível entrar na turma", error?.message);
+            } catch (error) {
+              return Alert.alert(
+                "Não foi possível entrar na turma",
+                getErrorMessage(error)
+              );
             }
           },
         },
@@ -94,8 +98,11 @@ const StudentSearchProfessorScreen = ({ navigation, route }: Props) => {
       const _student = (await api.get(`/student/${studentId}`))
         .data as IStudent;
       setStudent(_student);
-    } catch (error: any) {
-      return Alert.alert("Erro ao buscar dados", error?.message);
+    } catch (error) {
+      return Alert.alert(
+        "Erro ao buscar dados do aluno",
+        getErrorMessage(error)
+      );
     }
   };
 

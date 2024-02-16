@@ -17,6 +17,7 @@ import {
 } from "@expo/vector-icons";
 import { FlatList } from "react-native-gesture-handler";
 import { useFocusEffect } from "@react-navigation/native";
+import { getErrorMessage } from "../../../utils/error";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -32,10 +33,10 @@ const StudentHomepageScreen = ({ navigation, route }: Props) => {
       const _student = (await api.get(`/student/${studentId}`))
         .data as IStudent;
       setStudent(_student);
-    } catch (error: any) {
+    } catch (error) {
       return Alert.alert(
         "Não foi possível obter dados do aluno",
-        error?.message
+        getErrorMessage(error)
       );
     }
   };

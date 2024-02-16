@@ -15,6 +15,7 @@ import TextInputComponent from "../../../components/input";
 import { Ionicons } from "@expo/vector-icons";
 import ButtonComponent from "../../../components/Button";
 import PickerComponent from "../../../components/PickerComponent";
+import { getErrorMessage } from "../../../utils/error";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -83,8 +84,11 @@ const SignUpScreen = ({ navigation }: Props) => {
       const accessToken = data?.accessToken as string;
 
       return signIn(accessToken);
-    } catch (error: any) {
-      return Alert.alert("Não foi possível criar usuário", error?.message);
+    } catch (error) {
+      return Alert.alert(
+        "Não foi possível criar usuário",
+        getErrorMessage(error)
+      );
     }
   };
 
@@ -105,8 +109,11 @@ const SignUpScreen = ({ navigation }: Props) => {
       const accessToken = data?.accessToken as string;
 
       return signIn(accessToken);
-    } catch (error: any) {
-      return Alert.alert("Não foi possível criar usuário", error?.message);
+    } catch (error) {
+      return Alert.alert(
+        "Não foi possível criar usuário",
+        getErrorMessage(error)
+      );
     }
   };
 

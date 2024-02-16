@@ -16,6 +16,7 @@ import api from "../../../utils/api";
 import { useAuth } from "../../../contexts/AuthContext";
 import ButtonComponent from "../../../components/Button";
 import { isAvailableAsync, composeAsync } from "expo-mail-composer";
+import { getErrorMessage } from "../../../utils/error";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -40,8 +41,11 @@ const StudentProfessorScreen = ({ navigation }: Props) => {
 
       setStudent(_student);
       setProfessor(_professor);
-    } catch (error: any) {
-      return Alert.alert("Não foi possível obter dados", error?.message);
+    } catch (error) {
+      return Alert.alert(
+        "Erro ao carregar os dados do usuário",
+        getErrorMessage(error)
+      );
     }
   };
 
@@ -63,8 +67,8 @@ const StudentProfessorScreen = ({ navigation }: Props) => {
       try {
         await api.delete(`/student/${student.id}/professor/${professor.id}`);
         return signOut();
-      } catch (error: any) {
-        Alert.alert("Erro ao sair da turma", error?.message);
+      } catch (error) {
+        return Alert.alert("Erro ao sair da turma", getErrorMessage(error));
       }
     };
 
@@ -96,8 +100,8 @@ const StudentProfessorScreen = ({ navigation }: Props) => {
         subject: `Tourlibras: Aluno ${student?.User.fullName}`,
         recipients: [professor?.User?.email || "arthurdiluz@outlook.com"],
       });
-    } catch (error: any) {
-      return Alert.alert("Erro", error?.message);
+    } catch (error) {
+      return Alert.alert("Erro ao enviar e-mail", getErrorMessage(error));
     }
   };
 

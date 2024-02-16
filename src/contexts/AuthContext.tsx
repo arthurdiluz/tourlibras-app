@@ -4,6 +4,7 @@ import AuthContextType, { IJwtPayload } from "../interfaces";
 import api, { createAxiosAuthInterceptor } from "../utils/api";
 import { Alert } from "react-native";
 import { getItemAsync, setItemAsync, deleteItemAsync } from "expo-secure-store";
+import { getErrorMessage } from "../utils/error";
 
 export const AuthContext = createContext<AuthContextType | null>(null);
 
@@ -41,8 +42,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       loadUser();
       loadToken();
       checkTokenExpiration(token);
-    } catch (error: any) {
-      return Alert.alert("ERROR", error?.message);
+    } catch (error) {
+      return Alert.alert("Erro ao carregar token", getErrorMessage(error));
     } finally {
       return setLoading(false);
     }
@@ -68,8 +69,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       setUser(decodedUser);
 
       api.defaults.headers["Authorization"] = `Bearer ${token}`;
-    } catch (error: any) {
-      return Alert.alert("ERROR", error?.message);
+    } catch (error) {
+      return Alert.alert("Erro ao armazenar token", getErrorMessage(error));
     }
   };
 
@@ -79,8 +80,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         deleteItemAsync("jwtToken").then(() => handleSetToken(null)),
         deleteItemAsync("userData").then(() => setUser(null)),
       ]);
-    } catch (error: any) {
-      return Alert.alert("ERROR", error?.message);
+    } catch (error) {
+      return Alert.alert("Erro ao apagar tokens", getErrorMessage(error));
     }
   };
 

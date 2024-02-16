@@ -19,6 +19,7 @@ import {
 } from "../../../services/mediaUpload";
 import { getMediaUrlFromS3Key } from "../../../utils/file";
 import { useFocusEffect } from "@react-navigation/native";
+import { getErrorMessage } from "../../../utils/error";
 
 type Props = NativeStackScreenProps<any>;
 
@@ -66,8 +67,11 @@ const UserProfileScreen = ({ navigation }: Props) => {
 
             setProfessor(professorData);
             setSelectedGrammar(professorData.grammar);
-          } catch (error: any) {
-            return Alert.alert("Could not load professor data", error?.message);
+          } catch (error) {
+            return Alert.alert(
+              "Erro ao carregar os dados do professor",
+              getErrorMessage(error)
+            );
           }
           break;
 
@@ -84,8 +88,11 @@ const UserProfileScreen = ({ navigation }: Props) => {
         default:
           break;
       }
-    } catch (error: any) {
-      return Alert.alert("Could not load user data", error?.message);
+    } catch (error) {
+      return Alert.alert(
+        "Erro ao carregar os dados do usuário",
+        getErrorMessage(error)
+      );
     }
   };
 
@@ -159,8 +166,8 @@ const UserProfileScreen = ({ navigation }: Props) => {
           },
         ]
       );
-    } catch (error: any) {
-      Alert.alert("Não foi possível enviar imagem", error?.message);
+    } catch (error) {
+      return Alert.alert("Erro ao enviar imagem", getErrorMessage(error));
     }
   };
 
@@ -200,8 +207,11 @@ const UserProfileScreen = ({ navigation }: Props) => {
       await api.patch(`/user/${user?.id}`, { fullName });
 
       return handleGoBack();
-    } catch (error: any) {
-      return Alert.alert("Could not update data", error?.message);
+    } catch (error) {
+      return Alert.alert(
+        "Erro ao atualizar seus dados",
+        getErrorMessage(error)
+      );
     }
   };
 
