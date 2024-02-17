@@ -11,8 +11,6 @@
           "cameraPermission": "Permita $(PRODUCT_NAME) acessar sua câmera"
         }
       ]
-      // "expo-font",
-      // "expo-secure-store"
     ],
     "version": "1.0.0",
     "orientation": "portrait",
@@ -32,7 +30,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.arthurdiluz.tourlibras"
     },
     "web": {
       "favicon": "./assets/favicon.png"
