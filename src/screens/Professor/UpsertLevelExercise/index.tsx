@@ -146,7 +146,7 @@ const ProfessorUpsertLessonLevelExerciseScreen = ({
         setIsLoading(false);
 
         Alert.alert("Exercício criado com sucesso");
-        return navigation.navigate("ProfessorUpsertLessonScreen");
+        return navigation.navigate("ProfessorUpsertLessonScreen", { lessonId });
       } catch (error) {
         setIsLoading(false);
         return Alert.alert(
