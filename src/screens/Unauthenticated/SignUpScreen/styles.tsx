@@ -55,8 +55,8 @@ const styles = StyleSheet.create({
   },
 
   passwordToggle: {
-    position: "relative",
-    right: "200%",
+    position: "absolute",
+    right: 16,
   },
 
   roleToggleSection: {

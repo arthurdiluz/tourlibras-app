@@ -3,7 +3,7 @@ import { Alert, Platform, Text, View } from "react-native";
 import {
   ScrollView,
   Switch,
-  TouchableOpacity,
+  TouchableHighlight,
 } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -45,7 +45,7 @@ const SignUpScreen = ({ navigation }: Props) => {
   const [isPickerVisible, setPickerVisible] = useState(platform === "android");
 
   const handleTogglePasswordVisibility = () => {
-    setPasswordHidden(!isPasswordHidden);
+    setPasswordHidden((prev) => !prev);
   };
 
   const handleToggleUserRole = () => {
@@ -172,16 +172,13 @@ const SignUpScreen = ({ navigation }: Props) => {
                 customStyle={{ paddingRight: "15%" }}
                 secureTextEntry={isPasswordHidden}
               />
-              <TouchableOpacity
+              <Ionicons
+                name={isPasswordHidden ? "eye-off" : "eye"}
+                size={20}
+                color={"#FFF"}
                 onPress={handleTogglePasswordVisibility}
                 style={styles.passwordToggle}
-              >
-                <Ionicons
-                  name={isPasswordHidden ? "eye-off" : "eye"}
-                  size={20}
-                  color={"#FFF"}
-                />
-              </TouchableOpacity>
+              />
             </View>
           </View>
           <View style={styles.roleToggleSection}>
